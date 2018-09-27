@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Elliott Sales de Andrade" />
+
+
+<title>Scientific collaboration, Git, and GitHub</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link rel="icon" type="image/png" href="image/favicon.png">
+<style type="text/css">
+
+table {
+    border-collapse: collapse;
+}
+
+thead {
+    border-top: solid #DCDCDC;
+    border-bottom: solid #DCDCDC;
+}
+
+tr.odd {
+    background-color: #F8F8F8;
+}
+
+tr:last-child {
+    border-bottom: solid #DCDCDC;
+}
+
+</style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 54px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h2 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h3 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h4 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h5 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h6 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">EEB313H1</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-map-o"></span>
+     
+    Syllabus
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lec01-introduction.html">Sept. 6: Intro to course, programming, RStudio, and R Markdown</a>
+    </li>
+    <li>
+      <a href="lec02-basic-r.html">Sept. 11: Assignment, vectors, functions</a>
+    </li>
+    <li>
+      <a href="lec03-basic-r.html">Sept. 13: Data frames, intro to dplyr</a>
+    </li>
+    <li>
+      <a href="lec04-dplyr.html">Sept. 18: Data wrangling in dplyr, ggplot, tidy data</a>
+    </li>
+    <li>
+      <a href="lec05-dplyr.html">Sept. 20: More dplyr and ggplot</a>
+    </li>
+    <li>
+      <a href="lec06-exploratory-data-analysis.html">Sept. 25: Exploratory data analysis</a>
+    </li>
+    <li>
+      <a href="lec07-linear-modelling.html">Sept. 27: Linear models and statistical modelling</a>
+    </li>
+    <li>
+      <a href="lec08-linear-mixed-effects-models.html">Oct. 02: Mixed effects models</a>
+    </li>
+    <li>
+      <a href="lec09-Randomization-tests.html">Oct. 04: Simulating data: Randomization tests</a>
+    </li>
+    <li class="dropdown-header">Oct. 09: Multivariate stats</li>
+    <li class="dropdown-header">Oct. 11: Model selection</li>
+    <li class="dropdown-header">Oct. 16: Numerically solving population models</li>
+    <li class="dropdown-header">Oct. 18: Time series analysis</li>
+    <li>
+      <a href="lec12-datasets.html">Oct. 23: Datasets, hypothesis, begin projects</a>
+    </li>
+    <li>
+      <a href="lec14-git.html">Oct. 25: Reproducible science</a>
+    </li>
+    <li>
+      <a href="lec17-rmarkdown.html">Oct. 30: Reproducible science</a>
+    </li>
+    <li class="dropdown-header">Nov. 01: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 13: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 15: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 20: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 22: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 27: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 29: Project work (no lesson)</li>
+    <li class="dropdown-header">Dec. 04: Project work (no lesson)</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Assignments
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="assignment-01.html">Assignment 1</a>
+    </li>
+    <li>
+      <a href="assignment-02.html">Assignment 2</a>
+    </li>
+    <li>
+      <a href="assignment-03.html">Assignment 3</a>
+    </li>
+    <li>
+      <a href="assignment-04.html">Assignment 4</a>
+    </li>
+    <li class="dropdown-header">Assignment 5</li>
+    <li class="dropdown-header">Assignment 6</li>
+    <li class="dropdown-header">Assignment 7</li>
+    <li class="dropdown-header">Assignment 8</li>
+    <li class="dropdown-header">Final assignment</li>
+  </ul>
+</li>
+<li>
+  <a href="resources.html">
+    <span class="fa fa-question"></span>
+     
+    Resources and FAQ
+  </a>
+</li>
+<li>
+  <a href="about.html">
+    <span class="fa fa-info"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-bars"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="mailto:ahmed.hasan@mail.utoronto.ca">
+        <span class="fa fa-envelope"></span>
+         
+        Contact
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/uoftcoders/rcourse">
+        <span class="fa fa-github"></span>
+         
+        GitHub
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Scientific collaboration, Git, and GitHub</h1>
+<h4 class="author"><em>Elliott Sales de Andrade</em></h4>
+
+</div>
+
+
+<div id="lesson-preamble" class="section level2">
+<h2>Lesson preamble</h2>
+<blockquote>
+<h3 id="lesson-objectives">Lesson objectives:</h3>
+<ul>
+<li>Practice using the 4 main Git commands and the Git-RStudio interface</li>
+<li>Learn how and when to use branches</li>
+<li>Learn how to effectively use Pull Requests</li>
+<li>Project work</li>
+</ul>
+<h3 id="lesson-outline">Lesson outline:</h3>
+<ul>
+<li>Review basic Git usage (15 min)</li>
+<li>Branching in Git (30 min)</li>
+<li>Pull requests on GitHub (30 min)</li>
+<li>Project work
+<ul>
+<li>Continue working on assignment 7 (20 min)</li>
+</ul></li>
+</ul>
+</blockquote>
+<hr />
+</div>
+<div id="git" class="section level2">
+<h2>Git</h2>
+<div id="recap" class="section level3">
+<h3>Recap</h3>
+<div id="shell-commands" class="section level4">
+<h4>Shell commands</h4>
+<p>What do these do?</p>
+<ul>
+<li><code>ls</code></li>
+<li><code>cd</code></li>
+<li><code>touch</code></li>
+<li><code>echo</code></li>
+<li><code>&gt;</code></li>
+<li><code>cat</code></li>
+</ul>
+</div>
+<div id="setup" class="section level4">
+<h4>Setup</h4>
+<p>Follow the getting setup steps from command line:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="fu">git</span> config --global user.name <span class="st">&quot;Your Name&quot;</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="fu">git</span> config --global user.email yourname@example.com</a></code></pre></div>
+<p>Replace “Your Name”, with, well, your first and last name. Replace the fake email address with the email address you normally use.</p>
+<p>Confirm it works by running:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="fu">git</span> config --list</a></code></pre></div>
+</div>
+<div id="basic-git-commands" class="section level4">
+<h4>Basic Git commands</h4>
+<p>What do these do?</p>
+<ul>
+<li><code>git init</code></li>
+<li><code>git clone</code></li>
+<li><code>git diff</code></li>
+<li><code>git add</code></li>
+<li><code>git commit</code></li>
+<li><code>git log</code></li>
+<li><code>git status</code></li>
+<li><code>git remote</code></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="branching" class="section level2">
+<h2>Branching</h2>
+<p>Git commit history is a <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graph</a> (or DAG), which means that every single commit always has at least one ‘parent’ commit (the previous commit(s) in the history), and any individual commit can have multiple ‘children’. This history can be traced back through the ‘lineage’ or ‘ancestry’.</p>
+<div id="what-are-branches" class="section level3">
+<h3>What are branches?</h3>
+<p>Branches are simply a <em>named pointer</em> to a commit in the DAG, which automatically <em>move forward</em> as commits are made. Divergent commits (two commits with the same parent) could be considered “virtual” branches. Since they are simply pointers, branches in Git are very lightweight.</p>
+<div class="figure">
+<img src="image/branches.svg" alt="Examples of branching" />
+<p class="caption">Examples of branching</p>
+</div>
+</div>
+<div id="why-use-them" class="section level3">
+<h3>Why use them?</h3>
+<ul>
+<li>To keep experimental work separate</li>
+<li>To separate trials</li>
+<li>To ease collaboration</li>
+<li>To separate bug fixes from development</li>
+</ul>
+</div>
+<div id="managing-branches" class="section level3">
+<h3>Managing branches</h3>
+<ul>
+<li><code>git branch &lt;name&gt; [commit]</code></li>
+<li><code>git branch -d &lt;name&gt;</code></li>
+<li><code>git branch [-l]</code></li>
+</ul>
+</div>
+<div id="switching-branches" class="section level3">
+<h3>Switching branches</h3>
+<ul>
+<li><code>git checkout &lt;branch name&gt;</code></li>
+<li><code>git checkout -b &lt;branch name&gt; [commit]</code> — Create and switch to a branch in one go</li>
+</ul>
+</div>
+</div>
+<div id="merging" class="section level2">
+<h2>Merging</h2>
+<p>When you merge two branches together, the commit histories get merged together as well. This makes it easier to work collaboratively on a project, since each individual could work on their own branches, without dealing with the messiness that could come from working all on one branch.</p>
+<p>There are two kinds of merges in Git:</p>
+<ul>
+<li><code>git merge --ff-only</code>, a fast-forward merge: this is commonly used implicitly when pulling.</li>
+<li><code>git merge --no-ff</code>, a non-fast-forward merge: this is used to combine branches back together.</li>
+</ul>
+<div id="challenge" class="section level4">
+<h4>Challenge</h4>
+<ul>
+<li>Make 3 separate branches starting at the <em>same commit</em>.</li>
+<li>Add <code>file1.txt</code> (with any content inside) to the first branch, and <code>file2.txt</code> (with any content inside) to the second branch. Remember to commit these changes.
+<ul>
+<li>What happens when you try to merge the second branch into the first branch?</li>
+<li>Do you think there would be any difference if you merged in the opposite direction?</li>
+</ul></li>
+<li>On the third branch, add <code>file1.txt</code> with <em>different</em> contents than the first branch.
+<ul>
+<li>What happens this time if you try to merge with the first branch?</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="pull-requests-on-github" class="section level2">
+<h2>Pull requests on GitHub</h2>
+<p>A <em>pull request</em> is asking someone else to merge in your commits to another repo, that is, a “request” that they “pull” your changes into their repo. We will do this on GitHub shortly.</p>
+<div id="syncing-with-github" class="section level3">
+<h3>Syncing with GitHub</h3>
+<ul>
+<li><code>git push [&lt;remote&gt;] [&lt;branch&gt;]</code></li>
+<li><code>git fetch [&lt;remote&gt;]</code></li>
+<li><code>git pull [&lt;remote&gt;] [&lt;branch&gt;]</code> — <code>fetch</code> + <code>merge</code></li>
+</ul>
+</div>
+<div id="make-a-pull-request" class="section level3">
+<h3>Make a pull request</h3>
+<p>Let’s make a pull request now, as described during lecture.</p>
+</div>
+</div>
+
+
+<hr>
+
+<p>This work is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. See the <a href="LICENSE.html">licensing</a> page for more details about copyright information.</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

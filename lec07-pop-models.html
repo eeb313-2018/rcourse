@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Madeleine Bonsma-Fisher" />
+
+
+<title>Numerically solving differential equations in R</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link rel="icon" type="image/png" href="image/favicon.png">
+<style type="text/css">
+
+table {
+    border-collapse: collapse;
+}
+
+thead {
+    border-top: solid #DCDCDC;
+    border-bottom: solid #DCDCDC;
+}
+
+tr.odd {
+    background-color: #F8F8F8;
+}
+
+tr:last-child {
+    border-bottom: solid #DCDCDC;
+}
+
+</style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 54px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h2 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h3 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h4 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h5 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h6 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">EEB313H1</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-map-o"></span>
+     
+    Syllabus
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lec01-introduction.html">Sept. 6: Intro to course, programming, RStudio, and R Markdown</a>
+    </li>
+    <li>
+      <a href="lec02-basic-r.html">Sept. 11: Assignment, vectors, functions</a>
+    </li>
+    <li>
+      <a href="lec03-basic-r.html">Sept. 13: Data frames, intro to dplyr</a>
+    </li>
+    <li>
+      <a href="lec04-dplyr.html">Sept. 18: Data wrangling in dplyr, ggplot, tidy data</a>
+    </li>
+    <li>
+      <a href="lec05-dplyr.html">Sept. 20: More dplyr and ggplot</a>
+    </li>
+    <li>
+      <a href="lec06-exploratory-data-analysis.html">Sept. 25: Exploratory data analysis</a>
+    </li>
+    <li>
+      <a href="lec07-linear-modelling.html">Sept. 27: Linear models and statistical modelling</a>
+    </li>
+    <li>
+      <a href="lec08-linear-mixed-effects-models.html">Oct. 02: Mixed effects models</a>
+    </li>
+    <li>
+      <a href="lec09-Randomization-tests.html">Oct. 04: Simulating data: Randomization tests</a>
+    </li>
+    <li class="dropdown-header">Oct. 09: Multivariate stats</li>
+    <li class="dropdown-header">Oct. 11: Model selection</li>
+    <li class="dropdown-header">Oct. 16: Numerically solving population models</li>
+    <li class="dropdown-header">Oct. 18: Time series analysis</li>
+    <li>
+      <a href="lec12-datasets.html">Oct. 23: Datasets, hypothesis, begin projects</a>
+    </li>
+    <li>
+      <a href="lec14-git.html">Oct. 25: Reproducible science</a>
+    </li>
+    <li>
+      <a href="lec17-rmarkdown.html">Oct. 30: Reproducible science</a>
+    </li>
+    <li class="dropdown-header">Nov. 01: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 13: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 15: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 20: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 22: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 27: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 29: Project work (no lesson)</li>
+    <li class="dropdown-header">Dec. 04: Project work (no lesson)</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Assignments
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="assignment-01.html">Assignment 1</a>
+    </li>
+    <li>
+      <a href="assignment-02.html">Assignment 2</a>
+    </li>
+    <li>
+      <a href="assignment-03.html">Assignment 3</a>
+    </li>
+    <li>
+      <a href="assignment-04.html">Assignment 4</a>
+    </li>
+    <li class="dropdown-header">Assignment 5</li>
+    <li class="dropdown-header">Assignment 6</li>
+    <li class="dropdown-header">Assignment 7</li>
+    <li class="dropdown-header">Assignment 8</li>
+    <li class="dropdown-header">Final assignment</li>
+  </ul>
+</li>
+<li>
+  <a href="resources.html">
+    <span class="fa fa-question"></span>
+     
+    Resources and FAQ
+  </a>
+</li>
+<li>
+  <a href="about.html">
+    <span class="fa fa-info"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-bars"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="mailto:ahmed.hasan@mail.utoronto.ca">
+        <span class="fa fa-envelope"></span>
+         
+        Contact
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/uoftcoders/rcourse">
+        <span class="fa fa-github"></span>
+         
+        GitHub
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Numerically solving differential equations in R</h1>
+<h4 class="author"><em>Madeleine Bonsma-Fisher</em></h4>
+
+</div>
+
+
+<div id="lesson-preamble" class="section level2">
+<h2>Lesson preamble</h2>
+<blockquote>
+<h3 id="learning-objectives">Learning objectives</h3>
+<ul>
+<li>Review differential equations and one-dimensional phase portraits</li>
+<li>Numerically solve differential equations in R using Euler’s method and R’s ODE solver</li>
+</ul>
+<h3 id="lesson-outline">Lesson outline</h3>
+<p>Total lesson time: 2 hours</p>
+<ul>
+<li>Review qualitative analysis of one-dimensional systems (20 min)</li>
+<li>Euler’s method on paper (20 min)</li>
+<li>Euler’s method in R (40 min)</li>
+<li>Using R’s ODE-solver to numerically solve differential equations (30 min)</li>
+</ul>
+<h3 id="setup">Setup</h3>
+<ul>
+<li><code>install.packages('deSolve')</code></li>
+<li><code>install.packages('ggplot2')</code> (or <code>tidyverse</code>)</li>
+<li><code>install.packages('dplyr')</code> (or <code>tidyverse</code>)</li>
+<li><code>install.packages('tidyr')</code> (or <code>tidyverse</code>)</li>
+</ul>
+</blockquote>
+<hr />
+</div>
+<div id="recap-and-some-tips" class="section level2">
+<h2>Recap and some tips</h2>
+<ul>
+<li><p>You can include math in R notebooks using <a href="https://en.wikibooks.org/wiki/LaTeX/Mathematics">LaTeX syntax</a>.</p>
+<p><code>$$\frac{dN}{dt} = r N (1 - N/K)$$</code> produces <span class="math display">\[\frac{dN}{dt} = r N (1 - N/K)\]</span></p>
+<p>There’s also a tool that let’s you take pictures of math and then it will be converted to LaTeX for you!</p>
+<blockquote class="twitter-tweet" data-lang="en">
+<p lang="en" dir="ltr">
+Need LaTeX code in your Rmd? <br><br>Hate writing it? Don't know how? Purely lazy?<br><br>Well… mathpix 0.1.0 is now on CRAN. <a href="https://t.co/uTEHzJDrIq">https://t.co/uTEHzJDrIq</a> <a href="https://t.co/QMg8OX9hyP">pic.twitter.com/QMg8OX9hyP</a>
+</p>
+— Jonathan Carroll (<span class="citation">@carroll_jono</span>) <a href="https://twitter.com/carroll_jono/status/913037881727377408?ref_src=twsrc%5Etfw">September 27, 2017</a>
+</blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></li>
+<li><p><strong>Differential equation</strong>: an equation that describes how a function of variables is related to derivatives of those variables.</p></li>
+<li><p>Drawing <strong>phase portraits</strong> in one dimension:</p>
+<div class="figure">
+<img src="image/logistic.gif" alt="Logistic equation simulation" />
+<p class="caption">Logistic equation simulation</p>
+</div>
+<ul>
+<li>Fixed points: values of <span class="math inline">\(N\)</span> at which <span class="math inline">\(\frac{dN}{dt}\)</span>, the rate of change of <span class="math inline">\(N\)</span>, is <span class="math inline">\(0\)</span>. To find fixed points, plot <span class="math inline">\(\frac{dN}{dt}\)</span> vs. <span class="math inline">\(N\)</span> and find the place(s) where it crosses the <span class="math inline">\(x\)</span> axis.</li>
+<li>Stability: if you start at some <span class="math inline">\(N\)</span> close to the fixed point but not exactly on it, will you go towards (stable) or away (unstable) from the fixed point? The sign of <span class="math inline">\(\frac{dN}{dt}\)</span> on either side of a fixed point tells you whether <span class="math inline">\(N\)</span> will increase or decrease in that area. Draw an arrow to the right if <span class="math inline">\(\frac{dN}{dt}\)</span> is positive, and draw an arrow to the left if <span class="math inline">\(\frac{dN}{dt}\)</span> is negative.</li>
+</ul></li>
+</ul>
+<div id="challenge" class="section level4">
+<h4>Challenge</h4>
+<p>Find the fixed point(s) of the following differential equation.</p>
+<p><span class="math display">\[\frac{dN}{dt} = \text{sin}(N)\]</span></p>
+<ul>
+<li>Plot <span class="math inline">\(\frac{dN}{dt}\)</span> vs. <span class="math inline">\(N\)</span> for <span class="math inline">\(N\)</span> ranging from <span class="math inline">\(0\)</span> to <span class="math inline">\(10\)</span>.</li>
+<li>Sketch a phase portrait. Are the fixed point(s) stable or unstable?</li>
+</ul>
+<p>You can think of <span class="math inline">\(dN/dt\)</span> as a <em>velocity</em>: it tells you how fast <span class="math inline">\(N\)</span> is changing and in what direction. If we start a <strong>trajectory</strong> at some initial <span class="math inline">\(N_0\)</span>, <span class="math inline">\(dN/dt\)</span> dictates whether <span class="math inline">\(N\)</span> will increase, decrease, or stay the same. If <span class="math inline">\(N_0\)</span> happens to be at a fixed point, <span class="math inline">\(N\)</span> will remain at <span class="math inline">\(N_0\)</span> for all time.</p>
+</div>
+</div>
+<div id="numerically-simulating-models-in-r" class="section level2">
+<h2>Numerically simulating models in R</h2>
+<p>Some differential equations are possible to solve analytically (by integration). But when we encounter equations that are hard to solve analytically, we can instead solve them <strong>numerically</strong>. Numerically solving a differential equation means calculating an approximate solution for the variable of interest as it evolves in time, using the information contained in the equation about the <em>rate of change</em> of the variable at each time point.</p>
+<p>Let’s use the logistic equation as an example again. Like last class, we will plot <span class="math inline">\(dN/dt\)</span> vs. <span class="math inline">\(N\)</span>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(ggplot2) </a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">N_seq &lt;-</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="st">  </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">20</span>, <span class="dv">100</span>) <span class="co"># make a sequence of N values to plot dN/dt against</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">  </a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">logistic_eqn &lt;-<span class="st">  </span><span class="cf">function</span>(N, r, K) {</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">  <span class="co"># calculate dN/dt for the logistic equation</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">  </a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">  <span class="co"># r: growth rate (divisions per hour) </span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">  <span class="co"># K: carrying capacity</span></a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">  <span class="co"># N: population size</span></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">  <span class="kw">return</span>(r <span class="op">*</span><span class="st"> </span>N <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>N <span class="op">/</span><span class="st"> </span>K))</a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">}</a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">  </a>
+<a class="sourceLine" id="cb1-15" data-line-number="15">dN_dt &lt;-<span class="st"> </span><span class="kw">logistic_eqn</span>(N_seq, <span class="dt">r =</span> <span class="fl">0.5</span>, <span class="dt">K =</span> <span class="dv">80</span>)</a>
+<a class="sourceLine" id="cb1-16" data-line-number="16">  </a>
+<a class="sourceLine" id="cb1-17" data-line-number="17"><span class="kw">qplot</span>(N_seq, dN_dt) <span class="op">+</span></a>
+<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="kw">aes</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>)) <span class="co"># a line at zero for visual aid</span></a></code></pre></div>
+<p><img src="lec07-pop-models_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><span class="math inline">\(dN/dt\)</span> is the <strong>slope</strong> of <span class="math inline">\(N\)</span> with respect to <span class="math inline">\(t\)</span> at a given value of <span class="math inline">\(N\)</span>. We can use the slope as an update rule, exactly like the recursion equation we wrote last class that in the limit became a derivative:</p>
+<p><span class="math display">\[lim_{\Delta t \to 0}\frac{N_{t+\Delta t} - N_t}{\Delta t} = \frac{dN}{dt}\]</span></p>
+<p>Given a starting point <span class="math inline">\(N_t\)</span>, we can <em>approximate</em> <span class="math inline">\(N_{t+\Delta t}\)</span> using the differential equation:</p>
+<p><span class="math display">\[\frac{N_{t+\Delta t} - N_t}{\Delta t} \approx \frac{dN}{dt} \]</span></p>
+<p><span class="math display">\[N_{t+\Delta t} \approx N_t + \frac{dN}{dt} \Delta t\]</span></p>
+<p>To generate a solution for <span class="math inline">\(N\)</span> as it varies with <span class="math inline">\(t\)</span>, we loop through the recursion relation above, updating <span class="math inline">\(N\)</span> at each timestep.</p>
+<p>The image below is a cartoon of what this looks like in practice. Starting from a point <span class="math inline">\(A_0\)</span>, we use the derivative to tell us in what direction we should take our next step. <span class="math inline">\(\Delta t\)</span> is a parameter we can choose that determines how large of a step we take.</p>
+<p>This process has several names: <strong>Euler’s method</strong> after Leonhard Euler who wrote about it in about 1770, or <strong>forward finite difference method</strong>, referring to the process of stepping forward in time in small (<em>finite</em>) increments (<em>difference</em>).</p>
+<div class="figure">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Euler_method.svg/412px-Euler_method.svg.png" alt="Euler’s method: blue is the true solution, red is the approximate solution. Image source: Wikimedia" />
+<p class="caption">Euler’s method: blue is the true solution, red is the approximate solution. Image source: Wikimedia</p>
+</div>
+<p>There are many related but slightly different techniques for numerically solving differential equations. The best method will often depend on the situation, and we won’t go into detail on any other methods, but you can look up <a href="https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods"><em>Runge-Kutta</em> methods</a> if you’re interested in learning more about it.</p>
+<p>R has a package for numerically solving differential equations called <code>deSolve</code>. We will be using this package as well as implementing Euler’s method ourselves.</p>
+<div id="eulers-method-on-paper" class="section level3">
+<h3>Euler’s method on paper</h3>
+<p>We will calculate numerical solutions for the logistic equation so that we can compare what we know about the fixed points and their stability with the way a population obeying this equation changes in time. We’ll start with a paper example, then later implement it in R with a loop.</p>
+<p>This is the update rule:</p>
+<p><span class="math display">\[N_{t+\Delta t} = N_t + \frac{dN}{dt} \Delta t\]</span></p>
+<p>To calculate a solution which consists of some values of <span class="math inline">\(N\)</span> at particular times <span class="math inline">\(t\)</span>, we need to choose a population size to start at (<span class="math inline">\(N_0\)</span>), values for the parameters, and a timestep size (<span class="math inline">\(\Delta t\)</span>).</p>
+<p>Let’s choose <span class="math inline">\(r = 1\)</span>, <span class="math inline">\(K = 10\)</span>, <span class="math inline">\(N_0 = 2\)</span>, and <span class="math inline">\(\Delta t = 1\)</span> to make our math easier.</p>
+<p>Now we have <span class="math inline">\(N_{t=0} = N_0 = 2\)</span>, and we want <span class="math inline">\(N_{t=0+ \Delta t} = N_{t=0 +1} = N_1\)</span>. We apply the update rule:</p>
+<p><span class="math display">\[N_1 = \frac{dN}{dt} \Delta t + N_0\]</span></p>
+<p><span class="math display">\[N_1 = \frac{dN}{dt} \times 1 + N_0\]</span></p>
+<p><span class="math display">\[N_1 = \frac{dN}{dt} + N_0\]</span></p>
+<p>What should we put in for <span class="math inline">\(dN/dt\)</span>? We know <span class="math inline">\(dN/dt\)</span> for the logistic equation is</p>
+<p><span class="math display">\[\frac{dN}{dt} = rN(1-\frac{N}{K})\]</span></p>
+<p>We’ve chosen <span class="math inline">\(r\)</span> and <span class="math inline">\(K\)</span>, but what value should we put in for <span class="math inline">\(N\)</span>?</p>
+<p>This is not obvious at all, and there’s really no one right answer. There are other related methods of numerically solving differential equations that choose a value of <span class="math inline">\(N\)</span> halfway between <span class="math inline">\(N_0\)</span> and <span class="math inline">\(N_1\)</span> (the <strong>midpoint method</strong>), or you could use <span class="math inline">\(N_1\)</span>. But the simplest thing to do is to use <span class="math inline">\(N_0\)</span>, because we don’t yet know <span class="math inline">\(N_1\)</span> and it’s slightly more complicated to use an <span class="math inline">\(N\)</span> that depends on <span class="math inline">\(N_1\)</span>. This is the process shown in the cartoon above — we use the slope of <span class="math inline">\(N\)</span> at the point <span class="math inline">\(N_0\)</span> to tell us where <span class="math inline">\(N\)</span> should be at the next timestep.</p>
+<p>If we put in <span class="math inline">\(N_0\)</span> to <span class="math inline">\(dN/dt\)</span>:</p>
+<p><span class="math display">\[N_1 = rN_0(1-\frac{N_0}{K}) + N_0\]</span></p>
+<p>Now we have a thing we can calculate! Plugging in the numbers we chose for <span class="math inline">\(r\)</span>, <span class="math inline">\(K\)</span>, and <span class="math inline">\(N_0\)</span>, we get</p>
+<p><span class="math display">\[N_1 = 1 \times 2(1-\frac{2}{10}) + 2\]</span> <span class="math display">\[N_1 =  2+ 1.6 = 3.6\]</span> We repeat the proccess to get <span class="math inline">\(N_2\)</span>, and so on, remembering to evaluate <span class="math inline">\(dN/dt\)</span> at the value of <span class="math inline">\(N\)</span> from the previous timestep. The vertical bar <span class="math inline">\(\vert\)</span> instructs us to substitute <span class="math inline">\(N_0\)</span> for <span class="math inline">\(N\)</span> in the derivative.</p>
+<p><span class="math display">\[N_2 = \frac{dN}{dt}\vert_{N = N_1} + N_1\]</span></p>
+<p><span class="math display">\[N_2 = rN_1(1-\frac{N_1}{K}) + N_1\]</span></p>
+<p><span class="math display">\[N_2 = 2.304 + 3.6 = 5.904\]</span></p>
+<p>In 1770 there were no computers. It’s really amazing that people were using these numerical techniques long before computers existed to automate the process. According to Wikipedia, it was partly the push to develop faster and better ways to numerically solve differential equations that led to the computer as we know it.</p>
+<p>Lorenz simulated his famous equations on one of the earliest computers in 1960, and this was how he discovered the chaotic behaviour of the model.</p>
+<p>In the movie <em>Hidden Figures</em>, Katherine Goble Johnson uses Euler’s method to numerically match the equations for hyperbolic and elliptical orbit to get the astronaut John Glenn back from space. Watch the scene <a href="https://www.youtube.com/watch?v=v-pbGAts_Fg">here</a>.</p>
+</div>
+<div id="eulers-method-in-r" class="section level3">
+<h3>Euler’s method in R</h3>
+<p>Let’s review <code>for loops</code> first. A loop is a method to do something over and over again, which is perfect for Euler’s method — on paper, we were performing the same calculation over and over with a different value of <span class="math inline">\(N\)</span> each time.</p>
+<p>Here’s an example from an earlier lecture:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># For each number in v, print the number.</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">v &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="cf">for</span> (num <span class="cf">in</span> v) {</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">    <span class="kw">print</span>(num)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">}</a></code></pre></div>
+<pre><code>## [1] 2
+## [1] 4
+## [1] 6</code></pre>
+<p>Now let’s build up our Euler’s method code in R.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># Numerically solve the logistic equation using Euler&#39;s method</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co"># We have a function `logistic_eqn` that we defined before, so we can use that one.</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co"># We don&#39;t need to re-write it here if the previous chunk has been executed, but we can.</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">logistic_eqn &lt;-<span class="st">  </span><span class="cf">function</span>(N, r, K) {</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">  <span class="co"># calculate dN/dt for the logistic equation</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">  </a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">  <span class="co"># r: growth rate (divisions per hour) </span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10">  <span class="co"># K: carrying capacity</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11">  <span class="co"># N: population size</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12">  <span class="kw">return</span>(r <span class="op">*</span><span class="st"> </span>N <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>N <span class="op">/</span><span class="st"> </span>K))</a>
+<a class="sourceLine" id="cb4-13" data-line-number="13">}</a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co"># parameters</span></a>
+<a class="sourceLine" id="cb4-16" data-line-number="16">K &lt;-<span class="st"> </span><span class="dv">150</span></a>
+<a class="sourceLine" id="cb4-17" data-line-number="17">r &lt;-<span class="st"> </span><span class="dv">1</span>  </a>
+<a class="sourceLine" id="cb4-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb4-19" data-line-number="19">dt &lt;-<span class="st"> </span><span class="fl">0.05</span> <span class="co"># timestep - the smaller, the better</span></a>
+<a class="sourceLine" id="cb4-20" data-line-number="20">tmax &lt;-<span class="st"> </span><span class="dv">8</span> <span class="co"># the total time we want to numerically solve for</span></a>
+<a class="sourceLine" id="cb4-21" data-line-number="21">points &lt;-<span class="st"> </span>tmax<span class="op">/</span>dt <span class="co"># the number of data points in the simulation - add 1 so that we can start at t=0</span></a>
+<a class="sourceLine" id="cb4-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb4-23" data-line-number="23"><span class="co"># vectors to store values of N and t at each timestep:</span></a>
+<a class="sourceLine" id="cb4-24" data-line-number="24">N_vector &lt;-<span class="st"> </span><span class="kw">numeric</span>(points) <span class="co"># population size</span></a>
+<a class="sourceLine" id="cb4-25" data-line-number="25">t_vector &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, tmax <span class="op">-</span><span class="st"> </span>dt, <span class="dt">by =</span> dt) <span class="co"># time vector</span></a>
+<a class="sourceLine" id="cb4-26" data-line-number="26"></a>
+<a class="sourceLine" id="cb4-27" data-line-number="27"><span class="co"># initial condition</span></a>
+<a class="sourceLine" id="cb4-28" data-line-number="28">N0 &lt;-<span class="st"> </span><span class="dv">10</span></a>
+<a class="sourceLine" id="cb4-29" data-line-number="29">N_vector[<span class="dv">1</span>] &lt;-<span class="st"> </span>N0</a>
+<a class="sourceLine" id="cb4-30" data-line-number="30"></a>
+<a class="sourceLine" id="cb4-31" data-line-number="31">N &lt;-<span class="st"> </span>N0 <span class="co"># initialize variable N</span></a>
+<a class="sourceLine" id="cb4-32" data-line-number="32"></a>
+<a class="sourceLine" id="cb4-33" data-line-number="33"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>points) {</a>
+<a class="sourceLine" id="cb4-34" data-line-number="34">  <span class="co"># start at 2 because the initial state is at position 1</span></a>
+<a class="sourceLine" id="cb4-35" data-line-number="35">  dN &lt;-<span class="st"> </span><span class="kw">logistic_eqn</span>(<span class="dt">N =</span> N, <span class="dt">r =</span> r, <span class="dt">K =</span> K) <span class="op">*</span><span class="st"> </span>dt</a>
+<a class="sourceLine" id="cb4-36" data-line-number="36">  N &lt;-<span class="st"> </span>N <span class="op">+</span><span class="st"> </span>dN <span class="co"># the variable N is changing at each step of the loop</span></a>
+<a class="sourceLine" id="cb4-37" data-line-number="37">  N_vector[i] &lt;-<span class="st"> </span>N</a>
+<a class="sourceLine" id="cb4-38" data-line-number="38">}</a>
+<a class="sourceLine" id="cb4-39" data-line-number="39"></a>
+<a class="sourceLine" id="cb4-40" data-line-number="40"><span class="kw">qplot</span>(t_vector, N_vector,</a>
+<a class="sourceLine" id="cb4-41" data-line-number="41">      <span class="dt">ylab =</span> <span class="st">&quot;Population size N&quot;</span>,</a>
+<a class="sourceLine" id="cb4-42" data-line-number="42">      <span class="dt">xlab =</span> <span class="st">&quot;Time t&quot;</span>) </a></code></pre></div>
+<p><img src="lec07-pop-models_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>This numerical solution shows us that the population size grows until it reaches the carrying capacity <span class="math inline">\(K\)</span>, the stable fixed point.</p>
+</div>
+<div id="a-note-on-why-delta-t-has-to-be-small" class="section level3">
+<h3>A note on why <span class="math inline">\(\Delta t\)</span> has to be small</h3>
+<p>If you’re numerically solving a differential equation with Euler’s method, <span class="math inline">\(\Delta t\)</span> must be ‘small’. How small is small, and why does it have to be small? The answers to these are related, and to see why, let’s look at what can happen if <span class="math inline">\(\Delta t\)</span> is too big with an example from the logistic equation.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># what happens if we make dt too large when simulating? </span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co"># in this example, the starting population N0 is much larger than the carrying capacity.</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co"># This means dN/dt will be a large negative number: N will decrease quickly from such a large size.</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">r &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">K &lt;-<span class="st"> </span><span class="dv">50</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">dt &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">N0 &lt;-<span class="st"> </span><span class="dv">400</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10">dN &lt;-<span class="st"> </span><span class="kw">logistic_eqn</span>(N0, r, K) <span class="op">*</span><span class="st"> </span>dt <span class="co"># this is the change in N that we wil add to N0 to calculate N1</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12">N1 &lt;-<span class="st"> </span>N0 <span class="op">+</span><span class="st"> </span>dN</a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="kw">print</span>(N1) <span class="co"># this is no good: N has shot from +400 to -1000 in a single step! </span></a></code></pre></div>
+<pre><code>## [1] -1000</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">dN &lt;-<span class="st"> </span><span class="kw">logistic_eqn</span>(N1, r, K) <span class="op">*</span><span class="st"> </span>dt <span class="co"># calculate what the next change in N would be</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">N2 &lt;-<span class="st"> </span>N1 <span class="op">+</span><span class="st"> </span>dN</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="kw">print</span>(N2) <span class="co"># N is getting more and more negative!</span></a></code></pre></div>
+<pre><code>## [1] -11500</code></pre>
+<div id="challenge---in-groups" class="section level4">
+<h4>Challenge - in groups</h4>
+<p>Use Euler’s method to calculate a numerical solution for the following differential equation:</p>
+<p><span class="math display">\[\frac{dx}{dt} = -2.3 x\]</span></p>
+<p>The exact solution is</p>
+<p><span class="math display">\[x(t) = x_0 \text{e}^{-2.3t}\]</span></p>
+<ul>
+<li>Use an initial condition of <span class="math inline">\(x_0 = 50\)</span>, and calculate your answer for <span class="math inline">\(t\)</span> from <span class="math inline">\(0\)</span> to <span class="math inline">\(10\)</span>.</li>
+<li>Try a few different step sizes (<span class="math inline">\(\Delta t\)</span>) such as <span class="math inline">\(0.1\)</span>, <span class="math inline">\(0.7\)</span>, and <span class="math inline">\(1\)</span>. What happens if <span class="math inline">\(\Delta t\)</span> is too large?</li>
+</ul>
+<p>This is what’s called <strong>numerical instability</strong> — the numerical solution grows very large (either positive or negative) but the true solution doesn’t. In the logistic equation example above, while the true solution does grow more negative if <span class="math inline">\(N &lt; 0\)</span>, we get a trajectory that doesn’t make sense if we use a step size that’s too large.</p>
+<p>For accuracy, <span class="math inline">\(\Delta t\)</span> should be small. But the smaller it is, the longer it will take to compute the numerical approximation. In practice, choose a <span class="math inline">\(\Delta t\)</span> that is small enough that your solution doesn’t behave strangely, but large enough that you can simulate it in a reasonable amount of time.</p>
+</div>
+</div>
+</div>
+<div id="using-desolve-in-r-to-solve-differential-equations-numerically" class="section level2">
+<h2>Using <code>deSolve</code> in R to solve differential equations numerically</h2>
+<p>R has a package called <code>deSolve</code> which contains several functions to numerically solve differential equations. Let’s look at the documentation for <code>deSolve</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">library</span>(deSolve)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">?deSolve</a></code></pre></div>
+<p>This is pretty hard to read, especially if your calculus was a long time ago. The important thing to know for our purposes is that the equations we’re working with are <strong>first-order ordinary differential equations</strong>. <em>First-order</em> means that the derivatives are all first derivatives (as opposed to second derivatives, third derivatives, etc.). <strong>Ordinary</strong> means that the derivatives are full derivatives (as opposed to partial derivatives which are written <span class="math inline">\(\partial N / \partial t\)</span>).</p>
+<p>This means that the function we’ll be using is called <code>ode</code>, which stands for ‘ordinary differential equation’.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">?ode</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co"># The possible methods are all different ways of numerically solving DEs.</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#stiff vs. non-stiff : no precise definition, but &#39;stiff&#39; generally means it&#39;s possible to be numerically unstable if the step size is too big. </span></a></code></pre></div>
+<p>The method used by <code>ode</code> to numerically solve differential equations is called <code>lsoda</code>, which automatically tries to use the best method depending on the equation. This is why people like to use functions like <code>ode</code>: the result is often more accurate than Euler’s method and might also be faster to run.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># Example: deSolve with logistic eqn</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co"># now we need to define our function a bit differently to be in the format that `ode` uses</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">logistic_fn &lt;-<span class="st"> </span><span class="cf">function</span>(t, state, parameters) {</a>
+<a class="sourceLine" id="cb12-5" data-line-number="5">  <span class="co"># Calculates dN/dt for the logistic equation</span></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6">  </a>
+<a class="sourceLine" id="cb12-7" data-line-number="7">  <span class="co"># t: time point at which to evaluate derivative (doesn&#39;t actually change anything in this example)</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8">  <span class="co"># state: vector of variables (here it&#39;s just N)</span></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9">  <span class="co"># parameters: vector of model parameters c(r, K)</span></a>
+<a class="sourceLine" id="cb12-10" data-line-number="10">  </a>
+<a class="sourceLine" id="cb12-11" data-line-number="11">  N &lt;-<span class="st"> </span>state </a>
+<a class="sourceLine" id="cb12-12" data-line-number="12">  </a>
+<a class="sourceLine" id="cb12-13" data-line-number="13">  r &lt;-<span class="st"> </span>parameters[<span class="dv">1</span>] <span class="co"># the first element of the parameters vector is r</span></a>
+<a class="sourceLine" id="cb12-14" data-line-number="14">  K &lt;-<span class="st"> </span>parameters[<span class="dv">2</span>] <span class="co"># the second element of the parameters vector is K</span></a>
+<a class="sourceLine" id="cb12-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb12-16" data-line-number="16">  <span class="co">#rate of change</span></a>
+<a class="sourceLine" id="cb12-17" data-line-number="17">  dN &lt;-<span class="st"> </span>r <span class="op">*</span><span class="st"> </span>N <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>N <span class="op">/</span><span class="st"> </span>K)</a>
+<a class="sourceLine" id="cb12-18" data-line-number="18">    </a>
+<a class="sourceLine" id="cb12-19" data-line-number="19">  <span class="co">#return rate of change</span></a>
+<a class="sourceLine" id="cb12-20" data-line-number="20">  <span class="kw">return</span>(<span class="kw">list</span>(<span class="kw">c</span>(dN)))</a>
+<a class="sourceLine" id="cb12-21" data-line-number="21">}</a>
+<a class="sourceLine" id="cb12-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb12-23" data-line-number="23">parameters &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">r =</span> <span class="fl">0.5</span>, <span class="dt">K =</span> <span class="dv">50</span>)</a>
+<a class="sourceLine" id="cb12-24" data-line-number="24">state &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">N =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb12-25" data-line-number="25">times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dt">by =</span> <span class="fl">0.01</span>) <span class="co"># the timestep dt is chosen by setting the increment with &#39;by&#39;</span></a>
+<a class="sourceLine" id="cb12-26" data-line-number="26"></a>
+<a class="sourceLine" id="cb12-27" data-line-number="27"><span class="co">#?ode # look at the documentation to learn about the parameters</span></a>
+<a class="sourceLine" id="cb12-28" data-line-number="28">result &lt;-<span class="st"> </span><span class="kw">ode</span>(<span class="dt">y =</span> state, <span class="dt">times =</span> times, <span class="dt">func =</span> logistic_fn, <span class="dt">parms =</span> parameters)</a></code></pre></div>
+<p>The output of <code>ode</code> is a matrix that contains the times we requested and its calculated values of N.</p>
+<p>Notice that by using <code>ode</code> we didn’t have to write a loop explicitly ourselves. Under the hood, <code>ode</code> performs a similar computation to what we did manually.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">head</span>(result, <span class="dv">5</span>) <span class="co"># result has a list of times and values of N at those times</span></a></code></pre></div>
+<pre><code>##      time        N
+## [1,] 0.00 10.00000
+## [2,] 0.01 10.04006
+## [3,] 0.02 10.08024
+## [4,] 0.03 10.12054
+## [5,] 0.04 10.16096</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">class</span>(result) <span class="co"># result is a &#39;matrix&#39;: an array of numbers</span></a></code></pre></div>
+<pre><code>## [1] &quot;deSolve&quot; &quot;matrix&quot;</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">result &lt;-<span class="st"> </span><span class="kw">data.frame</span>(result) <span class="co"># convert it to a dataframe so we can use ggplot</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="kw">ggplot</span>(result) <span class="op">+</span></a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> N))</a></code></pre></div>
+<p><img src="lec07-pop-models_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<div id="extras" class="section level3">
+<h3>Extras</h3>
+<div id="simulation-of-the-logistic-equation" class="section level4">
+<h4>Simulation of the logistic equation</h4>
+<pre><code>library(animation)
+library(ggplot2)
+
+ani.options(interval=.00001)
+
+# dynamical equation for the logistic model
+dN_dt &lt;- function(N,r,K) {
+  return(r*N*(1-N/K))
+}
+
+# parameters
+K &lt;- 150
+r &lt;- 1
+
+dt &lt;- 0.05 # timestep - should really be smaller for accuracy
+tmax &lt;- 7
+points &lt;- tmax/dt
+
+t_vector &lt;- seq(dt, tmax, by = dt)
+
+# vectors to store simulation
+N_vector &lt;- numeric(points); 
+
+# initialize variables
+
+
+Nmax &lt;- 300
+N_axis &lt;- seq(0, Nmax, by = 0.5)
+
+
+saveGIF({
+    N &lt;- 10
+    N_vector[1] &lt;- N
+    
+    par(mfrow=c(2,1))
+    count &lt;- 1
+    for (t in t_vector){ 
+      dN &lt;- dN_dt(N, r, K)*dt
+      N &lt;- N + dN
+      N_vector[count] &lt;- N
+      
+      plot(N,0, ylim = c(-0.2,0.2), xlim = c(0,Nmax), ylab = &quot;&quot;) 
+      lines(N_axis, 0*N_axis)
+      plot(t_vector[1:count],N_vector[1:count],  
+           ylim = c(0,Nmax), xlim = c(0,tmax), 
+           xlab = &quot;Time&quot;, ylab = &quot;N&quot;) 
+      lines(t_vector, (numeric(points) + 1)*K)
+      count &lt;- count + 1
+    }
+    
+    N &lt;- 290
+    par(mfrow=c(2,1))
+    count &lt;- 1
+    for (t in t_vector){ 
+      dN &lt;- dN_dt(N, r, K)*dt
+      N &lt;- N + dN
+      N_vector[count] &lt;- N
+      
+      plot(N,0, ylim = c(-0.2,0.2), xlim = c(0,Nmax), ylab = &quot;&quot;) 
+      lines(N_axis, 0*N_axis)
+      plot(t_vector[1:count],N_vector[1:count],  
+           ylim = c(0,Nmax), xlim = c(0,tmax), 
+           xlab = &quot;Time&quot;, ylab = &quot;N&quot;) 
+      lines(t_vector, (numeric(points) + 1)*K)
+      count &lt;- count + 1
+    }
+})</code></pre>
+</div>
+</div>
+</div>
+
+
+<hr>
+
+<p>This work is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. See the <a href="LICENSE.html">licensing</a> page for more details about copyright information.</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Lina Tran" />
+
+
+<title>Preparing a scientific item for academic publishing</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link rel="icon" type="image/png" href="image/favicon.png">
+<style type="text/css">
+
+table {
+    border-collapse: collapse;
+}
+
+thead {
+    border-top: solid #DCDCDC;
+    border-bottom: solid #DCDCDC;
+}
+
+tr.odd {
+    background-color: #F8F8F8;
+}
+
+tr:last-child {
+    border-bottom: solid #DCDCDC;
+}
+
+</style>
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 54px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h2 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h3 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h4 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h5 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h6 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">EEB313H1</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-map-o"></span>
+     
+    Syllabus
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lec01-introduction.html">Sept. 6: Intro to course, programming, RStudio, and R Markdown</a>
+    </li>
+    <li>
+      <a href="lec02-basic-r.html">Sept. 11: Assignment, vectors, functions</a>
+    </li>
+    <li>
+      <a href="lec03-basic-r.html">Sept. 13: Data frames, intro to dplyr</a>
+    </li>
+    <li>
+      <a href="lec04-dplyr.html">Sept. 18: Data wrangling in dplyr, ggplot, tidy data</a>
+    </li>
+    <li>
+      <a href="lec05-dplyr.html">Sept. 20: More dplyr and ggplot</a>
+    </li>
+    <li>
+      <a href="lec06-exploratory-data-analysis.html">Sept. 25: Exploratory data analysis</a>
+    </li>
+    <li>
+      <a href="lec07-linear-modelling.html">Sept. 27: Linear models and statistical modelling</a>
+    </li>
+    <li>
+      <a href="lec08-linear-mixed-effects-models.html">Oct. 02: Mixed effects models</a>
+    </li>
+    <li>
+      <a href="lec09-Randomization-tests.html">Oct. 04: Simulating data: Randomization tests</a>
+    </li>
+    <li class="dropdown-header">Oct. 09: Multivariate stats</li>
+    <li class="dropdown-header">Oct. 11: Model selection</li>
+    <li class="dropdown-header">Oct. 16: Numerically solving population models</li>
+    <li class="dropdown-header">Oct. 18: Time series analysis</li>
+    <li>
+      <a href="lec12-datasets.html">Oct. 23: Datasets, hypothesis, begin projects</a>
+    </li>
+    <li>
+      <a href="lec14-git.html">Oct. 25: Reproducible science</a>
+    </li>
+    <li>
+      <a href="lec17-rmarkdown.html">Oct. 30: Reproducible science</a>
+    </li>
+    <li class="dropdown-header">Nov. 01: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 13: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 15: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 20: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 22: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 27: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 29: Project work (no lesson)</li>
+    <li class="dropdown-header">Dec. 04: Project work (no lesson)</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Assignments
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="assignment-01.html">Assignment 1</a>
+    </li>
+    <li>
+      <a href="assignment-02.html">Assignment 2</a>
+    </li>
+    <li>
+      <a href="assignment-03.html">Assignment 3</a>
+    </li>
+    <li>
+      <a href="assignment-04.html">Assignment 4</a>
+    </li>
+    <li class="dropdown-header">Assignment 5</li>
+    <li class="dropdown-header">Assignment 6</li>
+    <li class="dropdown-header">Assignment 7</li>
+    <li class="dropdown-header">Assignment 8</li>
+    <li class="dropdown-header">Final assignment</li>
+  </ul>
+</li>
+<li>
+  <a href="resources.html">
+    <span class="fa fa-question"></span>
+     
+    Resources and FAQ
+  </a>
+</li>
+<li>
+  <a href="about.html">
+    <span class="fa fa-info"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-bars"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="mailto:ahmed.hasan@mail.utoronto.ca">
+        <span class="fa fa-envelope"></span>
+         
+        Contact
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/uoftcoders/rcourse">
+        <span class="fa fa-github"></span>
+         
+        GitHub
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Preparing a scientific item for academic publishing</h1>
+<h4 class="author"><em>Lina Tran</em></h4>
+
+</div>
+
+
+<div id="lesson-preamble" class="section level2">
+<h2>Lesson preamble</h2>
+<blockquote>
+<h3 id="lesson-objectives">Lesson objectives:</h3>
+<ul>
+<li>Understand the roles and responsibilities surrounding authorship</li>
+<li>Learn about current conventions around academic publishing and how they are changing with open access journals and preprint servers</li>
+</ul>
+<h3 id="lesson-outline">Lesson outline:</h3>
+<ul>
+<li>Authorship (25 min)
+<ul>
+<li>Different types of contributors (10 min)</li>
+<li>How to credit data and software creators? (10 min)</li>
+<li>ORCID for keeping track of a scientist’s contributions (5 min)</li>
+</ul></li>
+<li>Academic Publishing (40 min)
+<ul>
+<li>An overview of the peer review system (5 min)</li>
+<li>The scientific life cycle (5 min)</li>
+<li>How do you decide where to publish? (10 min)</li>
+<li>Moving away from impact factors (10 min)</li>
+<li>Video: Open Access Explained! (10 min)</li>
+</ul></li>
+<li>Submitting a Scientific Publication (35 min)
+<ul>
+<li>General format (10 min)</li>
+<li>I’ve submitted, now what? (5 min)</li>
+<li>General writing tips (15 min)</li>
+</ul></li>
+</ul>
+</blockquote>
+<hr />
+</div>
+<div id="authorship" class="section level2">
+<h2>Authorship</h2>
+<div id="different-types-of-contributors" class="section level3">
+<h3>Different Types of Contributors</h3>
+<p>What kind of contributions make someone an author of a scientific publication? Here are some common types of contributions:</p>
+<ul>
+<li>Concept framework and question</li>
+<li>Funding</li>
+<li>Research design</li>
+<li>Data collection</li>
+<li>Analysis</li>
+<li>Writing and manuscript preparation</li>
+<li>Editing</li>
+<li>Manuscript submission and revision handling</li>
+</ul>
+<p>Typically, authorship requires having taken part in two of these, plus having read the manuscript and approving its content. This will vary from field to field. Consider the following:</p>
+<ul>
+<li>Do you think doing only one of these enough to merit authorship?</li>
+<li>If not, then what in your opinion is the relative weight of each of these?</li>
+</ul>
+<p>Many people in the biomedical field follow <a href="http://www.icmje.org/recommendations/browse/roles-and-responsibilities/defining-the-role-of-authors-and-contributors.html">these guidelines</a> for authorship.</p>
+<p><strong>Important Note</strong>: Have discussions about authorship early! This is crucial to avoiding potential conflicts around authorship. Talking about any issues with all involved early on is much better than waiting until when everything is done and it’s about time to submit.</p>
+<div id="further-reading" class="section level4">
+<h4>Further Reading</h4>
+<ul>
+<li>A great overview of authorship with a focus on ecology:
+<ul>
+<li><a href="https://arthropodecology.com/2012/08/31/determining-authorship-for-a-peer-reviewed-scientific-publication/">Determining authorship for a peer-reviewed scientific publication</a> by Chris Buddle.</li>
+</ul></li>
+<li>An article in Science Magazine about <a href="https://www.sciencemag.org/careers/2010/04/conventions-scientific-authorship">authoship conventions</a></li>
+<li>A paper about <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0066212">gender disparity in authorship</a></li>
+</ul>
+</div>
+</div>
+<div id="how-to-credit-data-and-software-creators" class="section level3">
+<h3>How to Credit Data and Software Creators?</h3>
+<p>As researchers in all sorts of fields begin to further embrace scripting and releasing their analyses and code, there are some challenges faced with authorship and citation. Let’s discuss some interesting questions:</p>
+<ul>
+<li>Why is there a discrepancy between the way credit is offered to data and software creators compared to typical avenues of academic authorship?</li>
+<li>Are data and software research products?
+<ul>
+<li>Who ‘owns’ the data that is produced, and what does this ownership entail?</li>
+</ul></li>
+<li>What is the best way to credit data and software creators?</li>
+</ul>
+</div>
+<div id="orcid" class="section level3">
+<h3>ORCID</h3>
+<p>An <a href="https://orcid.org/">ORCID</a> is a unique identifier that can distinguish you from other researchers (useful if you have a common name!) and has been integrated into many different aspects of the research workflow from manuscript/grant submission and citation listings.</p>
+</div>
+</div>
+<div id="academic-publishing" class="section level2">
+<h2>Academic Publishing</h2>
+<div id="an-overview-of-the-peer-review-system" class="section level3">
+<h3>An Overview of the Peer Review System</h3>
+<ul>
+<li>What is peer review?</li>
+<li>Why do we rely on peer review to publish our science?
+<ul>
+<li>Filtering manuscripts for publication from an editorial perspective</li>
+<li>Making constructive suggestions to improve manuscripts, and science overall</li>
+<li>But this is all in an ideal world…</li>
+</ul></li>
+<li>What challenges arise through use of the peer review process?
+<ul>
+<li>Does mandatory double-blinding of reviewers and reviewees help?</li>
+<li>What about publishing the names of reviewers along with publications?</li>
+</ul></li>
+<li>What criteria do you think a new or improved system for reviewing science would need?</li>
+</ul>
+</div>
+<div id="the-scientific-life-cycle" class="section level3">
+<h3>The Scientific Life Cycle</h3>
+<p>Broadly speaking, the life cycle of scientific publications entails the following:</p>
+<ol style="list-style-type: decimal">
+<li>Research (new findings are interpreted and reported upon)</li>
+<li>Peer Review (these reports are reviewed by a number of field ‘experts’)</li>
+<li>Publication (if they pass through the review process, they go through production)</li>
+<li>Dissemination &amp; Preservation (these items are copied, archived for posterity)</li>
+<li>Reuse &amp; Citation (other scientists make use of these finding to inform further research, or the information becomes part of general knowledge as time passes)</li>
+<li>Return to #1 (the cycle goes on…)</li>
+</ol>
+<p>(Adapted from <a href="http://www.lib.berkeley.edu/scholarly-communication/publishing/publishing-lifecycle">Berkeley Library Publishing Life Cycle</a>)</p>
+</div>
+<div id="how-do-you-decide-where-to-publish" class="section level3">
+<h3>How Do You Decide Where to Publish?</h3>
+<ul>
+<li>Think about journals in your field that you would like to publish to, and let’s discuss what factors contribute to these choices</li>
+</ul>
+<p>When choosing where to publish, it used to be convention to use some variation of “Choose the journal with the highest impact factor that also fits your work”. However, with increasing discussion about issues surrounding open access, this makes the decision difficult. Submission costs, review process, whether the journal is open access and how the journal is viewed by your colleagues (especially by decision makers…) all play into the final decision.</p>
+<div id="moving-away-from-impact-factors" class="section level4">
+<h4>Moving Away from Impact Factors</h4>
+<p>Journal impact factors are a measure of the average number of citations articles from that journal have received over a period of a year. How we value science and scientists has been dominated in the past by the impact factors of the journals they publish their work as a proxy for the quality of their papers.</p>
+<p>Questions:</p>
+<ul>
+<li>Is this the right way for us to be determining the quality of research?</li>
+<li>And if not, what is the right way to value science and in turn, scientists behind the research?</li>
+</ul>
+<p>You can read <a href="https://www.nature.com/news/beat-it-impact-factor-publishing-elite-turns-against-controversial-metric-1.20224">this article</a> in Nature about pushback against impact factors from influential players in scientific publishing.</p>
+</div>
+<div id="preprint-servers" class="section level4">
+<h4>Preprint Servers</h4>
+<p>While the definition may vary, for our purposes, we will define a preprint as a research article, review, or body of scientific work that has yet to be published in a journal.</p>
+<ul>
+<li>Do you have any hesitations about submitting to a preprint server?</li>
+</ul>
+</div>
+</div>
+<div id="video-open-access-explained-823" class="section level3">
+<h3>Video: Open Access Explained! (8:23)</h3>
+<iframe width="420" height="315" src="https://www.youtube.com/embed/L5rVH1KGBCY" frameborder="0" gesture="media" allowfullscreen>
+</iframe>
+<p>Fake or non-existent impact factors.</p>
+</div>
+<div id="the-ethics-and-risks-in-sharing-data" class="section level3">
+<h3>The ethics and risks in sharing data</h3>
+<p>‘Scooping’ is often cited as a concern when discussing sharing data. However, getting scooped from a published data source has been <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002432">empirically demonstrated</a> to be a rare phenomenon, but even some open advocates have had trouble supporting <a href="https://emckiernan.wordpress.com/2014/02/26/my-concerns-about-ploss-new-open-data-policy/">blanket open data policies</a>.</p>
+<p>Let’s discuss the following:</p>
+<ul>
+<li>Which concerns about data/code sharing do you feel have merit?</li>
+<li>How can we mitigate these issues?</li>
+</ul>
+</div>
+</div>
+<div id="submitting-a-scientific-publication" class="section level2">
+<h2>Submitting a Scientific Publication</h2>
+<p>Now that we have a good idea of authorship and the scientific publication process, let’s consider the steps you would take to actually submit a scientific item for publishing.</p>
+<div id="general-format" class="section level3">
+<h3>General Format</h3>
+<p>Typically, a research article will contain the following sections:</p>
+<ul>
+<li>”Abstract”</li>
+<li>“Background and Rationale”</li>
+<li>“Research Objectives and Hypotheses”</li>
+<li>“Methods”</li>
+<li>“Results”</li>
+<li>“Discussion”</li>
+<li>“Conclusion”</li>
+</ul>
+<p>Do these look familiar? They should, because they are the headings you need to include in your final assignment! “Background and Rationale” and “Research Objectives and Hypotheses” are usually combined into one “Introduction” section, but this varies from journal to journal. Also, the order may vary with some placing the detailed methods in the supplementary. Journals may also require a short “Significance Statement” as to why the finding is interesting. This may be more common in basic science that has potential clinical/translational implications. Also, many journals also require a written abstract for their work as well.</p>
+</div>
+<div id="journal-specifications" class="section level3">
+<h3>Journal Specifications</h3>
+<p>Depending on what journal you decide to publish in, you may have to change the format to meet these guidelines. This may include:</p>
+<ul>
+<li>word counts (either for sections or the whole document)</li>
+<li>section headings</li>
+<li>figure and figure caption formats</li>
+<li>methods formats</li>
+<li>reference styles (this is where those .csl + .bib files come in handy!)</li>
+<li>statistical information</li>
+</ul>
+<p>Often, you will also need to write a <strong>cover letter</strong> to discuss the importance of your work, and why it is appropriate for the journal in question. This helps give editors more context for why they should consider your work for their journal.</p>
+</div>
+<div id="ive-submitted-now-what" class="section level3">
+<h3>I’ve submitted, now what?</h3>
+<p>This is what it will typically look like after you’ve submitted to a journal, however, specific timelines and details will of course vary from journal to journal. For example, there may be multiple rounds of revision, or you may need to appeal a decision in some cases. Please look up the submission process for your journal of interest for more information.</p>
+<ol style="list-style-type: decimal">
+<li>Editors will decide whether or not to send out your manuscript for reviews</li>
+<li>Reviewers will be contacted and if they agree to review, they will receive a deadline to send in their comments on what other experiments or discussion points would improve the manuscript, and ultimately, whether they are in favour of publishing this work</li>
+<li>Depending on the reviews, you may be rejected at this point, or need to make revisions which may entail more experiments, different statistical analyses, or clarifying the findings to address the comments of the reviewers.</li>
+<li>The revised manuscript will be sent back to reviewers to again decide if they should suggest the editor to publish the paper or not.</li>
+<li>The editor makes a final decision, if it is a rejection, they may suggest submission to a different journal, and/or some brief description as to why they will not proceed with the manuscript.</li>
+<li>If your article has been accepted, the production phase begins where you will work with the editor to make your manuscript publication ready.</li>
+</ol>
+</div>
+<div id="general-scientific-writing-tips" class="section level3">
+<h3>General Scientific Writing Tips</h3>
+<p>Scientific writing is very structured. After reading many articles, you will begin to see the patterns emerge from author to author. You may even start to pick out the good writers from the bad writers, and take away good practices from the good writers. While there is no simple recipe, there are guidelines you can follow.</p>
+<p>These are some tips on the writing process and style:</p>
+<ul>
+<li>Be clear and concise, especially when stating your objectives/hypotheses</li>
+<li>Define your terms: don’t use acronyms without first defining them</li>
+<li>Jargon should be minimized, and explained if they must be used</li>
+<li>Typically, do not state a fact without citing work that supports this fact. While you may think something is obvious, not everyone reading your work will.</li>
+<li>Edit, Edit, Edit. You should plan in advance to have others read your work if possible, but your first draft should not be your last draft
+<ul>
+<li>Have someone who is not in your field read over your work. While the details of specific terms (which you should be minimizing) may not be clear to a non-expert, they should still be able to understand the big picture.</li>
+</ul></li>
+</ul>
+<p>In terms of content, these are some questions you can ask yourself:</p>
+<ul>
+<li>Do you give context as to why your research question is interesting?</li>
+<li>Do you clearly state what your findings are?</li>
+<li>Do you give perspective on how your findings fit in (or don’t fit in) with accepted views, or existing literature?</li>
+<li>Do you address other experiments and interesting questions that result from your findings?</li>
+</ul>
+<p><em>This lesson has been adapted from <a href="https://cbahlai.github.io/rqm-template/lessons/week3/">Lecture 3 of the original RQM course</a></em></p>
+</div>
+</div>
+
+
+<hr>
+
+<p>This work is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. See the <a href="LICENSE.html">licensing</a> page for more details about copyright information.</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

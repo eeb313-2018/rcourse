@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Madeleine Bonsma-Fisher" />
+
+
+<title>Fixed points, nullclines, and stability</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link rel="icon" type="image/png" href="image/favicon.png">
+<style type="text/css">
+
+table {
+    border-collapse: collapse;
+}
+
+thead {
+    border-top: solid #DCDCDC;
+    border-bottom: solid #DCDCDC;
+}
+
+tr.odd {
+    background-color: #F8F8F8;
+}
+
+tr:last-child {
+    border-bottom: solid #DCDCDC;
+}
+
+</style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 54px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h2 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h3 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h4 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h5 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h6 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">EEB313H1</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-map-o"></span>
+     
+    Syllabus
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lec01-introduction.html">Sept. 6: Intro to course, programming, RStudio, and R Markdown</a>
+    </li>
+    <li>
+      <a href="lec02-basic-r.html">Sept. 11: Assignment, vectors, functions</a>
+    </li>
+    <li>
+      <a href="lec03-basic-r.html">Sept. 13: Data frames, intro to dplyr</a>
+    </li>
+    <li>
+      <a href="lec04-dplyr.html">Sept. 18: Data wrangling in dplyr, ggplot, tidy data</a>
+    </li>
+    <li>
+      <a href="lec05-dplyr.html">Sept. 20: More dplyr and ggplot</a>
+    </li>
+    <li>
+      <a href="lec06-exploratory-data-analysis.html">Sept. 25: Exploratory data analysis</a>
+    </li>
+    <li>
+      <a href="lec07-linear-modelling.html">Sept. 27: Linear models and statistical modelling</a>
+    </li>
+    <li>
+      <a href="lec08-linear-mixed-effects-models.html">Oct. 02: Mixed effects models</a>
+    </li>
+    <li>
+      <a href="lec09-Randomization-tests.html">Oct. 04: Simulating data: Randomization tests</a>
+    </li>
+    <li class="dropdown-header">Oct. 09: Multivariate stats</li>
+    <li class="dropdown-header">Oct. 11: Model selection</li>
+    <li class="dropdown-header">Oct. 16: Numerically solving population models</li>
+    <li class="dropdown-header">Oct. 18: Time series analysis</li>
+    <li>
+      <a href="lec12-datasets.html">Oct. 23: Datasets, hypothesis, begin projects</a>
+    </li>
+    <li>
+      <a href="lec14-git.html">Oct. 25: Reproducible science</a>
+    </li>
+    <li>
+      <a href="lec17-rmarkdown.html">Oct. 30: Reproducible science</a>
+    </li>
+    <li class="dropdown-header">Nov. 01: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 13: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 15: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 20: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 22: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 27: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 29: Project work (no lesson)</li>
+    <li class="dropdown-header">Dec. 04: Project work (no lesson)</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Assignments
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="assignment-01.html">Assignment 1</a>
+    </li>
+    <li>
+      <a href="assignment-02.html">Assignment 2</a>
+    </li>
+    <li>
+      <a href="assignment-03.html">Assignment 3</a>
+    </li>
+    <li>
+      <a href="assignment-04.html">Assignment 4</a>
+    </li>
+    <li class="dropdown-header">Assignment 5</li>
+    <li class="dropdown-header">Assignment 6</li>
+    <li class="dropdown-header">Assignment 7</li>
+    <li class="dropdown-header">Assignment 8</li>
+    <li class="dropdown-header">Final assignment</li>
+  </ul>
+</li>
+<li>
+  <a href="resources.html">
+    <span class="fa fa-question"></span>
+     
+    Resources and FAQ
+  </a>
+</li>
+<li>
+  <a href="about.html">
+    <span class="fa fa-info"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-bars"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="mailto:ahmed.hasan@mail.utoronto.ca">
+        <span class="fa fa-envelope"></span>
+         
+        Contact
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/uoftcoders/rcourse">
+        <span class="fa fa-github"></span>
+         
+        GitHub
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Fixed points, nullclines, and stability</h1>
+<h4 class="author"><em>Madeleine Bonsma-Fisher</em></h4>
+
+</div>
+
+
+<div id="lesson-preamble" class="section level2">
+<h2>Lesson preamble</h2>
+<blockquote>
+<h3 id="learning-objectives">Learning objectives</h3>
+<ul>
+<li>Find fixed points for one-dimensional systems analytically</li>
+<li>Find fixed points for two-dimensional systems analytically</li>
+<li>Find nullclines for two-dimensional systems</li>
+<li>Analyze stability for one and two-dimensional systems analytically
+<ul>
+<li>Write down the Jacobian matrix</li>
+<li>Use R to find eigenvalues of the Jacobian</li>
+<li>Classify stability of fixed points using eigenvalues of the Jacobian</li>
+</ul></li>
+</ul>
+</blockquote>
+<blockquote>
+<h3 id="lesson-outline">Lesson outline</h3>
+<p>Total lesson time: 2 hours</p>
+<ul>
+<li>Finding fixed points analytically (30 min)</li>
+<li>Finding and plotting nullclines (20 min)</li>
+<li>Quantitative stability analysis in one dimension (20 min)</li>
+<li>Quantitative stability analysis in two dimensions (40 min)</li>
+</ul>
+</blockquote>
+<blockquote>
+<h3 id="setup">Setup</h3>
+<ul>
+<li><code>install.packages('phaseR')</code></li>
+<li><code>install.packages('deSolve')</code></li>
+<li><code>install.packages('ggplot2')</code> (or <code>tidyverse</code>)</li>
+<li><code>install.packages('dplyr')</code> (or <code>tidyverse</code>)</li>
+<li><code>install.packages('tidyr')</code> (or <code>tidyverse</code>)</li>
+</ul>
+</blockquote>
+</div>
+<div id="finding-fixed-points-analytically" class="section level2">
+<h2>Finding fixed points analytically</h2>
+<p>Up until now we’ve been plotting <span class="math inline">\(\frac{dN}{dt}\)</span> vs. <span class="math inline">\(N\)</span> to find the fixed points of a system. But we can also solve <span class="math inline">\(\frac{dN}{dt}\)</span> <span class="math inline">\(=0\)</span> analytically to find the fixed points. One advantage of finding the fixed points analytically is that you can see how the fixed points depend on the model parameters, whereas before we had to choose parameters in order to plot <span class="math inline">\(\frac{dN}{dt}\)</span> and find the fixed points qualitatively.</p>
+<p><span class="math display">\[\frac{dN}{dt} = rN(1-\frac{N}{K})\]</span></p>
+<p>First, we set <span class="math inline">\(\frac{dN}{dt}\)</span> <span class="math inline">\(=0\)</span>.</p>
+<p><span class="math display">\[0 = rN(1-\frac{N}{K})\]</span></p>
+<p>Next, we find all the values of <span class="math inline">\(N\)</span> that satisfy this equation. If either <span class="math inline">\(rN = 0\)</span> or <span class="math inline">\(1-\frac{N}{K} = 0\)</span>, the equation is satisfied. This means we have two fixed points, one at <span class="math inline">\(N = 0\)</span> (since <span class="math inline">\(r \neq 0\)</span>) and the other at <span class="math inline">\(N = K\)</span>. These are the same fixed points we found graphically last week. Notice that one of the fixed points depends on <span class="math inline">\(K\)</span>, but that neither of the fixed points depend on <span class="math inline">\(r\)</span>.</p>
+<div id="challenge" class="section level4">
+<h4>Challenge</h4>
+<p>Find the fixed point(s) of the following differential equation:</p>
+<p><span class="math display">\[\frac{dx}{dt} = x^2 - 1\]</span></p>
+<ul>
+<li>First find the fixed points analytically on paper.</li>
+<li>Plot <span class="math inline">\(\frac{dx}{dt}\)</span> vs. <span class="math inline">\(x\)</span> for <span class="math inline">\(x\)</span> ranging from <span class="math inline">\(-2\)</span> to <span class="math inline">\(2\)</span> in <span class="math inline">\(0.1\)</span> increments.</li>
+<li>Sketch a phase portrait. Are the fixed point(s) stable or unstable?</li>
+</ul>
+</div>
+</div>
+<div id="fixed-points-in-two-dimensional-systems" class="section level2">
+<h2>Fixed points in two-dimensional systems</h2>
+<p>Why are we bothering to find fixed points analytically when we could find them graphically? One reason that we touched on last class is that it allows us to see how the fixed points depend on the model parameters. Another reason is that by solving the system analytically, we can be sure that we found <em>all</em> the fixed points, even ones that we wouldn’t find by simulating trajectories.</p>
+<p>Finding fixed points in two dimensions is similar to finding them in one dimension, but now we have two equations that we have to solve <em>simultaneously</em>. That means we set both <span class="math inline">\(dx/dt = 0\)</span> and <span class="math inline">\(dy/dt = 0\)</span> and find combinations of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> that make both zero at the same time.</p>
+<p>Let’s find the fixed points for our predator-prey model:</p>
+<p><span class="math display">\[\frac{dx}{dt} = Ax - Bxy\]</span> <span class="math display">\[\frac{dy}{dt} = Cx - Dy\]</span></p>
+<p>We need to solve <span class="math inline">\(0 = Ax - Bxy\)</span> and <span class="math inline">\(0 = Cx - Dy\)</span>. We have two equations and two unknowns, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. Let’s factor the equations where we can:</p>
+<p><span class="math display">\[0 = x(A-By)\]</span></p>
+<p><span class="math display">\[0 = Cx - Dy\]</span></p>
+<p>One possibility from the first equation is <span class="math inline">\(x = 0\)</span>. If <span class="math inline">\(x = 0\)</span>, then <span class="math inline">\(y\)</span> must also be <span class="math inline">\(0\)</span> in order for <span class="math inline">\(Cx - Dy = -Dy = 0\)</span>. So one fixed point is <span class="math inline">\(x = 0, y = 0\)</span>.</p>
+<p>The other factor in the first equation gives <span class="math inline">\(A = By\)</span>, so <span class="math inline">\(y = A/B\)</span>. If we plug <span class="math inline">\(y = A/B\)</span> into the second equation, we get <span class="math inline">\(Cx = AD/B\)</span>, so <span class="math inline">\(x = \frac{AD}{BC}\)</span>. The second fixed point is <span class="math inline">\(x = \frac{AD}{BC}, y = \frac{A}{B}\)</span>.</p>
+<p>Let’s create a phase portrait using <code>phaseR</code> and add these fixed points to the phase portrait.</p>
+<div id="challenge-1" class="section level4">
+<h4>Challenge</h4>
+<p>Define a function called <code>predator_prey</code> that uses the format required by <code>ode</code> to calculate and return <span class="math inline">\(dx/dt\)</span> and <span class="math inline">\(dy/dt\)</span>. Feel free to refer to the notes from last class and re-use what you need.</p>
+<p>Now we create the phase portrait using <code>phaseR</code>, add some trajectories, and add the fixed points.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(phaseR)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co"># parameters</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">A &lt;-<span class="st"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">B &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">C &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">D &lt;-<span class="st"> </span><span class="fl">0.2</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">params &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">A =</span> A, <span class="dt">B =</span> B, <span class="dt">C =</span> C, <span class="dt">D =</span> D) <span class="co"># so that they can be called by name</span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">initial_conditions &lt;-<span class="st">  </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">                                <span class="dv">8</span>, <span class="dv">5</span>, </a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">                                <span class="dv">2</span>, <span class="dv">0</span>, </a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">                                <span class="dv">0</span>, <span class="dv">8</span>), </a>
+<a class="sourceLine" id="cb1-15" data-line-number="15">                              <span class="dt">ncol =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb1-16" data-line-number="16">                              <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-17" data-line-number="17"></a>
+<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="co"># plot vector field: on a grid of points, plot an arrow in the direction of dx/dt and dy/dt</span></a>
+<a class="sourceLine" id="cb1-19" data-line-number="19">pp_flowField &lt;-<span class="st"> </span><span class="kw">flowField</span>(predator_prey, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">10</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb1-20" data-line-number="20">                          <span class="dt">parameters =</span> params,</a>
+<a class="sourceLine" id="cb1-21" data-line-number="21">                          <span class="dt">points =</span> <span class="dv">15</span>, <span class="co"># this is the density of grid points on which to plot arrows</span></a>
+<a class="sourceLine" id="cb1-22" data-line-number="22">                          <span class="dt">system =</span> <span class="st">&#39;two.dim&#39;</span>, <span class="co"># &#39;two.dim&#39; is default</span></a>
+<a class="sourceLine" id="cb1-23" data-line-number="23">                          <span class="dt">add =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb1-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb1-25" data-line-number="25"><span class="co"># add trajectories</span></a>
+<a class="sourceLine" id="cb1-26" data-line-number="26">pp_trajectory &lt;-<span class="st"> </span><span class="kw">trajectory</span>(predator_prey, </a>
+<a class="sourceLine" id="cb1-27" data-line-number="27">                            <span class="co"># y0 is a matrix where each row is pairs of (X, Y) </span></a>
+<a class="sourceLine" id="cb1-28" data-line-number="28">                            <span class="dt">y0 =</span> initial_conditions, </a>
+<a class="sourceLine" id="cb1-29" data-line-number="29">                            <span class="dt">tlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">30</span>), <span class="co"># how far in time to calculate the trajectories</span></a>
+<a class="sourceLine" id="cb1-30" data-line-number="30">                            <span class="dt">parameters =</span> params, <span class="dt">system =</span> <span class="st">&quot;two.dim&quot;</span>)</a></code></pre></div>
+<pre><code>## Note: col has been reset as required</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># plot fixed points (using the base plotting system, which is not as good as ggplot)</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co"># x = 0, y = 0 </span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="kw">points</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="co"># x, y coordinates of point to plot</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">       <span class="dt">cex =</span> <span class="fl">1.5</span>) <span class="co"># &#39;cex&#39; stands for &#39;character expansion&#39;: marker size relative to default</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co"># x = AD/BC, y = A/B</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">x_star &lt;-<span class="st"> </span>A <span class="op">*</span><span class="st"> </span>D <span class="op">/</span><span class="st"> </span>(B <span class="op">*</span><span class="st"> </span>C)  <span class="co"># fixed points are often denoted with `star` i.e. x*, y*</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">y_star &lt;-<span class="st"> </span>A <span class="op">/</span><span class="st"> </span>B</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="kw">points</span>(x_star, y_star, <span class="co"># x, y coordinates of point to plot</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">       <span class="dt">pch =</span> <span class="dv">21</span>, <span class="co"># pch = 21 gives a filled circle, &#39;pch&#39; stands for &#39;plotting character&#39;</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">       <span class="co"># see  https://stat.ethz.ch/R-manual/R-devel/library/graphics/html/points.html</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13">       <span class="dt">bg =</span> <span class="st">&#39;black&#39;</span>, <span class="co"># background colour</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14">       <span class="dt">cex =</span> <span class="fl">1.5</span>) </a></code></pre></div>
+<p><img src="lec09-modeling-r_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>One interesting thing about this system is that <span class="math inline">\(x = 0, y = 0\)</span> is an unstable fixed point, but there is one direction in which trajectories are attracted to it: along the y-axis. This makes sense: if there are no prey (<span class="math inline">\(x = 0\)</span>), then the predators must also go extinct. We will come back to this later when we talk about analyzing stability analytically.</p>
+</div>
+</div>
+<div id="nullclines-in-two-dimensional-systems" class="section level2">
+<h2>Nullclines in two-dimensional systems</h2>
+<p>A nullcline is a curve on which one of the derivatives in the model is <span class="math inline">\(0\)</span>. In other words, it’s a series of points for which one of the variables is not changing — its rate of change is <span class="math inline">\(0\)</span> on that line.</p>
+<p>Finding nullclines is similar to finding fixed points, except that when we found fixed points, we required both derivatives to be <em>simultaneously</em> zero. For nullclines, we only set one derivative to zero at a time, and the other one is free to do what it wants.</p>
+<p>To find the <span class="math inline">\(x\)</span> nullcline(s), the curve(s) on which <span class="math inline">\(x\)</span> will not change, we set <span class="math inline">\(\frac{dx}{dt} = Ax - Bxy\)</span> to zero, ignoring <span class="math inline">\(\frac{dy}{dt}\)</span>.</p>
+<p><span class="math display">\[0 = Ax - Bxy\]</span></p>
+<p>Now we proceed exactly as if we were finding the fixed points, but we don’t require that <span class="math inline">\(y\)</span> be anything in particular. We can factor the right hand side to <span class="math inline">\(x(A-By)\)</span>, which means there are actually two curves for which the rate of change of <span class="math inline">\(x\)</span> is <span class="math inline">\(0\)</span>. One of them is at <span class="math inline">\(x = 0\)</span>: it’s a straight line on the y-axis. For any value of <span class="math inline">\(y\)</span>, provided <span class="math inline">\(x = 0\)</span>, <span class="math inline">\(x\)</span> won’t change. The other one is at <span class="math inline">\(y = A/B\)</span>: another straight line, this time at a fixed value of <span class="math inline">\(y\)</span>. For any value of <span class="math inline">\(x\)</span>, provided <span class="math inline">\(y = A/B\)</span>, <span class="math inline">\(x\)</span> won’t change.</p>
+<p>Let’s run a numerical solution for the predator-prey model we’ve been using and plot the null clines we just found.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># run the numerical solution</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">library</span>(deSolve)</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">parameters &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">A =</span> <span class="dv">5</span>, <span class="dt">B =</span> <span class="dv">1</span>, <span class="dt">C =</span> <span class="dv">1</span>, <span class="dt">D =</span> <span class="fl">0.2</span>)</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">state &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">X =</span> <span class="dv">2</span>, <span class="dt">Y =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dt">by =</span> <span class="fl">0.01</span>)</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">result &lt;-<span class="st"> </span><span class="kw">ode</span>(<span class="dt">y =</span> state, <span class="dt">times =</span> times, <span class="dt">func =</span> predator_prey, <span class="dt">parms =</span> parameters)</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">result &lt;-<span class="st"> </span><span class="kw">data.frame</span>(result)</a></code></pre></div>
+<p>Plot a trajectory in the phase plane and the nullclines:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">x_seq &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">8</span>, <span class="dt">by =</span> <span class="fl">0.1</span>)</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">y_seq &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">8</span>, <span class="dt">by =</span> <span class="fl">0.1</span>)</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(x_seq, y_seq)</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span><span class="co"># assign plot to a variable so we can use it later</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="st">  </span><span class="kw">geom_path</span>(<span class="kw">aes</span>(<span class="dt">x =</span> X, <span class="dt">y =</span> Y, <span class="dt">color =</span> time), result) <span class="op">+</span><span class="st"> </span><span class="co"># trajectory</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="dv">0</span>, <span class="dt">y =</span> y_seq), df, <span class="dt">color =</span> <span class="st">&#39;dark red&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="co"># x nullcline 1</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x_seq, <span class="dt">y =</span> A<span class="op">/</span>B), df, <span class="dt">color =</span> <span class="st">&#39;dark red&#39;</span>) <span class="co"># x nullcline 2</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13">p1</a></code></pre></div>
+<p><img src="lec09-modeling-r_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>The nullclines go through the places where the trajectory turns back on itself – they go through the ‘peaks’ and ‘valleys’ of <span class="math inline">\(x\)</span>.</p>
+<p>Another way to think of the nullclines is as if we were back to a 1D system and were plotting <span class="math inline">\(dx/dt\)</span> vs. <span class="math inline">\(x\)</span> for a series of values of <span class="math inline">\(y\)</span>. The nullcline passes through all the points where <span class="math inline">\(dx/dt = 0\)</span>.</p>
+<p>Now let’s find the nullclines for <span class="math inline">\(y\)</span> by solving <span class="math inline">\(0 = Cx - Dy\)</span>. In general, we want an equation in the form <span class="math inline">\(y(x)\)</span>, <span class="math inline">\(y\)</span> as a function of <span class="math inline">\(x\)</span>, so that we can more easily plot it on our phase portrait axes.</p>
+<p>After rearranging, we find the solution to this equation: <span class="math inline">\(y = \frac{C}{D}x\)</span>. Let’s add it to the plot</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">p1 <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x_seq, <span class="dt">y =</span> x_seq<span class="op">*</span>C<span class="op">/</span>D), df, <span class="dt">colour =</span> <span class="st">&#39;blue&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="st">  </span><span class="kw">xlim</span>(<span class="dv">0</span>, <span class="dv">8</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="st">  </span><span class="kw">ylim</span>(<span class="dv">0</span>, <span class="dv">8</span>)</a></code></pre></div>
+<pre><code>## Warning: Removed 64 rows containing missing values (geom_path).</code></pre>
+<p><img src="lec09-modeling-r_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>The intersection(s) of the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> nullclines are the fixed points, so plotting null clines is also a way to graphically find the fixed points. This is particularly useful if it’s hard to solve for the fixed points analytically.</p>
+<p>The <code>phaseR</code> package also includes a <code>nullclines</code> function to draw nullclines for you.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">?nullclines</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># plot vector field: on a grid of points, plot an arrow in the direction of dx/dt and dy/dt</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">pp_flowField &lt;-<span class="st"> </span><span class="kw">flowField</span>(predator_prey, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">10</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">                          <span class="dt">parameters =</span> params,</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">                          <span class="dt">points =</span> <span class="dv">15</span>, <span class="co"># this is the density of grid points on which to plot arrows</span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">                          <span class="dt">system =</span> <span class="st">&#39;two.dim&#39;</span>, <span class="co"># &#39;two.dim&#39; is default</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">                          <span class="dt">add =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co"># add trajectories</span></a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">pp_trajectory &lt;-<span class="st"> </span><span class="kw">trajectory</span>(predator_prey, </a>
+<a class="sourceLine" id="cb9-10" data-line-number="10">                            <span class="co"># y0 is a matrix where each row is pairs of (X, Y) </span></a>
+<a class="sourceLine" id="cb9-11" data-line-number="11">                            <span class="dt">y0 =</span> initial_conditions, </a>
+<a class="sourceLine" id="cb9-12" data-line-number="12">                            <span class="dt">tlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">30</span>), <span class="co"># how far in time to calculate the trajectories</span></a>
+<a class="sourceLine" id="cb9-13" data-line-number="13">                            <span class="dt">parameters =</span> params, <span class="dt">system =</span> <span class="st">&quot;two.dim&quot;</span>)</a></code></pre></div>
+<pre><code>## Note: col has been reset as required</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">pp_nullclines &lt;-<span class="st"> </span><span class="kw">nullclines</span>(predator_prey, </a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">           <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="co"># axis limits</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">           <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">           <span class="co"># y0 is a matrix where each row is pairs of (X, Y) </span></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">           <span class="dt">y0 =</span> initial_conditions, </a>
+<a class="sourceLine" id="cb11-6" data-line-number="6">           <span class="dt">t.end =</span> <span class="dv">30</span>, <span class="co"># how far in time to calculate the trajectories </span></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7">           <span class="dt">parameters =</span> params, <span class="dt">system =</span> <span class="st">&quot;two.dim&quot;</span>)</a></code></pre></div>
+<p><img src="lec09-modeling-r_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>The vector field tells us graphically that there is one stable fixed point at (<span class="math inline">\(x = 1, y = 5\)</span>) and one unstable fixed point at (<span class="math inline">\(x = 0, y = 0\)</span>).</p>
+<div id="challenge-to-think-about" class="section level4">
+<h4>Challenge (to think about)</h4>
+<p>Is there a minimum number of nullclines a system must have? Are the nullclines guaranteed to intersect? Are nullclines always straight lines?</p>
+</div>
+<div id="challenge-2" class="section level4">
+<h4>Challenge</h4>
+<p>Find the fixed point(s) and nullclines analytically for the following two-dimensional system. Verify your work by plotting the nullclines.</p>
+<p><span class="math display">\[\frac{dx}{dt} = 4x - y\]</span> <span class="math display">\[\frac{dy}{dt} = 2x + y\]</span></p>
+</div>
+</div>
+<div id="quantitative-stability-analysis" class="section level2">
+<h2>Quantitative stability analysis</h2>
+<p>We’ve now found fixed points analytically, but up until now we’ve been analyzing the stability of the fixed points by constructing a phase portrait and looking at it. This is a perfectly good way to analyze stability, but we can do more: we can find out a whole lot with the quantitative stability analysis we’re about to do:</p>
+<ul>
+<li>Whether a fixed point will be stable or unstable</li>
+<li>How the system will behave near a fixed point (are there oscillations, etc.)</li>
+<li>How the stability and type of a fixed point depend on the model parameters</li>
+</ul>
+<p>The last reason in the list is in many ways the best reason. As we will see, in some models the number and/or stability of the fixed points depends on the system parameters, and quantitatively analyzing stability will show us this.</p>
+<p>To analyze stability, we <strong>linearize</strong> our model: we assume the system is linear close to the fixed point so that we have differential equations in the form <span class="math inline">\(d\vec{x}/dt \propto \vec{x}\)</span>, where <span class="math inline">\(\vec{x}\)</span> is a vector of length <span class="math inline">\(D\)</span>, the number of dimensions in the model. Each element of <span class="math inline">\(\vec{x}\)</span> is a particular direction in phase space. In one dimension it’s the same as the model variable, but in more than one dimension the directions don’t necessarily have to be the same as the model variables. Because the equations are in this linearized form, their solutions are exponential functions. These solutions will tell us how the system behaves in the region close to the fixed points.</p>
+<p>That was a lot. Let’s start looking at examples.</p>
+<div id="quantitative-stability-analysis-in-one-dimension" class="section level3">
+<h3>Quantitative stability analysis in one dimension</h3>
+<p>Let’s look at the logistic equation.</p>
+<p><span class="math display">\[\frac{dN}{dt} = rN (1-\frac{N}{K})\]</span></p>
+<p>Let’s call the right-hand side of this equation <span class="math inline">\(f(N)\)</span>: <span class="math inline">\(f(N) = rN(1 - \frac{N}{K})\)</span>. First, we find the fixed points by setting <span class="math inline">\(f(N) = 0\)</span>. The fixed points are <span class="math inline">\(N = 0\)</span> and <span class="math inline">\(N = K\)</span>.</p>
+<p>Next, to linearize this equation, we take the <strong>derivative</strong> of <span class="math inline">\(f(N)\)</span> with respect to <span class="math inline">\(N\)</span>: we calculate <span class="math inline">\(\frac{\partial f(N)}{\partial N}\)</span>.</p>
+<p><span class="math display">\[f(N) = rN(1 - \frac{N}{K}) = rN - \frac{rN^2}{K}\]</span></p>
+<p>In the second form it’s a bit easier to take the derivative with respect to <span class="math inline">\(N\)</span>.</p>
+<p><span class="math display">\[\frac{\partial}{\partial N} f(N) = r - \frac{2rN}{K}\]</span></p>
+<p><em>Note</em>: the symbol <span class="math inline">\(\partial\)</span> stands for ‘partial derivative’: it means that we only worry about terms that <strong>explicitly</strong> depend on <span class="math inline">\(N\)</span> in this case.</p>
+<div id="challenge-3" class="section level4">
+<h4>Challenge</h4>
+<p>Evaluate the following derivatives:</p>
+<p><span class="math display">\[\frac{d}{dx} x^2\]</span></p>
+<p><span class="math display">\[\frac{\partial}{\partial N} \text{e}^N\]</span></p>
+<p><span class="math display">\[\frac{\partial}{\partial x} \frac{y}{x}\]</span></p>
+<hr />
+<p>Now comes the magic. We evaluate the derivative we just calculated, <span class="math inline">\(\frac{\partial f(N)}{\partial N}\)</span>, at each of the fixed points in turn. If it’s <strong>negative</strong>, the fixed point is <strong>stable</strong>. If it’s <strong>positive</strong>, the fixed point is <strong>unstable</strong>. That’s all there is to it!</p>
+<p>For the fixed point <span class="math inline">\(N = 0\)</span>:</p>
+<p><span class="math display">\[\frac{\partial}{\partial N} f(N) \vert_{N=0} = (r - \frac{2rN}{K})\vert_{N=0} = r\]</span></p>
+<p><span class="math inline">\(r\)</span> is the growth rate, a number we haven’t chosen, but we do know that it’s always positive. That means <span class="math inline">\(N = 0\)</span> is an unstable fixed point.</p>
+<p>For the fixed point <span class="math inline">\(N = K\)</span>:</p>
+<p><span class="math display">\[\frac{\partial}{\partial N} f(N) \vert_{N=K} = (r - \frac{2rN}{K})\vert_{N=K} = r - \frac{2rK}{K} = -r\]</span></p>
+<p>If <span class="math inline">\(r\)</span> is positive, then this expression is negative, and <span class="math inline">\(N=K\)</span> is a stable fixed point. Notice that if we happened to make the parameter <span class="math inline">\(r\)</span> negative, the stability of the fixed points would switch! These kinds of observations are much easier to make after we’ve quantitatively analyzed stability.</p>
+<p>Here’s another way to think about what just happened. When we were drawing phase portraits, we looked at the sign of <span class="math inline">\(\frac{dN}{dt}\)</span> and drew arrows to the left or right depending on its sign. Now, by looking at <span class="math inline">\(\frac{\partial}{\partial N} \frac{dN}{dt}\)</span> instead, we’re formally calculating the <em>slope</em> of <span class="math inline">\(\frac{dN}{dt}\)</span> with respect to <span class="math inline">\(N\)</span> near the fixed point: where the slope is negative, we know that <span class="math inline">\(N\)</span> will be drawn back towards the fixed point, and where the slope is positive, <span class="math inline">\(N\)</span> will be pushed away from the fixed point.</p>
+<p>Let’s revisit the differential equation <span class="math inline">\(\frac{dx}{dt} = \text{sin}(x)\)</span> to explore this idea.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">x_seq &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dt">by =</span> <span class="fl">0.1</span>)</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw">qplot</span>(x_seq, <span class="kw">sin</span>(x_seq)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>)</a></code></pre></div>
+<p><img src="lec09-modeling-r_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>The four fixed points visible here are respectively unstable, stable, unstable, and stable, because the slope through the fixed points is respectively positive, negative, positive, and negative.</p>
+</div>
+</div>
+<div id="stability-analysis-in-two-dimensions" class="section level3">
+<h3>Stability analysis in two dimensions</h3>
+<p>Analyzing stability in two dimensions follows exactly the same principle, but the math is a little bit more complicated. Now instead of needing to find the slope in just one dimension, we have a two-dimensional surface we need to consider.</p>
+<p>Imagine the landscape of <span class="math inline">\(dx/dt\)</span> and <span class="math inline">\(dy/dt\)</span> as an actual landscape with hills and valleys. We could have mountain peaks that represent unstable fixed points:</p>
+<div class="figure">
+<img src="https://chrismartinphotography.files.wordpress.com/2014/09/mount-rundle-moonrise-c2a9-christopher-martin-95461.jpg" alt="Mt Rundle, Alberta" />
+<p class="caption">Mt Rundle, Alberta</p>
+</div>
+<p>We could have beautiful valleys that represent stable fixed points:</p>
+<div class="figure">
+<img src="https://www1.toronto.ca/City%20Of%20Toronto/Parks%20Forestry%20&amp;%20Recreation/Events/images/brickworks-park-headerimages.jpg" alt="Evergreen Brickworks" />
+<p class="caption">Evergreen Brickworks</p>
+</div>
+<p>We could have a treacherous mountain pass:</p>
+<div class="figure">
+<img src="https://d36tnp772eyphs.cloudfront.net/blogs/1/2015/06/4a.Peru-Abra-Malaga2.jpg" alt="Abra Malaga Pass, Peru" />
+<p class="caption">Abra Malaga Pass, Peru</p>
+</div>
+<p>Here’s an idealized representation of a mountain pass.</p>
+<div class="figure">
+<img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Saddleroute3.JPG" alt="Idealized mountain pass, By Paulba Legend (talk), CC BY-SA 3.0" />
+<p class="caption">Idealized mountain pass, By Paulba Legend (talk), CC BY-SA 3.0</p>
+</div>
+<div id="challenge-4" class="section level4">
+<h4>Challenge</h4>
+<p>Is the high point of a mountain pass a <strong>stable</strong> fixed point or an <strong>unstable</strong> fixed point? Why?</p>
+</div>
+</div>
+<div id="calculating-the-jacobian-matrix" class="section level3">
+<h3>Calculating the Jacobian matrix</h3>
+<p>We will now learn how to formally describe the stability of fixed points in two-dimensional systems — how to quantitatively distinguish all the possible landscape shapes that can surround a fixed point.</p>
+<p>Just like in the one-dimensional case, we want to calculate the slope of the two-dimensional surface in the vicinity of the fixed point. To do this, we calculate four partial derivatives and arrange them into a matrix called the <strong>Jacobian</strong>.</p>
+<p>Let’s use our predator-prey model as an example. We let the right-hand side of each equation equal <span class="math inline">\(f(x,y)\)</span> and <span class="math inline">\(g(x,y)\)</span> respectively.</p>
+<p><span class="math display">\[\frac{dx}{dt} = Ax - Bxy = f(x,y)\]</span> <span class="math display">\[\frac{dy}{dt} = Cx - Dy = g(x,y)\]</span></p>
+<p>This is the Jacobian matrix. It’s often called <span class="math inline">\(J\)</span>.</p>
+<p><span class="math display">\[J=\begin{bmatrix}
+    \frac{\partial f}{\partial x} &amp; \frac{\partial f}{\partial y} \\
+    \frac{\partial g}{\partial x} &amp; \frac{\partial g}{\partial y}
+\end{bmatrix}\]</span></p>
+<p><em>Note</em>: it doesn’t matter which variable is which, or which equation is called <span class="math inline">\(f\)</span> or <span class="math inline">\(g\)</span>, as long as the order is consistent — one function on the top row, the other on the bottom, one variable in the first column, the other in the second.</p>
+<p>Let’s evaluate each of these partial derivatives.</p>
+<p><span class="math display">\[\frac{\partial f}{\partial x} = \frac{\partial }{\partial x} (Ax-Bxy) = A - By\]</span></p>
+<p>Think of the partial derivative as a slice in a particular direction through a potato: you could look at how the potato shape changes along its long direction or its short direction, and by doing a partial derivative you are slicing along only one of the directions.</p>
+<p><span class="math display">\[\frac{\partial f}{\partial y} = \frac{\partial }{\partial y} (Ax-Bxy) = - Bx\]</span> <span class="math display">\[\frac{\partial g}{\partial x} = \frac{\partial }{\partial x} (Cx-Dy) = C\]</span></p>
+<p><span class="math display">\[\frac{\partial g}{\partial x} = \frac{\partial }{\partial x} (Cx-Dy) = -D\]</span></p>
+<p>We can put all these terms into the Jacobian. This matrix is now the Jacobian corresponding to our predator-prey model.</p>
+<p><span class="math display">\[J=\begin{bmatrix}
+    A - By &amp; -Bx \\
+    C &amp; -D
+\end{bmatrix}\]</span></p>
+</div>
+<div id="classifying-fixed-points-using-eigenvalues-of-the-jacobian" class="section level3">
+<h3>Classifying fixed points using eigenvalues of the Jacobian</h3>
+<p>From here, we need to calculate the <strong>eigenvalues</strong> of the Jacobian matrix. The eigenvalues of a square matrix <span class="math inline">\(A\)</span> are numbers (often denoted <span class="math inline">\(\lambda\)</span>) that satisfy the following relationship, where <span class="math inline">\(\vec{v}\)</span> is a vector whose length is the dimension of <span class="math inline">\(A\)</span>. (If <span class="math inline">\(A\)</span> is a 2-by-2 matrix, <span class="math inline">\(\vec{v}\)</span> is a length-2 vector.)</p>
+<p><span class="math display">\[A\vec{v} = \lambda \vec{v}\]</span>.</p>
+<p>What this means is that if the matrix <span class="math inline">\(A\)</span> is multiplied with a particular vector <span class="math inline">\(\vec{v}\)</span>, the resulting vector is a number multiplied by the original vector.</p>
+<p>This isn’t true for just any vector. The particualr vectors that satisfy this relationship for the matrix <span class="math inline">\(A\)</span> are called <strong>eigenvectors</strong>. In general, this is how matrix multiplication works:</p>
+<p><span class="math display">\[\begin{bmatrix}
+    \alpha &amp; \beta \\
+    \gamma &amp; \delta
+\end{bmatrix} 
+\begin{bmatrix} 
+v_1 \\
+v_2
+\end{bmatrix} = 
+\begin{bmatrix}
+\alpha v_1 + \beta v_2 \\
+\gamma v_1 + \delta v_2
+\end{bmatrix}\]</span></p>
+<p>The result is a new vector, still of length 2, but not necessarily a constant multiplied by the original vector <span class="math inline">\((v_1, v_2)\)</span>.</p>
+<p>For a 2-by-2 matrix, there are in general two eigenvalues and two eigenvectors. In the language of stability, the eigenvectors are ‘directions’ in the landscape — each one is an axis, like <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are axes, except that the eigenvector directions don’t have to be perpendicular or oriented the same way as <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
+<p>The eigenvalues relate to stability because they determine how the system behaves along each eigenvector direction. By writing our linearized system in the form <span class="math inline">\(A\vec{v} = \lambda \vec{v}\)</span>, we have something that looks like the differential equation <span class="math inline">\(dx/dt = \lambda x\)</span>, which has an exponential function <span class="math inline">\(\text{e}^{\lambda x}\)</span> as its solution. The eigenvalues <span class="math inline">\(\lambda\)</span> determine if the solution grows or shrinks: if <span class="math inline">\(\lambda &gt;0\)</span>, the solution will grow, moving away from the fixed point. If $ 0$, that eigendirection is <strong>unstable</strong>. - If all eigenvalues have negative real parts, the fixed point is <strong>stable</strong>. - If one or more eigenvalues has a positive real part, the fixed point is <strong>unstable</strong>. - If the eigenvalues have an imaginary (<strong>complex</strong>) part, the fixed point is <strong>oscillatory</strong>.</p>
+<p>Let’s do the other fixed point:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># stability analysis for predator-prey model</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co"># choose parameter values</span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">A &lt;-<span class="st"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb13-5" data-line-number="5">B &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6">C &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7">D &lt;-<span class="st"> </span><span class="fl">0.2</span></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="co"># the other fixed point</span></a>
+<a class="sourceLine" id="cb13-10" data-line-number="10">y &lt;-<span class="st"> </span>A <span class="op">/</span><span class="st"> </span>B</a>
+<a class="sourceLine" id="cb13-11" data-line-number="11">x &lt;-<span class="st"> </span>D <span class="op">*</span><span class="st"> </span>A <span class="op">/</span><span class="st"> </span>(B <span class="op">*</span><span class="st"> </span>C)</a>
+<a class="sourceLine" id="cb13-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb13-13" data-line-number="13"><span class="co"># define the partial derivatives</span></a>
+<a class="sourceLine" id="cb13-14" data-line-number="14">dx_dx &lt;-<span class="st"> </span>A <span class="op">-</span><span class="st"> </span>B <span class="op">*</span><span class="st"> </span>y</a>
+<a class="sourceLine" id="cb13-15" data-line-number="15">dx_dy &lt;-<span class="st"> </span><span class="op">-</span>B <span class="op">*</span><span class="st"> </span>x</a>
+<a class="sourceLine" id="cb13-16" data-line-number="16">dy_dx &lt;-<span class="st"> </span>C</a>
+<a class="sourceLine" id="cb13-17" data-line-number="17">dy_dy &lt;-<span class="st"> </span><span class="op">-</span>D</a>
+<a class="sourceLine" id="cb13-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb13-19" data-line-number="19"><span class="co"># create the Jacobian matrix</span></a>
+<a class="sourceLine" id="cb13-20" data-line-number="20">J2 &lt;-</a>
+<a class="sourceLine" id="cb13-21" data-line-number="21"><span class="kw">matrix</span>(</a>
+<a class="sourceLine" id="cb13-22" data-line-number="22"><span class="kw">c</span>(dx_dx, dx_dy, </a>
+<a class="sourceLine" id="cb13-23" data-line-number="23">  dy_dx, dy_dy),</a>
+<a class="sourceLine" id="cb13-24" data-line-number="24"><span class="dt">nrow =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb13-25" data-line-number="25"><span class="dt">ncol =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb13-26" data-line-number="26"><span class="dt">byrow =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb13-27" data-line-number="27">)</a>
+<a class="sourceLine" id="cb13-28" data-line-number="28"></a>
+<a class="sourceLine" id="cb13-29" data-line-number="29"><span class="co"># calculate eigenvalues</span></a>
+<a class="sourceLine" id="cb13-30" data-line-number="30">e_vals2 &lt;-<span class="st"> </span><span class="kw">eigen</span>(J2)<span class="op">$</span>values</a>
+<a class="sourceLine" id="cb13-31" data-line-number="31"></a>
+<a class="sourceLine" id="cb13-32" data-line-number="32"><span class="kw">print</span>(e_vals2)</a></code></pre></div>
+<pre><code>## [1] -0.1+0.9949874i -0.1-0.9949874i</code></pre>
+<p>Let’s return to our phase portrait and look at what the eigenvalues and eigenvectors have to do with the fixed points graphically. We can get the eigenvectors for plotting using the same function <code>eigen</code> but pulling out the <code>vectors</code> part instead of <code>values</code>.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># calculate eigenvectors</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">e_vectors1 &lt;-<span class="st"> </span><span class="kw">eigen</span>(J1)<span class="op">$</span>vectors</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">e_vectors2 &lt;-<span class="st"> </span><span class="kw">eigen</span>(J2)<span class="op">$</span>vectors</a></code></pre></div>
+<p>The eigenvectors are plotted as thick dashed lines. In each of these directions, the system will evolve approximately according to our linearized result: as an exponential function with parameter <span class="math inline">\(\lambda\)</span>. When <span class="math inline">\(\lambda\)</span> is complex, this means the system will oscillate.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">par</span>(<span class="dt">pty=</span><span class="st">&#39;s&#39;</span>)</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="co"># plot vector field: on a grid of points, plot an arrow in the direction of dx/dt and dy/dt</span></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4">pp_flowField &lt;-<span class="st"> </span><span class="kw">flowField</span>(predator_prey, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">10</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb16-5" data-line-number="5">                          <span class="dt">parameters =</span> params,</a>
+<a class="sourceLine" id="cb16-6" data-line-number="6">                          <span class="dt">points =</span> <span class="dv">15</span>, <span class="co"># this is the density of grid points on which to plot arrows</span></a>
+<a class="sourceLine" id="cb16-7" data-line-number="7">                          <span class="dt">system =</span> <span class="st">&#39;two.dim&#39;</span>, <span class="co"># &#39;two.dim&#39; is default</span></a>
+<a class="sourceLine" id="cb16-8" data-line-number="8">                          <span class="dt">add =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co"># add trajectories</span></a>
+<a class="sourceLine" id="cb16-11" data-line-number="11">pp_trajectory &lt;-<span class="st"> </span><span class="kw">trajectory</span>(predator_prey, </a>
+<a class="sourceLine" id="cb16-12" data-line-number="12">                            <span class="co"># y0 is a matrix where each row is pairs of (X, Y) </span></a>
+<a class="sourceLine" id="cb16-13" data-line-number="13">                            <span class="dt">y0 =</span> <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">8</span>, <span class="dv">5</span>,</a>
+<a class="sourceLine" id="cb16-14" data-line-number="14">                                          <span class="dv">1</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb16-15" data-line-number="15">                                        <span class="dt">ncol =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb16-16" data-line-number="16">                                        <span class="dt">byrow =</span> <span class="ot">TRUE</span>), </a>
+<a class="sourceLine" id="cb16-17" data-line-number="17">                            <span class="dt">tlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">30</span>), <span class="co"># how far in time to calculate the trajectories</span></a>
+<a class="sourceLine" id="cb16-18" data-line-number="18">                            <span class="dt">parameters =</span> params, <span class="dt">system =</span> <span class="st">&quot;two.dim&quot;</span>)</a></code></pre></div>
+<pre><code>## Note: col has been reset as required</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">pp_nullclines &lt;-<span class="st"> </span><span class="kw">nullclines</span>(predator_prey, </a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">           <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="co"># axis limits</span></a>
+<a class="sourceLine" id="cb18-3" data-line-number="3">           <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb18-4" data-line-number="4">           <span class="co"># y0 is a matrix where each row is pairs of (X, Y) </span></a>
+<a class="sourceLine" id="cb18-5" data-line-number="5">           <span class="dt">y0 =</span> initial_conditions, </a>
+<a class="sourceLine" id="cb18-6" data-line-number="6">           <span class="dt">t.end =</span> <span class="dv">30</span>, <span class="co"># how far in time to calculate the trajectories </span></a>
+<a class="sourceLine" id="cb18-7" data-line-number="7">           <span class="dt">parameters =</span> params, <span class="dt">system =</span> <span class="st">&quot;two.dim&quot;</span>)</a>
+<a class="sourceLine" id="cb18-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb18-9" data-line-number="9"><span class="co"># plot the eigenvectors for fixed point (x = 0, y = 0)</span></a>
+<a class="sourceLine" id="cb18-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb18-11" data-line-number="11"><span class="co"># eigenvector for eigenvalue lambda = 5</span></a>
+<a class="sourceLine" id="cb18-12" data-line-number="12"><span class="kw">lines</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span>, e_vectors1[<span class="dv">1</span>]), <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">0</span>, e_vectors1[<span class="dv">2</span>]), <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&#39;green&#39;</span>)</a>
+<a class="sourceLine" id="cb18-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb18-14" data-line-number="14"><span class="co"># eigenvector for eigenvalue lambda = -0.2</span></a>
+<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="kw">lines</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span>, e_vectors1[<span class="dv">3</span>]), <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">0</span>, e_vectors1[<span class="dv">4</span>]), <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&#39;purple&#39;</span>)</a>
+<a class="sourceLine" id="cb18-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb18-17" data-line-number="17"><span class="co"># plot the eigenvectors for fixed point (x = AD/BC, y = A/B)</span></a>
+<a class="sourceLine" id="cb18-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb18-19" data-line-number="19"><span class="co"># eigenvector for eigenvalue lambda = -0.1 + 0.9949874i</span></a>
+<a class="sourceLine" id="cb18-20" data-line-number="20"><span class="kw">lines</span>(<span class="dt">x =</span> <span class="kw">c</span>(A<span class="op">*</span>D<span class="op">/</span>(B<span class="op">*</span>C), e_vectors2[<span class="dv">1</span>]), <span class="dt">y =</span> <span class="kw">c</span>(A<span class="op">/</span>B, e_vectors2[<span class="dv">2</span>]), <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&#39;green&#39;</span>)</a></code></pre></div>
+<pre><code>## Warning in xy.coords(x, y): imaginary parts discarded in coercion</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># eigenvector for eigenvalue lambda = -0.1 - 0.9949874i</span></a>
+<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw">lines</span>(<span class="dt">x =</span> <span class="kw">c</span>(A<span class="op">*</span>D<span class="op">/</span>(B<span class="op">*</span>C), e_vectors2[<span class="dv">3</span>]), <span class="dt">y =</span> <span class="kw">c</span>(A<span class="op">/</span>B, e_vectors2[<span class="dv">4</span>]), <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&#39;purple&#39;</span>)</a></code></pre></div>
+<pre><code>## Warning in xy.coords(x, y): imaginary parts discarded in coercion</code></pre>
+<p><img src="lec09-modeling-r_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>The fixed point at (<span class="math inline">\(x = 0, y = 0\)</span>) is a <strong>saddle point</strong>, like a mountain pass.</p>
+<!-- ### An example in three dimensions (bac-virus-nutrients) -->
+</div>
+</div>
+
+
+<hr>
+
+<p>This work is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. See the <a href="LICENSE.html">licensing</a> page for more details about copyright information.</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

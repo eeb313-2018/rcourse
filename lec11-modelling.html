@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Luke Johnston" />
+
+
+<title>Statistical and probabilistic modelling in R</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link rel="icon" type="image/png" href="image/favicon.png">
+<style type="text/css">
+
+table {
+    border-collapse: collapse;
+}
+
+thead {
+    border-top: solid #DCDCDC;
+    border-bottom: solid #DCDCDC;
+}
+
+tr.odd {
+    background-color: #F8F8F8;
+}
+
+tr:last-child {
+    border-bottom: solid #DCDCDC;
+}
+
+</style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 54px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h2 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h3 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h4 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h5 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h6 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">EEB313H1</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-map-o"></span>
+     
+    Syllabus
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lec01-introduction.html">Sept. 6: Intro to course, programming, RStudio, and R Markdown</a>
+    </li>
+    <li>
+      <a href="lec02-basic-r.html">Sept. 11: Assignment, vectors, functions</a>
+    </li>
+    <li>
+      <a href="lec03-basic-r.html">Sept. 13: Data frames, intro to dplyr</a>
+    </li>
+    <li>
+      <a href="lec04-dplyr.html">Sept. 18: Data wrangling in dplyr, ggplot, tidy data</a>
+    </li>
+    <li>
+      <a href="lec05-dplyr.html">Sept. 20: More dplyr and ggplot</a>
+    </li>
+    <li>
+      <a href="lec06-exploratory-data-analysis.html">Sept. 25: Exploratory data analysis</a>
+    </li>
+    <li>
+      <a href="lec07-linear-modelling.html">Sept. 27: Linear models and statistical modelling</a>
+    </li>
+    <li>
+      <a href="lec08-linear-mixed-effects-models.html">Oct. 02: Mixed effects models</a>
+    </li>
+    <li>
+      <a href="lec09-Randomization-tests.html">Oct. 04: Simulating data: Randomization tests</a>
+    </li>
+    <li class="dropdown-header">Oct. 09: Multivariate stats</li>
+    <li class="dropdown-header">Oct. 11: Model selection</li>
+    <li class="dropdown-header">Oct. 16: Numerically solving population models</li>
+    <li class="dropdown-header">Oct. 18: Time series analysis</li>
+    <li>
+      <a href="lec12-datasets.html">Oct. 23: Datasets, hypothesis, begin projects</a>
+    </li>
+    <li>
+      <a href="lec14-git.html">Oct. 25: Reproducible science</a>
+    </li>
+    <li>
+      <a href="lec17-rmarkdown.html">Oct. 30: Reproducible science</a>
+    </li>
+    <li class="dropdown-header">Nov. 01: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 13: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 15: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 20: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 22: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 27: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 29: Project work (no lesson)</li>
+    <li class="dropdown-header">Dec. 04: Project work (no lesson)</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Assignments
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="assignment-01.html">Assignment 1</a>
+    </li>
+    <li>
+      <a href="assignment-02.html">Assignment 2</a>
+    </li>
+    <li>
+      <a href="assignment-03.html">Assignment 3</a>
+    </li>
+    <li>
+      <a href="assignment-04.html">Assignment 4</a>
+    </li>
+    <li class="dropdown-header">Assignment 5</li>
+    <li class="dropdown-header">Assignment 6</li>
+    <li class="dropdown-header">Assignment 7</li>
+    <li class="dropdown-header">Assignment 8</li>
+    <li class="dropdown-header">Final assignment</li>
+  </ul>
+</li>
+<li>
+  <a href="resources.html">
+    <span class="fa fa-question"></span>
+     
+    Resources and FAQ
+  </a>
+</li>
+<li>
+  <a href="about.html">
+    <span class="fa fa-info"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-bars"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="mailto:ahmed.hasan@mail.utoronto.ca">
+        <span class="fa fa-envelope"></span>
+         
+        Contact
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/uoftcoders/rcourse">
+        <span class="fa fa-github"></span>
+         
+        GitHub
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Statistical and probabilistic modelling in R</h1>
+<h4 class="author"><em>Luke Johnston</em></h4>
+
+</div>
+
+
+<div id="lesson-preamble" class="section level2">
+<h2>Lesson preamble</h2>
+<blockquote>
+<h3 id="lesson-objectives">Lesson objectives</h3>
+<ul>
+<li>Learn how to apply and interpret linear regression for a variety of data</li>
+<li>Understand probability and the importance of presenting confidence intervals</li>
+<li>Learn the importance of visualizing your data when doing any analyses or statistics</li>
+</ul>
+<h3 id="lesson-outline">Lesson outline</h3>
+<ul>
+<li>Statistics and probability (5 min)</li>
+<li>Generalized linear models (40-50 min)
+<ul>
+<li>Linear regression</li>
+<li>Logistic regression</li>
+</ul></li>
+<li>Confidence intervals and p-values (15-20 min)</li>
+<li>Importance of visualization (20 min)</li>
+</ul>
+<h3 id="setup">Setup</h3>
+<ul>
+<li><code>install.packages(&quot;dplyr&quot;)</code> # or <code>tidyverse</code></li>
+<li><code>install.packages(&quot;tidyr&quot;)</code> # or <code>tidyverse</code></li>
+<li><code>install.packages(&quot;broom&quot;)</code></li>
+<li><code>install.packages(&quot;datasauRus&quot;)</code></li>
+</ul>
+</blockquote>
+<hr />
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
+## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
+## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
+<pre><code>## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">library</span>(broom)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">library</span>(datasauRus)</a></code></pre></div>
+</div>
+<div id="statistics-and-probability" class="section level2">
+<h2>Statistics and probability</h2>
+<p>Theoretical models are powerful tools for explaining and understanding the world. However, they are limited in that the real-world often doesn’t perfectly fit these models. The real world is messy and noisy. We can’t always blindly trust our data as there are inherent biases and errors in it. Measuring it, collecting it, recording it, and inputting it are some of the possible sources of error and bias. We use statistics and probability to determine whether the way we understand and conceptualize the world (as models) matches reality (even with the error and bias).</p>
+<p>A reason we use statistical methods in R compared to writing up the formulas and equations ourselves is that we can focus on answering questions without worrying about whether we are doing the math or computation wrong. This is of course dependent on the type of research questions you may be interested in (e.g. for more theoretical questions, doing the math and computation yourself is probably a goal!) and on the type of data you are using/collecting. There is a lot of complexity that has already been taken care of in the available R packages and functions. For example, the function <code>glm</code> that we will use in this lesson takes a maximum likelihood-based approach to estimation, which is a complex method for determining fit (like the least squares method of fitting you did in the previous lesson). That way, you can answer your research questions and not worry too much about the exact math involved and instead worry about the specifics of your field (e.g. Are you measuring the right thing? Are you collecting the right data? Are you asking the right questions? Is there an ecological or biological aspect you are missing in your analysis?)</p>
+</div>
+<div id="generalized-linear-models" class="section level2">
+<h2>Generalized linear models</h2>
+<p>Generalized linear models (or GLM) is a family of statistical modelling techniques, that can also be used in place of several other techniques, e.g. correlation or analysis of variance (ANOVA), linear regression, logistic regression. GLM is a powerful technique that you can use on a wide range of data and research questions, and is the foundation for understanding how more advanced techniques work. This is the reason I will be covering GLM in depth. (For those who will go into graduate studies or into research in general, you will likely use mixed effects models. If you can understand and grasp GLM, it will be substantially easier for you to understand mixed effects modelling and other techniques.)</p>
+<div id="linear-regression" class="section level3">
+<h3>Linear regression</h3>
+<p>A version of GLM that uses continuous <span class="math inline">\(y\)</span> values is called linear regression, which I’m going to focus on. The formula for linear regression (or GLM in general) is:</p>
+<p><span class="math display">\[ Y = \alpha + X\beta + \varepsilon \]</span></p>
+<p>Or, a simplified, alphabetized version is:</p>
+<p><span class="math display">\[ y = a + Xb + e \]</span></p>
+<p>Where <span class="math inline">\(a\)</span> is the intercept, <span class="math inline">\(X\)</span> is the variable (or as a matrix of all variables), <span class="math inline">\(b\)</span> is the slope/coefficient, and <span class="math inline">\(e\)</span> is the error term. In the case of multiple linear regression (more than one <span class="math inline">\(x\)</span>), it is expanded to:</p>
+<p><span class="math display">\[ y = a + x_1b_1 + x_2b_2 +...+ x_nb_n + e \]</span></p>
+<p>Where each <span class="math inline">\(x_n\)</span> is a variable (either continuous or categorical) in a data frame and <span class="math inline">\(b_n\)</span> is the variable coefficient/slope.</p>
+<p>We construct these regression models for several reasons. Sometimes we want to infer how some variables (<span class="math inline">\(x\)</span>) cause or influence another variable (<span class="math inline">\(y\)</span>). Or maybe we know that <span class="math inline">\(y\)</span> has a lot of error in the measurement or is difficult to measure, so we want to derive a formula in order to predict <span class="math inline">\(y\)</span> based on more accurately measured variables. In R we can run linear regression either using <code>lm</code> or using <code>glm</code>. We’ll use <code>glm</code> since it can be expanded to other types of analyses. First, let’s load up a dataset.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">portal &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;portal_data.csv&quot;</span>)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   record_id = col_integer(),
+##   month = col_integer(),
+##   day = col_integer(),
+##   year = col_integer(),
+##   plot_id = col_integer(),
+##   species_id = col_character(),
+##   sex = col_character(),
+##   hindfoot_length = col_integer(),
+##   weight = col_integer(),
+##   genus = col_character(),
+##   species = col_character(),
+##   taxa = col_character(),
+##   plot_type = col_character()
+## )</code></pre>
+<p>Now, let’s fit a model to the data. Let’s say we want to see the role that sex has on hindfoot length in various species in the <code>portal</code> dataset. (<code>gaussian</code> is stating that <code>hindfoot_length</code> is a continuous variable and that you assume the error terms have a Gaussian, or normal, distribution.)</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">fit1 &lt;-<span class="st"> </span><span class="kw">glm</span>(hindfoot_length <span class="op">~</span><span class="st"> </span>sex, <span class="dt">data =</span> portal, <span class="dt">family =</span> gaussian)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">summary</span>(fit1)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = hindfoot_length ~ sex, family = gaussian, data = portal)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -27.710   -8.710    2.290    7.163   35.163  
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 28.83678    0.07826 368.469  &lt; 2e-16 ***
+## sexM         0.87280    0.10799   8.082 6.58e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for gaussian family taken to be 91.22251)
+## 
+##     Null deviance: 2867427  on 31369  degrees of freedom
+## Residual deviance: 2861468  on 31368  degrees of freedom
+##   (3416 observations deleted due to missingness)
+## AIC: 230610
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<p>There’s a lot of results and information contained within <code>fit1</code>, which <code>summary()</code> extracts and presents in a fairly nice format. However, a lot of this information we aren’t really interested in. So let’s extract only what we want, using the <code>broom</code> package. (get it, broom to clean up?)</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">tidy</span>(fit1)</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   28.8      0.0783    368.   0.      
+## 2 sexM           0.873    0.108       8.08 6.58e-16</code></pre>
+<p>Much nicer! Ok, so what does this actually mean? Let’s go back to the equation and convert the above into the formula:</p>
+<p><span class="math display">\[ hindfoot\_length = Intercept + (sexM \times b) \]</span></p>
+<p>Let’s substitute in the numbers. The intercept, is well, the intercept in the data above. The <span class="math inline">\(b\)</span> is the estimate for <code>sex</code>.</p>
+<p><span class="math display">\[ hindfoot\_length = 28.836 + (sexM \times 0.872) \]</span></p>
+<p>We can use this equation to estimate the value of hindfoot length for a specific sex. But first, let’s make sure this is working correctly. Let’s find out the mean hindfoot length by sex.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">portal <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(sex)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">    </span><span class="kw">group_by</span>(sex) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean_hfl =</span> <span class="kw">mean</span>(hindfoot_length, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) </a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   sex   mean_hfl
+##   &lt;chr&gt;    &lt;dbl&gt;
+## 1 F         28.8
+## 2 M         29.7</code></pre>
+<p>Ok, let’s compare to the equation. The variable <code>sexM</code> is 1 for male and 0 for female. So if we want to calculate the hindfoot length of female, we have to set <code>sexM</code> as 0 in the equation. Let’s do it:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="fl">28.836</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">0</span> <span class="op">*</span><span class="st"> </span><span class="fl">0.872</span>)</a></code></pre></div>
+<pre><code>## [1] 28.836</code></pre>
+<p>Same as above! And for males (equal to 1):</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="fl">28.836</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">*</span><span class="st"> </span><span class="fl">0.872</span>)</a></code></pre></div>
+<pre><code>## [1] 29.708</code></pre>
+<p>Good, it matches what we calculated. Why is this useful? Well, we can add more terms to the GLM equation. This allows us to determine how a variable influences <span class="math inline">\(y\)</span> when other variables are held constant and is known as <em>multiple linear regression</em>. Since hindfoot length is probably also dependent on <code>weight</code>, let’s add that to the model and put the values into the equation.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">fit2 &lt;-<span class="st"> </span><span class="kw">glm</span>(hindfoot_length <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>weight, <span class="dt">data =</span> portal)</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">tidy</span>(fit2)</a></code></pre></div>
+<pre><code>## # A tibble: 3 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   21.2     0.0738      287.  0.      
+## 2 sexM           0.799   0.0795       10.1 9.38e-24
+## 3 weight         0.183   0.00111     164.  0.</code></pre>
+<p><span class="math display">\[ hindfoot\_length = 21.157 + (sexM \times 0.799) + (weight \times 0.183)\]</span></p>
+<p>So if we wanted to know what the hindfoot length would be for a female of 50 weight:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="fl">21.157</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">0</span> <span class="op">*</span><span class="st"> </span><span class="fl">0.799</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">50</span> <span class="op">*</span><span class="st"> </span><span class="fl">0.183</span>)</a></code></pre></div>
+<pre><code>## [1] 30.307</code></pre>
+<p>Sometimes, depending on the research question, we want to be able to see the predicted <span class="math inline">\(y\)</span> based on a single variable after removing the other variables. To remove a variable you set it to zero, but a zero weight of an animal doesn’t make sense. It doesn’t exist! So, we can transform the data so that zero is possible. There are many ways to transform data, but one way that is often used is to mean center the data. Mean centering is subtracting each value by the mean. After mean centering, 0 is equal to the mean of the variable. So let’s do that to weight.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">portal2 &lt;-<span class="st"> </span>portal <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">wt_center =</span> weight <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(weight, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">    <span class="co"># You can also use `scale`</span></a>
+<a class="sourceLine" id="cb22-4" data-line-number="4">    <span class="co"># mutate(wt_center = scale(weight, scale = FALSE))</span></a>
+<a class="sourceLine" id="cb22-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb22-6" data-line-number="6">fit3 &lt;-<span class="st"> </span><span class="kw">glm</span>(hindfoot_length <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>wt_center, <span class="dt">data =</span> portal2)</a>
+<a class="sourceLine" id="cb22-7" data-line-number="7"><span class="kw">tidy</span>(fit3)</a></code></pre></div>
+<pre><code>## # A tibble: 3 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   29.0     0.0576      503.  0.      
+## 2 sexM           0.799   0.0795       10.1 9.38e-24
+## 3 wt_center      0.183   0.00111     164.  0.</code></pre>
+<p><span class="math display">\[ hindfoot\_length = 28.96 + (sexM \times 0.8) + (wt\_center \times 0.18)\]</span></p>
+<p>Much better. So if we wanted to compare males vs females who have a mean weight (set to 0):</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co"># Female</span></a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="fl">28.96</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">0</span> <span class="op">*</span><span class="st"> </span><span class="fl">0.8</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">0</span> <span class="op">*</span><span class="st"> </span><span class="fl">0.18</span>)</a></code></pre></div>
+<pre><code>## [1] 28.96</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># Male</span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="fl">28.96</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">*</span><span class="st"> </span><span class="fl">0.8</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">0</span> <span class="op">*</span><span class="st"> </span><span class="fl">0.18</span>)</a></code></pre></div>
+<pre><code>## [1] 29.76</code></pre>
+<p>Or if we wanted to see males with weight 10 g minus the mean vs 10 g plus the mean:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># Males 10 cm minus mean</span></a>
+<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="fl">28.96</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">*</span><span class="st"> </span><span class="fl">0.8</span>) <span class="op">+</span><span class="st"> </span>(<span class="op">-</span><span class="dv">10</span> <span class="op">*</span><span class="st"> </span><span class="fl">0.18</span>)</a></code></pre></div>
+<pre><code>## [1] 27.96</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># Male 10 cm plus mean</span></a>
+<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="fl">28.96</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">*</span><span class="st"> </span><span class="fl">0.8</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">10</span> <span class="op">*</span><span class="st"> </span><span class="fl">0.18</span>)</a></code></pre></div>
+<pre><code>## [1] 31.56</code></pre>
+<div id="challenge" class="section level4">
+<h4>Challenge</h4>
+<ol style="list-style-type: decimal">
+<li>Create a new dataframe called <code>challenge1</code> that keeps only taxa of “Rodent” (<code>filter</code>) and with a new column (<code>mutate</code>) called “Dipodomys” where if genus is equal to “Dipodomys” than the value is “Yes” and if not the value is “No” (hint: use <code>ifelse</code>). Then, create a model using <code>glm</code> called <code>fit_challenge1</code> that has the terms <code>hindfoot_length</code> (as <span class="math inline">\(y\)</span>), <code>sex</code>, <code>wt_center</code>, and <code>Dipodomys</code>. Extract the relevant information from the model using <code>tidy</code>. What is the hindfoot length when sex is female, weight is 5 above the mean, and Dipodomys is yes?</li>
+</ol>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="co"># Solution</span></a>
+<a class="sourceLine" id="cb32-2" data-line-number="2">challenge1 &lt;-<span class="st"> </span>portal2 <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb32-3" data-line-number="3"><span class="st">    </span><span class="kw">filter</span>(taxa <span class="op">==</span><span class="st"> &quot;Rodent&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb32-4" data-line-number="4"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">Dipodomys =</span> <span class="kw">ifelse</span>(genus <span class="op">==</span><span class="st"> &quot;Dipodomys&quot;</span>, <span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;No&quot;</span>))</a>
+<a class="sourceLine" id="cb32-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb32-6" data-line-number="6">fit_challenge1 &lt;-<span class="st"> </span><span class="kw">glm</span>(hindfoot_length <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>wt_center <span class="op">+</span><span class="st"> </span>Dipodomys, <span class="dt">data =</span> challenge1)</a>
+<a class="sourceLine" id="cb32-7" data-line-number="7"><span class="kw">tidy</span>(fit_challenge1)</a></code></pre></div>
+<pre><code>## # A tibble: 4 x 5
+##   term         estimate std.error statistic p.value
+##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)   22.9     0.0289      794.    0     
+## 2 sexM          -0.0647  0.0334       -1.94  0.0527
+## 3 wt_center      0.116   0.000498    234.    0     
+## 4 DipodomysYes  13.5     0.0357      379.    0</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="fl">22.9</span> <span class="op">+</span><span class="st"> </span>(<span class="op">-</span><span class="fl">0.06</span> <span class="op">*</span><span class="st"> </span><span class="dv">0</span>) <span class="op">+</span><span class="st"> </span>(<span class="fl">0.12</span> <span class="op">*</span><span class="st"> </span><span class="dv">5</span>) <span class="op">+</span><span class="st"> </span>(<span class="fl">13.5</span> <span class="op">*</span><span class="st"> </span><span class="dv">1</span>)</a></code></pre></div>
+<pre><code>## [1] 37</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Use the below code to create a new variable <code>Disease</code> with (random) values as either 0 for “Healthy” or 1 for “Diseased”. Then, write up a formula using <code>glm</code> to analyze the role that weight, sex, and hindfoot length (<em>not</em> mean centered) has on disease status. Because the <span class="math inline">\(y\)</span> is not continuous, you need to set <code>family = binomial</code> in <code>glm</code>. Run the code, check the summary (or <code>tidy</code>), put the numbers into an equation (as we did above), and <em>try</em> to interpret the results (where sex is female, weight is 50, and hindfoot length is 30).</li>
+</ol>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="co"># So random numbers is the same for everyone</span></a>
+<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="kw">set.seed</span>(<span class="dv">1002</span>)</a>
+<a class="sourceLine" id="cb36-3" data-line-number="3">challenge2 &lt;-<span class="st"> </span>portal <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-4" data-line-number="4"><span class="st">    </span><span class="co"># rbinom randomly creates values for binary data.</span></a>
+<a class="sourceLine" id="cb36-5" data-line-number="5"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">Disease =</span> <span class="kw">rbinom</span>(<span class="kw">nrow</span>(.), <span class="dv">1</span>, <span class="fl">0.25</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="co"># Solution</span></a>
+<a class="sourceLine" id="cb37-2" data-line-number="2">fit_challenge2 &lt;-<span class="st"> </span><span class="kw">glm</span>(Disease <span class="op">~</span><span class="st"> </span>weight <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>hindfoot_length, </a>
+<a class="sourceLine" id="cb37-3" data-line-number="3">                      <span class="dt">data =</span> challenge2, <span class="dt">family =</span> binomial)</a>
+<a class="sourceLine" id="cb37-4" data-line-number="4"><span class="kw">summary</span>(fit_challenge2)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = Disease ~ weight + sex + hindfoot_length, family = binomial, 
+##     data = challenge2)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -0.7780  -0.7700  -0.7609   1.6406   1.6960  
+## 
+## Coefficients:
+##                   Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)     -1.0351924  0.0467550 -22.141   &lt;2e-16 ***
+## weight          -0.0003031  0.0005085  -0.596    0.551    
+## sexM            -0.0338419  0.0263049  -1.287    0.198    
+## hindfoot_length -0.0004350  0.0018926  -0.230    0.818    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 34757  on 30675  degrees of freedom
+## Residual deviance: 34754  on 30672  degrees of freedom
+##   (4110 observations deleted due to missingness)
+## AIC: 34762
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">tidy</span>(fit_challenge2)</a></code></pre></div>
+<pre><code>## # A tibble: 4 x 5
+##   term             estimate std.error statistic   p.value
+##   &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)     -1.04      0.0468     -22.1   1.28e-108
+## 2 weight          -0.000303  0.000509    -0.596 5.51e-  1
+## 3 sexM            -0.0338    0.0263      -1.29  1.98e-  1
+## 4 hindfoot_length -0.000435  0.00189     -0.230 8.18e-  1</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="fl">-1.035</span> <span class="op">+</span><span class="st"> </span>(<span class="op">-</span><span class="fl">0.0003</span> <span class="op">*</span><span class="st"> </span><span class="dv">50</span>) <span class="op">+</span><span class="st"> </span>(<span class="op">-</span><span class="fl">0.0338</span> <span class="op">*</span><span class="st"> </span><span class="dv">0</span>) <span class="op">+</span><span class="st"> </span>(<span class="op">-</span><span class="fl">0.0004</span> <span class="op">*</span><span class="st"> </span><span class="dv">30</span>)</a></code></pre></div>
+<pre><code>## [1] -1.062</code></pre>
+</div>
+</div>
+<div id="logistic-regression" class="section level3">
+<h3>Logistic regression</h3>
+<p>Logistic regression is a technique that has the <span class="math inline">\(y\)</span> as a binary or categorical variable (e.g. female vs male, mammal vs plant vs bacteria). We won’t be covering this in too much detail, but I will go over it to highlight the flexibility that GLM has in handling different types of data.</p>
+<p>The reason why the result of the challenge two above was difficult to interpret was because there’s a bit more to logistic regression then with linear regression. It becomes clearer when we look at the formula:</p>
+<p><span class="math display">\[ logit(p) = \ln\left(\frac{P(y=1)}{P(y=0)}\right) = a + Xb + e\]</span></p>
+<p>In this case, the <span class="math inline">\(y\)</span> is the logged odds of the event occurring (in the challenge the event was disease). In order to interpret the model results, we need to exponentiate both sides of the equation.</p>
+<p><span class="math display">\[ \exp\left(\ln\left(\frac{p}{1 - p}\right)\right) = \exp(a + Xb + e)\]</span> <span class="math display">\[ \frac{p}{1 - p} = e^{a + Xb + e}\]</span></p>
+<p>where <span class="math inline">\(p\)</span> is the probability of the event (equal to 1, in this case of disease). So if we exponentiate the estimates, and solve for the formula, we can interpret the result as the odds of an event occurring.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="kw">exp</span>(<span class="op">-</span><span class="fl">1.035</span> <span class="op">+</span><span class="st"> </span>(<span class="op">-</span><span class="fl">0.0003</span> <span class="op">*</span><span class="st"> </span><span class="dv">50</span>) <span class="op">+</span><span class="st"> </span>(<span class="op">-</span><span class="fl">0.0338</span> <span class="op">*</span><span class="st"> </span><span class="dv">0</span>) <span class="op">+</span><span class="st"> </span>(<span class="op">-</span><span class="fl">0.0004</span> <span class="op">*</span><span class="st"> </span><span class="dv">30</span>))</a></code></pre></div>
+<pre><code>## [1] 0.3457636</code></pre>
+<p>In this case, for a female with a weight of 50 and hindfoot of 30, the probability of disease is 0.345, or 34%. Interpretation actually gets a bit more complicated than that depending on what you want to look at. So depending on your final project, if you need/want to use this, we can help walk you through this more.</p>
+</div>
+</div>
+<div id="confidence-intervals-and-p-values" class="section level2">
+<h2>Confidence intervals, and p-values</h2>
+<p>So what’s the point of using <code>glm</code>? Not only does it create a model with coefficients and the magnitude (effect size), but it is also used to calculate how <em>certain</em> we are about the results. The main power of GLM comes from the ability to estimate model parameters and derive meaning from how certain <span class="math inline">\(x\)</span> variables (independent variables) influence the <span class="math inline">\(y\)</span> (dependent variable). We can use this model to <em>predict</em> what could happen to some value if we knew or could change the independent variables (<span class="math inline">\(x\)</span>). But we also want to know whether this model reflects reality.</p>
+<div id="confidence-intervals" class="section level3">
+<h3>Confidence intervals</h3>
+<p>From GLM we can determine the <em>confidence</em> (or rather, the <em>uncertainty</em>) we have about the beta (<span class="math inline">\(b\)</span>) estimates. In the case of linear regression model, we can use <code>tidy</code> with the <code>conf.int</code> argument to calculate the confidence interval. In the default case, this calculates the 95% confidence interval, or rather we are 95% certain that the estimate lies in this range.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1">fit_wt &lt;-<span class="st"> </span><span class="kw">glm</span>(hindfoot_length <span class="op">~</span><span class="st"> </span>weight, <span class="dt">data =</span> portal)</a>
+<a class="sourceLine" id="cb45-2" data-line-number="2"><span class="kw">tidy</span>(fit_wt, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb45-3" data-line-number="3"><span class="st">    </span><span class="kw">select</span>(term, estimate, conf.low, conf.high, p.value)</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 5
+##   term        estimate conf.low conf.high p.value
+##   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)   21.6     21.4      21.7         0
+## 2 weight         0.183    0.181     0.185       0</code></pre>
+<p>In this case, the uncertainty of the estimate for hindfoot length is between 2.524 to 2.58, which is pretty narrow (that’s a good thing). This tells us that the estimate that hindfoot length influences weight is probably reflective of reality. That makes sense since longer hindfeet mean there is more space and amount of area for more flesh to attach to and that there is more bone, which adds weight. We can also be more strict about our uncertainty (counter-intuitively, a larger confidence interval is more strict).</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="co"># Confidence interval of 99%</span></a>
+<a class="sourceLine" id="cb47-2" data-line-number="2"><span class="kw">tidy</span>(fit_wt, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>, <span class="dt">conf.level =</span> <span class="fl">0.99</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb47-3" data-line-number="3"><span class="st">    </span><span class="kw">select</span>(term, estimate, conf.low, conf.high, p.value)</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 5
+##   term        estimate conf.low conf.high p.value
+##   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)   21.6     21.4      21.7         0
+## 2 weight         0.183    0.180     0.186       0</code></pre>
+<p>We can also expand the model to include more terms.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1">fit_wtsex &lt;-<span class="st"> </span><span class="kw">glm</span>(hindfoot_length <span class="op">~</span><span class="st"> </span>weight <span class="op">+</span><span class="st"> </span>sex, <span class="dt">data =</span> portal)</a>
+<a class="sourceLine" id="cb49-2" data-line-number="2"><span class="kw">tidy</span>(fit_wtsex, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb49-3" data-line-number="3"><span class="st">    </span><span class="kw">select</span>(term, estimate, conf.low, conf.high, p.value)</a></code></pre></div>
+<pre><code>## # A tibble: 3 x 5
+##   term        estimate conf.low conf.high  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   21.2     21.0      21.3   0.      
+## 2 weight         0.183    0.181     0.185 0.      
+## 3 sexM           0.799    0.644     0.955 9.38e-24</code></pre>
+<p>Great! In almost all cases, you should favour confidence intervals and estimation over the p-value. In some parts of science (especially biomedical research), p-values are ubiquitous. But, there is a major problem with p-values. What does the p-value <em>mean</em>?</p>
+</div>
+<div id="p-values-are-counter-intuitive" class="section level3">
+<h3>P-values are counter-intuitive</h3>
+<p>P-values are based on and used in hypothesis testing. Hypothesis testing is when you ask a question such as “Are males heavier than females in rodents?”. There is then the null hypothesis (“females and males weigh the same”) and the alternative hypothesis (“males are heavier than females”). Using statistical tests, we can calculate the p-value to give us an indication of which hypothesis is true. Traditionally, if the p-value is &lt;0.05 you ‘reject’ the null hypothesis. This cut off is completely arbitrary.</p>
+<!-- What do you all think about this cut off? this is 1 in 20 chance that
+you'll see this result if the null hypothesis was true -->
+<p>However, the true meaning of the p-value is a bit counter-intuitive. The p-value is the probability of getting a result that is the same as or more extreme as what you are getting given the null hypothesis is true. There is nothing in that statement that says the <em>alternate</em> hypothesis is true… This is important because often researchers use the p-value to say that their hypothesis is true or that the p-value is the probability their hypothesis (and thus reality) is true. But that is not at all the case! This is why the use of p-values should be minimized as much as possible and to instead use estimation and confidence intervals.</p>
+<p>The other thing with p-values is that they are ‘unstable’/‘unreliable’… meaning they can change with even just slight differences in the data. Let’s do a demonstration:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1">num_tests &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb51-2" data-line-number="2">sample_size &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb51-3" data-line-number="3">actual_difference &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb51-4" data-line-number="4">variability &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb51-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb51-6" data-line-number="6">p.values &lt;-<span class="st"> </span><span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span>num_tests, <span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb51-7" data-line-number="7">    x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(sample_size, <span class="dt">mean =</span> <span class="dv">0</span>, </a>
+<a class="sourceLine" id="cb51-8" data-line-number="8">               <span class="dt">sd =</span> variability)</a>
+<a class="sourceLine" id="cb51-9" data-line-number="9">    y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(sample_size, <span class="dt">mean =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span>actual_difference, </a>
+<a class="sourceLine" id="cb51-10" data-line-number="10">               <span class="dt">sd =</span> variability)</a>
+<a class="sourceLine" id="cb51-11" data-line-number="11">    <span class="kw">tidy</span>(<span class="kw">t.test</span>(x, y))[[<span class="st">&#39;p.value&#39;</span>]]</a>
+<a class="sourceLine" id="cb51-12" data-line-number="12">})</a>
+<a class="sourceLine" id="cb51-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb51-14" data-line-number="14"><span class="kw">qplot</span>(<span class="dt">y =</span> p.values) <span class="op">+</span></a>
+<a class="sourceLine" id="cb51-15" data-line-number="15"><span class="st">    </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="fl">0.05</span>)</a></code></pre></div>
+<p><img src="lec11-modelling_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p>As you can see, we <em>know</em> that x and y are the same (both have a mean of 0 and standard deviation of 1). And yet, there are still ~6 or so (below the line) tests that show a “significant” difference between x and y! Which makes sense, since a p-value of 0.05 equals a 5% chance you will see another similar result if the null hypothesis were true. Confusing eh?</p>
+<div id="challenge-1" class="section level4">
+<h4>Challenge</h4>
+<ol style="list-style-type: decimal">
+<li>Play around with the above code and try this different conditions. What do you notice?
+<ul>
+<li><code>sample_size</code> to 10</li>
+<li><code>sample_size</code> to 500</li>
+<li><code>num_tests</code> to 1000</li>
+<li><code>num_tests</code> to 10</li>
+<li><code>actual_difference</code> to 0.25</li>
+<li><code>actual_difference</code> to 1</li>
+<li><code>variability</code> to 0.5</li>
+<li><code>variability</code> to 3</li>
+</ul></li>
+</ol>
+</div>
+</div>
+</div>
+<div id="data-visualization" class="section level2">
+<h2>Data visualization</h2>
+<div id="a-key-step-in-all-analyses" class="section level3">
+<h3>A key step in all analyses</h3>
+<p>Visualizing your data before, during, and after doing statistics or modelling your data is an incredibly important and sometimes overlooked aspect of data analysis. Sometimes statistics and modelling give you an answer that you sort of expect, but the actual data is telling a different story.</p>
+<div id="challenge-2" class="section level4">
+<h4>Challenge</h4>
+<p>There are several datasets found within the <code>datasauRus</code> package. This package is trying to illustrate a point. First, let’s look at the mean and standard deviation of the variables in each dataset:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1">datasaurus_dozen <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb52-2" data-line-number="2"><span class="st">    </span><span class="kw">group_by</span>(dataset) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb52-3" data-line-number="3"><span class="st">    </span><span class="kw">summarise</span>(</a>
+<a class="sourceLine" id="cb52-4" data-line-number="4">        <span class="dt">mean_x =</span> <span class="kw">mean</span>(x),</a>
+<a class="sourceLine" id="cb52-5" data-line-number="5">        <span class="dt">sd_x =</span> <span class="kw">sd</span>(x),</a>
+<a class="sourceLine" id="cb52-6" data-line-number="6">        <span class="dt">mean_y =</span> <span class="kw">mean</span>(y),</a>
+<a class="sourceLine" id="cb52-7" data-line-number="7">        <span class="dt">sd_y =</span> <span class="kw">sd</span>(y)</a>
+<a class="sourceLine" id="cb52-8" data-line-number="8">    )</a></code></pre></div>
+<pre><code>## # A tibble: 13 x 5
+##    dataset    mean_x  sd_x mean_y  sd_y
+##    &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1 away         54.3  16.8   47.8  26.9
+##  2 bullseye     54.3  16.8   47.8  26.9
+##  3 circle       54.3  16.8   47.8  26.9
+##  4 dino         54.3  16.8   47.8  26.9
+##  5 dots         54.3  16.8   47.8  26.9
+##  6 h_lines      54.3  16.8   47.8  26.9
+##  7 high_lines   54.3  16.8   47.8  26.9
+##  8 slant_down   54.3  16.8   47.8  26.9
+##  9 slant_up     54.3  16.8   47.8  26.9
+## 10 star         54.3  16.8   47.8  26.9
+## 11 v_lines      54.3  16.8   47.8  26.9
+## 12 wide_lines   54.3  16.8   47.8  26.9
+## 13 x_shape      54.3  16.8   47.8  26.9</code></pre>
+<p>They’re all basically the same… What about for linear regression? (<code>lm</code> is the same as <code>glm</code> with family <code>gaussian</code>.)</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="co"># Linear regression on each dataset</span></a>
+<a class="sourceLine" id="cb54-2" data-line-number="2">datasaurus_dozen <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb54-3" data-line-number="3"><span class="st">    </span><span class="kw">group_by</span>(dataset) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb54-4" data-line-number="4"><span class="st">    </span><span class="kw">do</span>(<span class="kw">tidy</span>(<span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> .))[<span class="dv">2</span>, ])</a></code></pre></div>
+<pre><code>## # A tibble: 13 x 6
+## # Groups:   dataset [13]
+##    dataset    term  estimate std.error statistic p.value
+##    &lt;chr&gt;      &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+##  1 away       x      -0.103      0.135    -0.760   0.448
+##  2 bullseye   x      -0.110      0.135    -0.813   0.417
+##  3 circle     x      -0.110      0.135    -0.811   0.419
+##  4 dino       x      -0.104      0.136    -0.764   0.446
+##  5 dots       x      -0.0969     0.135    -0.715   0.476
+##  6 h_lines    x      -0.0992     0.136    -0.732   0.466
+##  7 high_lines x      -0.110      0.135    -0.812   0.418
+##  8 slant_down x      -0.111      0.135    -0.818   0.415
+##  9 slant_up   x      -0.110      0.135    -0.814   0.417
+## 10 star       x      -0.101      0.135    -0.746   0.457
+## 11 v_lines    x      -0.112      0.135    -0.824   0.412
+## 12 wide_lines x      -0.107      0.135    -0.789   0.431
+## 13 x_shape    x      -0.105      0.135    -0.778   0.438</code></pre>
+<p>Same thing, all are more or less the same. But, there is something seriously wrong with every since one of the datasets. Pair up and explore the data visually to see what’s going on. Can you see it?</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1"><span class="co"># Solution</span></a>
+<a class="sourceLine" id="cb56-2" data-line-number="2"><span class="kw">ggplot</span>(datasaurus_dozen, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">colour =</span> dataset)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb56-3" data-line-number="3"><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb56-4" data-line-number="4"><span class="st">    </span><span class="kw">theme_void</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb56-5" data-line-number="5"><span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb56-6" data-line-number="6"><span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>dataset, <span class="dt">ncol =</span> <span class="dv">3</span>)</a></code></pre></div>
+<p><img src="lec11-modelling_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+</div>
+</div>
+<div id="other-examples-of-using-visualization-to-find-a-problem" class="section level3">
+<h3>Other examples of using visualization to find a problem</h3>
+<p>From what you found in the challenge above, can you see why it’s dangerous to not visualize the data first? Sometimes just visualizing the data can give you greater insight into the data and meaning than any statistical or mathematical model can provide. (For a real-world example of this, check out this <a href="https://www.wired.com/2014/10/astrophysics-interstellar-black-hole/">article</a> on the discoveries physicists made when they created a visualization of a black hole based on the math when making the movie Interstellar).</p>
+<p>But even the type of graph you use can hide data. Check out the figure below for an example of that. In general, it’s better to visualize the raw data points, but this quickly becomes a problem as you get more data.</p>
+<div class="figure">
+<img src="image/boxplot-problem.gif" alt="Visualizing raw data vs aggregate. From this source" />
+<p class="caption">Visualizing raw data vs aggregate. From <a href="https://g.redditmedia.com/Opizo6PEpuT_cL0N0tWK5g59CsMHFystdNCpYOqhu-A.gif?w=884&amp;fm=mp4&amp;mp4-fragmented=false&amp;s=222875e5455c31829929add6c426a86b">this source</a></p>
+</div>
+<p>Another example is known as Simpson’s Paradox. You all have already encountered Simpson’s Paradox in the challenges of lecture 4 and 5, where the average weight of all species decreased over time, but for each species weight remained constant. These types of problems are encountered all the time in data analysis and it is part of what makes science so hard, because data often doesn’t behave as we expect it to. The figure below illustrates Simpson’s Paradox.</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="kw">ggplot</span>(simpsons_paradox, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">colour =</span> dataset)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb57-2" data-line-number="2"><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb57-3" data-line-number="3"><span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb57-4" data-line-number="4"><span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb57-5" data-line-number="5"><span class="st">    </span><span class="kw">facet_wrap</span>( <span class="op">~</span><span class="st"> </span>dataset, <span class="dt">ncol =</span> <span class="dv">3</span>)</a></code></pre></div>
+<p><img src="lec11-modelling_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p>And sometimes, by not looking at the raw data, it can lead to actual harm. For instance, Simpson’s paradox comes up in medical studies of drugs that could be lifesaving for a patient. If inappropriate conclusions are drawn because the data wasn’t completely explored, people could be harmed or could die. This is true in <em>any</em> scientific field, including ecology. Policies aimed at benefiting the environment could in fact be <em>harming</em> it because these types of things were not examined.</p>
+</div>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<ul>
+<li><a href="https://stats.stackexchange.com/questions/81000/calculate-coefficients-in-a-logistic-regression-with-r">Calculating coefficients for logistic regression</a></li>
+<li><a href="https://www.autodeskresearch.com/publications/samestats">Images showing why visualization is important</a></li>
+<li><a href="https://stats.stackexchange.com/questions/171768/interpreting-coefficients-in-a-logistic-regression">Interpreting logistic regression</a></li>
+<li><a href="https://www.youtube.com/watch?v=5OL1RqHrZQ8">Dance of the p-value video</a></li>
+</ul>
+</div>
+
+
+<hr>
+
+<p>This work is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. See the <a href="LICENSE.html">licensing</a> page for more details about copyright information.</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

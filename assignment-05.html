@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Assignment 5: Population models in two dimensions (8 marks)</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link rel="icon" type="image/png" href="image/favicon.png">
+<style type="text/css">
+
+table {
+    border-collapse: collapse;
+}
+
+thead {
+    border-top: solid #DCDCDC;
+    border-bottom: solid #DCDCDC;
+}
+
+tr.odd {
+    background-color: #F8F8F8;
+}
+
+tr:last-child {
+    border-bottom: solid #DCDCDC;
+}
+
+</style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 54px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h2 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h3 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h4 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h5 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h6 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">EEB313H1</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-map-o"></span>
+     
+    Syllabus
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lec01-introduction.html">Sept. 6: Intro to course, programming, RStudio, and R Markdown</a>
+    </li>
+    <li>
+      <a href="lec02-basic-r.html">Sept. 11: Assignment, vectors, functions</a>
+    </li>
+    <li>
+      <a href="lec03-basic-r.html">Sept. 13: Data frames, intro to dplyr</a>
+    </li>
+    <li>
+      <a href="lec04-dplyr.html">Sept. 18: Data wrangling in dplyr, ggplot, tidy data</a>
+    </li>
+    <li>
+      <a href="lec05-dplyr.html">Sept. 20: More dplyr and ggplot</a>
+    </li>
+    <li>
+      <a href="lec06-exploratory-data-analysis.html">Sept. 25: Exploratory data analysis</a>
+    </li>
+    <li>
+      <a href="lec07-linear-modelling.html">Sept. 27: Linear models and statistical modelling</a>
+    </li>
+    <li>
+      <a href="lec08-linear-mixed-effects-models.html">Oct. 02: Mixed effects models</a>
+    </li>
+    <li>
+      <a href="lec09-Randomization-tests.html">Oct. 04: Simulating data: Randomization tests</a>
+    </li>
+    <li class="dropdown-header">Oct. 09: Multivariate stats</li>
+    <li class="dropdown-header">Oct. 11: Model selection</li>
+    <li class="dropdown-header">Oct. 16: Numerically solving population models</li>
+    <li class="dropdown-header">Oct. 18: Time series analysis</li>
+    <li>
+      <a href="lec12-datasets.html">Oct. 23: Datasets, hypothesis, begin projects</a>
+    </li>
+    <li>
+      <a href="lec14-git.html">Oct. 25: Reproducible science</a>
+    </li>
+    <li>
+      <a href="lec17-rmarkdown.html">Oct. 30: Reproducible science</a>
+    </li>
+    <li class="dropdown-header">Nov. 01: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 13: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 15: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 20: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 22: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 27: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 29: Project work (no lesson)</li>
+    <li class="dropdown-header">Dec. 04: Project work (no lesson)</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Assignments
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="assignment-01.html">Assignment 1</a>
+    </li>
+    <li>
+      <a href="assignment-02.html">Assignment 2</a>
+    </li>
+    <li>
+      <a href="assignment-03.html">Assignment 3</a>
+    </li>
+    <li>
+      <a href="assignment-04.html">Assignment 4</a>
+    </li>
+    <li class="dropdown-header">Assignment 5</li>
+    <li class="dropdown-header">Assignment 6</li>
+    <li class="dropdown-header">Assignment 7</li>
+    <li class="dropdown-header">Assignment 8</li>
+    <li class="dropdown-header">Final assignment</li>
+  </ul>
+</li>
+<li>
+  <a href="resources.html">
+    <span class="fa fa-question"></span>
+     
+    Resources and FAQ
+  </a>
+</li>
+<li>
+  <a href="about.html">
+    <span class="fa fa-info"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-bars"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="mailto:ahmed.hasan@mail.utoronto.ca">
+        <span class="fa fa-envelope"></span>
+         
+        Contact
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/uoftcoders/rcourse">
+        <span class="fa fa-github"></span>
+         
+        GitHub
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Assignment 5: Population models in two dimensions (8 marks)</h1>
+
+</div>
+
+
+<p><em>To submit this assignment, upload the full document on blackboard, including the original questions, your code, and the output. Submit both your <code>.Rmd</code> source file and a knitted <code>.html</code> version of the same file.</em></p>
+<p><em>For questions that ask you to plot something by hand, indicate which assignment and question the plot is for and either include a photo or scan of it in the markdown document or hand in the hard copy.</em></p>
+<ol style="list-style-type: decimal">
+<li><p>Quantitatively analyzing a one-dimensional model (2 marks).</p>
+<p>Consider the differential equation <span class="math inline">\(\frac{dx}{dt} = x(1-x)\)</span> from last week’s assignment.</p></li>
+</ol>
+<!-- -->
+<ol style="list-style-type: lower-alpha">
+<li><p>Find the fixed points (equilibrium values) of the system (analytically, on paper) (0.5 marks).</p></li>
+<li><p>Use R to simulate this equation and plot <span class="math inline">\(x\)</span> vs. <span class="math inline">\(t\)</span> for <span class="math inline">\(0 \le t \le 10\)</span>. Plot trajectories for several different starting values of <span class="math inline">\(x\)</span> (initial conditions) using <code>ggplot</code> and the <code>do</code> function we used in class. Based on the long-time behaviour of the system, which fixed point(s) are stable and which are unstable? (1 mark)</p></li>
+<li><p>Analyze the stability of the fixed points on paper. Since this system is one-dimensional, we only need a single derivative: <span class="math inline">\(\frac{\partial f(x)}{\partial x}\)</span>, where <span class="math inline">\(f(x) = x(1-x)\)</span>. Calculate this derivative, evaluate it at each of the fixed points, and use the result to classify each point as stable or unstable (0.5 marks).</p></li>
+</ol>
+<!-- -->
+<ol start="2" style="list-style-type: decimal">
+<li><p>The Lotka-Volterra competition model (6 marks).</p>
+<p>Consider the Lotka-Volterra competition model. Unlike the predator-prey model considered last week, in this model the growth rate of each species (<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>) depends on the per-capita effect the competing species have on each other, which can be thought of as the amount of overlap in resource use. The amount of overlap for each species is given by <span class="math inline">\(\alpha_1\)</span> and <span class="math inline">\(\alpha_2\)</span>, respectively. <span class="math inline">\(\alpha_1\)</span> and <span class="math inline">\(\alpha_2\)</span> don’t need to be equal.</p>
+<p><span class="math display">\[\frac{dx}{dt} = r_1 x \left(1-\frac{x+\alpha_1 y}{K_1}\right)\]</span></p>
+<p><span class="math display">\[\frac{dy}{dt} = r_2 y \left(1-\frac{y+\alpha_2 x}{K_2}\right)\]</span></p>
+<p><span class="math inline">\(r\)</span> and <span class="math inline">\(K\)</span> are growth rates and carrying capacities, respectively.</p></li>
+</ol>
+<!-- -->
+<ol style="list-style-type: lower-alpha">
+<li><p>Find the fixed points and nullclines of the system (analytically, on paper). The fixed points can be found by setting <span class="math inline">\(\frac{dx}{dt} = 0\)</span> and <span class="math inline">\(\frac{dy}{dt} = 0\)</span> simultaneously, and the nullclines can be found by setting each derivative to zero individually and solving for <span class="math inline">\(y\)</span> as a function of <span class="math inline">\(x\)</span> in each case so that they can be plotted on a <span class="math inline">\(y\)</span> vs. <span class="math inline">\(x\)</span> phase portrait (0.75 marks).</p></li>
+<li><p>Use R to simulate these equations and plot <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> vs. <span class="math inline">\(t\)</span>. Use the symmetric case: <span class="math inline">\(\alpha_1 = \alpha_2 = \alpha\)</span>, <span class="math inline">\(K_1 = K_2 = K\)</span>, and <span class="math inline">\(r_1 = r_2 = r\)</span>. Choose <span class="math inline">\(\alpha = 0.2, K = 50\)</span>, and <span class="math inline">\(r = 1\)</span>. Choose a starting value where <span class="math inline">\(x\)</span> is different from <span class="math inline">\(y\)</span> (0.75 marks).</p></li>
+<li>Create a phase portrait for this system in R using <code>phaseR</code>. Plot the following:
+<ul>
+<li>all the fixed points.</li>
+<li>the nullclines found in (a). Plot all the nullclines yourself instead of using <code>nullcline</code> from <code>phaseR</code> — <code>nullcline</code> doesn’t always plot all the nullclines correctly.</li>
+<li>three to four trajectories (1 marks).</li>
+</ul></li>
+<li><p>Analyze the stability of each fixed point using the same assumptions and parameter values as in part (b). Calculate the four partial derivatives needed for the Jacobian: <span class="math inline">\(\frac{\partial f(x,y)}{\partial x}\)</span>, <span class="math inline">\(\frac{\partial f(x,y)}{\partial y}\)</span>, <span class="math inline">\(\frac{\partial g(x,y)}{\partial x}\)</span>, <span class="math inline">\(\frac{\partial g(x,y)}{\partial y}\)</span>, where <span class="math inline">\(f(x) = r_1 x \left(1-\frac{x+\alpha_1 y}{K_1}\right)\)</span> and <span class="math inline">\(f(y) = r_2 y \left(1-\frac{y+\alpha_2 x}{K_2}\right)\)</span>.</p>
+<p>For example, for the fixed point <span class="math inline">\(x^* = 0\)</span>, <span class="math inline">\(y^* = K\)</span> (<span class="math inline">\(x^*\)</span> notation indicates fixed point):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Fixed point</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">x_star &lt;-<span class="st"> </span><span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">y_star &lt;-<span class="st"> </span>K;</a></code></pre></div>
+<p>And we can use our solutions for the partial derivatives above, plugging in the equilibrium values. For example, the partial derivative of <span class="math inline">\(f(x)\)</span> with respect to x evaluated at the fixed point above is:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># Partial derivatives / elements of the Jacobian</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">df_dx &lt;-<span class="st"> </span>r <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(x_star <span class="op">+</span><span class="st"> </span>alpha <span class="op">*</span><span class="st"> </span>y_star) <span class="op">/</span><span class="st"> </span>K) <span class="op">-</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>K) <span class="op">*</span><span class="st"> </span>r <span class="op">*</span><span class="st"> </span>x_star</a></code></pre></div>
+<p>Now create the Jacobian matrix and then calculate the eigenvalues:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">J &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(df_dx, df_dy, </a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">              dg_dx, dg_dy), </a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">            <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">nrow =</span> <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">            <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">e_vals &lt;-<span class="st"> </span><span class="kw">eigen</span>(J)<span class="op">$</span>values</a></code></pre></div>
+<p>For each point, give the eigenvalues and explain whether the fixed point is stable or unstable. Will it oscillate? Explain why or why not (1 marks).</p></li>
+<li><p>Simplify the fixed points of the system on paper in the case when <span class="math inline">\(\alpha_1 = \alpha_2 = \alpha\)</span>, <span class="math inline">\(r_1 = r_2 = r\)</span>, and <span class="math inline">\(K_1 \neq K_2\)</span>. Create a plot in R showing <span class="math inline">\(x^*\)</span> vs. <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(y^*\)</span> vs <span class="math inline">\(\alpha\)</span>, and <span class="math inline">\(x ^ * + y ^ *\)</span> vs. <span class="math inline">\(\alpha\)</span> for $ -1 &lt; &lt; 1.5$ for the <em>non-trivial</em> fixed point where both <span class="math inline">\(x^*\)</span> and <span class="math inline">\(y^*\)</span> are not zero. Note that <span class="math inline">\(\alpha = -1\)</span> and <span class="math inline">\(\alpha = 1\)</span> will give infinity, so skip those two points when plotting. Label <span class="math inline">\(K_1\)</span>, <span class="math inline">\(K_2\)</span>, and <span class="math inline">\(K_1 + K_2\)</span> on the y-axis. (2.5 marks total)</p>
+<ul>
+<li><p>Thinking of <span class="math inline">\(\alpha\)</span> as the parameter that controls “overlap” between the two competing species, what is the biological meaning of <span class="math inline">\(\alpha = 0\)</span>? (Hint: compare this fixed point to the non-trivial fixed point from the logistic model: <span class="math inline">\(N^* = K\)</span>.)</p></li>
+<li><p>What is the biological meaning of <span class="math inline">\(0 &lt; \alpha &lt; 1\)</span>? What is the biological meaning of <span class="math inline">\(\alpha = 1\)</span>, and of <span class="math inline">\(\alpha &gt; 1\)</span>? (Hint: what is the sum of the non-trivial fixed points <span class="math inline">\(x^*\)</span> and <span class="math inline">\(y^*\)</span> in each of these cases in terms of <span class="math inline">\(K_1\)</span> and <span class="math inline">\(K_2\)</span>?)</p></li>
+<li><p>What would happen to the system if <span class="math inline">\(\alpha\)</span> was negative? (Hint: is “competition” still an appropriate name for the model if <span class="math inline">\(\alpha &lt; 0\)</span>?)</p></li>
+</ul></li>
+</ol>
+
+
+<hr>
+
+<p>This work is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. See the <a href="LICENSE.html">licensing</a> page for more details about copyright information.</p>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

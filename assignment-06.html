@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Assignment 6: Statistical modelling (8 marks)</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link rel="icon" type="image/png" href="image/favicon.png">
+<style type="text/css">
+
+table {
+    border-collapse: collapse;
+}
+
+thead {
+    border-top: solid #DCDCDC;
+    border-bottom: solid #DCDCDC;
+}
+
+tr.odd {
+    background-color: #F8F8F8;
+}
+
+tr:last-child {
+    border-bottom: solid #DCDCDC;
+}
+
+</style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 54px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h2 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h3 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h4 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h5 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h6 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">EEB313H1</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-map-o"></span>
+     
+    Syllabus
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lec01-introduction.html">Sept. 6: Intro to course, programming, RStudio, and R Markdown</a>
+    </li>
+    <li>
+      <a href="lec02-basic-r.html">Sept. 11: Assignment, vectors, functions</a>
+    </li>
+    <li>
+      <a href="lec03-basic-r.html">Sept. 13: Data frames, intro to dplyr</a>
+    </li>
+    <li>
+      <a href="lec04-dplyr.html">Sept. 18: Data wrangling in dplyr, ggplot, tidy data</a>
+    </li>
+    <li>
+      <a href="lec05-dplyr.html">Sept. 20: More dplyr and ggplot</a>
+    </li>
+    <li>
+      <a href="lec06-exploratory-data-analysis.html">Sept. 25: Exploratory data analysis</a>
+    </li>
+    <li>
+      <a href="lec07-linear-modelling.html">Sept. 27: Linear models and statistical modelling</a>
+    </li>
+    <li>
+      <a href="lec08-linear-mixed-effects-models.html">Oct. 02: Mixed effects models</a>
+    </li>
+    <li>
+      <a href="lec09-Randomization-tests.html">Oct. 04: Simulating data: Randomization tests</a>
+    </li>
+    <li class="dropdown-header">Oct. 09: Multivariate stats</li>
+    <li class="dropdown-header">Oct. 11: Model selection</li>
+    <li class="dropdown-header">Oct. 16: Numerically solving population models</li>
+    <li class="dropdown-header">Oct. 18: Time series analysis</li>
+    <li>
+      <a href="lec12-datasets.html">Oct. 23: Datasets, hypothesis, begin projects</a>
+    </li>
+    <li>
+      <a href="lec14-git.html">Oct. 25: Reproducible science</a>
+    </li>
+    <li>
+      <a href="lec17-rmarkdown.html">Oct. 30: Reproducible science</a>
+    </li>
+    <li class="dropdown-header">Nov. 01: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 13: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 15: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 20: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 22: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 27: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 29: Project work (no lesson)</li>
+    <li class="dropdown-header">Dec. 04: Project work (no lesson)</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Assignments
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="assignment-01.html">Assignment 1</a>
+    </li>
+    <li>
+      <a href="assignment-02.html">Assignment 2</a>
+    </li>
+    <li>
+      <a href="assignment-03.html">Assignment 3</a>
+    </li>
+    <li>
+      <a href="assignment-04.html">Assignment 4</a>
+    </li>
+    <li class="dropdown-header">Assignment 5</li>
+    <li class="dropdown-header">Assignment 6</li>
+    <li class="dropdown-header">Assignment 7</li>
+    <li class="dropdown-header">Assignment 8</li>
+    <li class="dropdown-header">Final assignment</li>
+  </ul>
+</li>
+<li>
+  <a href="resources.html">
+    <span class="fa fa-question"></span>
+     
+    Resources and FAQ
+  </a>
+</li>
+<li>
+  <a href="about.html">
+    <span class="fa fa-info"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-bars"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="mailto:ahmed.hasan@mail.utoronto.ca">
+        <span class="fa fa-envelope"></span>
+         
+        Contact
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/uoftcoders/rcourse">
+        <span class="fa fa-github"></span>
+         
+        GitHub
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Assignment 6: Statistical modelling (8 marks)</h1>
+
+</div>
+
+
+<!-- keep this part -->
+<p><em>To submit this assignment, upload the full document on blackboard, including the original questions, your code, and the output. Submit both your <code>.Rmd</code> source file and a knitted <code>.html</code> version of the same file.</em></p>
+<ol style="list-style-type: decimal">
+<li><p>Ricker model (4 marks).</p>
+<p>The Ricker model is a stochastic model for growth of a population. Its two parameters are the death rate <span class="math inline">\(b\)</span> and growth rate <span class="math inline">\(r\)</span> of the population. The carrying capacity of the system is <span class="math inline">\(r/b\)</span>.</p>
+<p><span class="math inline">\(N_{t+1} = N_t e^{r - bN_t + \xi_t}\)</span></p></li>
+</ol>
+<!-- -->
+<ol style="list-style-type: lower-alpha">
+<li>Use the following code to simulate a dataset of the number of fish returning to spawn each year. Create a point and line plot with time on x-axis and the y on the y-axis using <code>ggplot2</code>. Include a horizontal line at the carrying capacity and name the axis labels something more meaningful (0.5 marks).</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Simulating data for the Ricker Model function</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">simulate_data &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="st">    </span><span class="cf">function</span>(<span class="dt">initial_condition =</span> <span class="dv">1000</span>,</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">             <span class="dt">growth_rate =</span> <span class="fl">2.0</span>,</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">             <span class="dt">carrying_capacity =</span> <span class="dv">2000</span>,</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">             <span class="dt">noise =</span> <span class="fl">0.75</span>,</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">             <span class="dt">timesteps =</span> <span class="dv">100</span>) {</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">        </a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">        <span class="co"># So random number generator is consistent</span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">        <span class="kw">set.seed</span>(<span class="dv">2100</span>)</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">        </a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">        death_rate &lt;-<span class="st"> </span>growth_rate <span class="op">/</span><span class="st"> </span>carrying_capacity</a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">    </a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">        y &lt;-<span class="st"> </span><span class="kw">numeric</span>(timesteps <span class="op">+</span><span class="st"> </span><span class="dv">1</span>) <span class="co"># empty vector of population sizes</span></a>
+<a class="sourceLine" id="cb1-15" data-line-number="15">        y[<span class="dv">1</span>] &lt;-<span class="st"> </span>initial_condition <span class="co"># set first element to a initial condition</span></a>
+<a class="sourceLine" id="cb1-16" data-line-number="16">        <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>(timesteps <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)) {</a>
+<a class="sourceLine" id="cb1-17" data-line-number="17">            y[i] &lt;-<span class="st"> </span>y[i <span class="op">-</span><span class="st"> </span><span class="dv">1</span>] <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>(<span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">1</span>, growth_rate <span class="op">-</span><span class="st"> </span>death_rate <span class="op">*</span><span class="st"> </span>y[i <span class="op">-</span><span class="st"> </span><span class="dv">1</span>], noise))</a>
+<a class="sourceLine" id="cb1-18" data-line-number="18">        }</a>
+<a class="sourceLine" id="cb1-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb1-20" data-line-number="20">        data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">time =</span> <span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">length</span>(y), <span class="dt">by =</span> <span class="dv">1</span>), <span class="dt">y =</span> y)</a>
+<a class="sourceLine" id="cb1-21" data-line-number="21">        <span class="kw">return</span>(data)</a>
+<a class="sourceLine" id="cb1-22" data-line-number="22">}</a>
+<a class="sourceLine" id="cb1-23" data-line-number="23"></a>
+<a class="sourceLine" id="cb1-24" data-line-number="24"><span class="co"># Simulate data:</span></a>
+<a class="sourceLine" id="cb1-25" data-line-number="25">ricker_df &lt;-<span class="st"> </span><span class="kw">simulate_data</span>()</a></code></pre></div>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><p>Use least squares to fit the simulated data to the model (<em>hint:</em> check with lecture 10 material, fitting models with two parameters, for similar code). Follow these steps. (1.5 marks)</p>
+<ol style="list-style-type: decimal">
+<li>Make a vector of <span class="math inline">\(N_t\)</span> and <span class="math inline">\(N_{t+1}\)</span>, so that <span class="math inline">\(N_t\)</span> is the independent variable and <span class="math inline">\(N_{t+1}\)</span> is the data you are fitting</li>
+<li>Create a function <code>ricker_pred_fn</code> that: a) has these two arguments, <code>r</code>, <code>b</code>, in that order; b) calculates <span class="math inline">\(N_{t+1}\)</span> given <span class="math inline">\(N_t\)</span>, according to the Ricker model equation; c) subtracts the <span class="math inline">\(N_{t+1}\)</span> from the predicted Ricker model to create the residual; d) and returns the squared residual.</li>
+<li>Create two sequence of <code>rvals</code> (for <span class="math inline">\(r\)</span>) ranging from 0.5 to 3 and <code>bvals</code> (for <span class="math inline">\(b\)</span>) ranging from 0.0001 to 0.0015.</li>
+<li>Either use a <code>for</code> loop or use the <code>expand.grid</code> + <code>mapply</code> combination (check lecture 10 material) to apply every combination of <code>rvals</code> and <code>bvals</code> to the <code>ricker_pred_fn</code> function.</li>
+<li>Plot the resulting matrix using <code>wireframe</code>.</li>
+<li>Use <code>which</code> to extract the best-fitting values of <span class="math inline">\(r\)</span> and <span class="math inline">\(b\)</span>.</li>
+</ol></li>
+<li><p>Rearrange the Ricker model formula so that it has the regression form <span class="math inline">\(y = a + Xb + e\)</span>, where <span class="math inline">\(y = ln(N_{t+1}/N_t)\)</span> (<em>hint:</em> taking the logarithm cancels out the exponential <span class="math inline">\(e\)</span>). Write down the formula below. What are <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, <span class="math inline">\(X\)</span>, and <span class="math inline">\(e\)</span> equivalents in the Ricker model equation? (0.5 mark).</p></li>
+<li><p>Create a new data frame called <code>ricker_df2</code> with two columns <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> based on the data from <code>ricker_df</code>, with the new variables in the form of the equation in 1c) above (<em>hint:</em> reuse the variables from 1b). Use <code>ricker_df2</code> to fit a linear regression model of the rearranged Ricker equation using <code>glm</code>. Print out a tidy version of the model results, keeping only the term, estimate, confidence interval, and p-value. What are the estimates for <span class="math inline">\(r\)</span> and <span class="math inline">\(b\)</span>? Are they the same as the constants used from 1a)? (1 mark)</p></li>
+<li><p>Is there a difference between the fit using <code>glm</code> and the fit using least squares? Comment on why or why not there may be a difference. Is there an advantage to using one method over the other? (0.5 mark)</p></li>
+</ol>
+<!-- -->
+<ol start="2" style="list-style-type: decimal">
+<li>Generalized Linear Models (GLM). Run the below code chunk. (4 marks)</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">co2_df &lt;-<span class="st"> </span><span class="kw">as_data_frame</span>(<span class="kw">as.matrix</span>(CO2)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">conc =</span> <span class="kw">as.integer</span>(conc),</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">           <span class="dt">uptake =</span> <span class="kw">as.numeric</span>(uptake))</a></code></pre></div>
+<ol style="list-style-type: lower-alpha">
+<li><p>Look through the help documentation (<code>?CO2</code>) to understand what each variable means. Which variable(s) do you think would be the <span class="math inline">\(y\)</span> in the GLM model? Which variable(s) would be the <span class="math inline">\(x\)</span>? Briefly defend these choices. (0.25 marks)</p></li>
+<li><p>Create at most two plots that explore the data to eventually justify the final variables you will use in the <code>glm</code> model. The order and type of plots shown should highlight your thought process for your choice of variables in the model. (1 mark)</p></li>
+<li><p>Write up the GLM equation, substituting in your final variables that you will use. You can write it as a comment in a code chunk, as plain text, or as a LaTeX equation (same as how we’ve shown it in class). (0.25 mark)</p></li>
+<li><p>Run the <code>glm</code> model, tidy it up, and keep only the term, estimate, confidence interval, and p-value. (optional: if you want to create a table in the html output, use the <code>knitr::kable()</code> function) (1 mark)</p></li>
+<li><p>Insert the numbers from the <code>glm</code> output into the GLM equation. (0.25 mark)</p></li>
+<li><p>How much does <code>uptake</code> change if <code>conc</code> goes up by 10 mL/L? (<em>Note:</em> it is intentional that there is no mention of the other variables in the model.) Write out the interpretation as a simple statement of this contribution of <code>conc</code> on <code>uptake</code>, when the other variables are also in the model. (0.25 mark)</p></li>
+<li><p>In regression modelling, there is a concept known as “interaction terms”. What this means is that the influence a variable has on the dependent variable (<span class="math inline">\(y\)</span>) changes when another variable also changes. For example, in mammals, body temperature and air temperature are not related to each other, while in reptiles, body temperature <em>is</em> related to air temperature. So the regression equation would be:</p>
+<p><span class="math display">\[ BodyTemp = a + b_1 AirTemp + b_2 Reptile + b_3 (AirTemp \times Reptile) \]</span></p>
+<p>In <code>glm</code>, the formula would look like: <code>BodyTemp ~ AirTemp + Reptile + AirTemp:Reptile</code>. Do you think there is a potential interaction in the <code>co2_df</code> dataset? If so then: write up the <code>glm</code> formula; run the model; tidy it up; and keep the term, estimate, confidence interval, and p-value. Print this model output. Now, insert in the numbers in the GLM formula and write out the interpretations of the different conditions of the variables. <em>Remember</em>, character data is converted into (in this dataset) 0 and 1 in the regression equation. If you don’t think there are interactions, justify why. (1 marks)</p></li>
+</ol>
+
+
+<hr>
+
+<p>This work is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. See the <a href="LICENSE.html">licensing</a> page for more details about copyright information.</p>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

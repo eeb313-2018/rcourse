@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Luke Johnston" />
+
+
+<title>Project and Git setup in RStudio, project work</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/htmlwidgets-1.2/htmlwidgets.js"></script>
+<script src="site_libs/viz-0.3/viz.js"></script>
+<link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link rel="icon" type="image/png" href="image/favicon.png">
+<style type="text/css">
+
+table {
+    border-collapse: collapse;
+}
+
+thead {
+    border-top: solid #DCDCDC;
+    border-bottom: solid #DCDCDC;
+}
+
+tr.odd {
+    background-color: #F8F8F8;
+}
+
+tr:last-child {
+    border-bottom: solid #DCDCDC;
+}
+
+</style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 54px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h2 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h3 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h4 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h5 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h6 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">EEB313H1</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-map-o"></span>
+     
+    Syllabus
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lec01-introduction.html">Sept. 6: Intro to course, programming, RStudio, and R Markdown</a>
+    </li>
+    <li>
+      <a href="lec02-basic-r.html">Sept. 11: Assignment, vectors, functions</a>
+    </li>
+    <li>
+      <a href="lec03-basic-r.html">Sept. 13: Data frames, intro to dplyr</a>
+    </li>
+    <li>
+      <a href="lec04-dplyr.html">Sept. 18: Data wrangling in dplyr, ggplot, tidy data</a>
+    </li>
+    <li>
+      <a href="lec05-dplyr.html">Sept. 20: More dplyr and ggplot</a>
+    </li>
+    <li>
+      <a href="lec06-exploratory-data-analysis.html">Sept. 25: Exploratory data analysis</a>
+    </li>
+    <li>
+      <a href="lec07-linear-modelling.html">Sept. 27: Linear models and statistical modelling</a>
+    </li>
+    <li>
+      <a href="lec08-linear-mixed-effects-models.html">Oct. 02: Mixed effects models</a>
+    </li>
+    <li>
+      <a href="lec09-Randomization-tests.html">Oct. 04: Simulating data: Randomization tests</a>
+    </li>
+    <li class="dropdown-header">Oct. 09: Multivariate stats</li>
+    <li class="dropdown-header">Oct. 11: Model selection</li>
+    <li class="dropdown-header">Oct. 16: Numerically solving population models</li>
+    <li class="dropdown-header">Oct. 18: Time series analysis</li>
+    <li>
+      <a href="lec12-datasets.html">Oct. 23: Datasets, hypothesis, begin projects</a>
+    </li>
+    <li>
+      <a href="lec14-git.html">Oct. 25: Reproducible science</a>
+    </li>
+    <li>
+      <a href="lec17-rmarkdown.html">Oct. 30: Reproducible science</a>
+    </li>
+    <li class="dropdown-header">Nov. 01: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 13: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 15: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 20: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 22: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 27: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 29: Project work (no lesson)</li>
+    <li class="dropdown-header">Dec. 04: Project work (no lesson)</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Assignments
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="assignment-01.html">Assignment 1</a>
+    </li>
+    <li>
+      <a href="assignment-02.html">Assignment 2</a>
+    </li>
+    <li>
+      <a href="assignment-03.html">Assignment 3</a>
+    </li>
+    <li>
+      <a href="assignment-04.html">Assignment 4</a>
+    </li>
+    <li class="dropdown-header">Assignment 5</li>
+    <li class="dropdown-header">Assignment 6</li>
+    <li class="dropdown-header">Assignment 7</li>
+    <li class="dropdown-header">Assignment 8</li>
+    <li class="dropdown-header">Final assignment</li>
+  </ul>
+</li>
+<li>
+  <a href="resources.html">
+    <span class="fa fa-question"></span>
+     
+    Resources and FAQ
+  </a>
+</li>
+<li>
+  <a href="about.html">
+    <span class="fa fa-info"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-bars"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="mailto:ahmed.hasan@mail.utoronto.ca">
+        <span class="fa fa-envelope"></span>
+         
+        Contact
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/uoftcoders/rcourse">
+        <span class="fa fa-github"></span>
+         
+        GitHub
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Project and Git setup in RStudio, project work</h1>
+<h4 class="author"><em>Luke Johnston</em></h4>
+
+</div>
+
+
+<div id="lesson-preamble" class="section level2">
+<h2>Lesson preamble</h2>
+<blockquote>
+<h3 id="lesson-objectives">Lesson objectives:</h3>
+<ul>
+<li>Learn <em>a bit</em> about how version control and Git works</li>
+<li>Learn the 4 main Git commands and the Git-RStudio interface</li>
+<li>Know why a standard/consistent folder and file structure is important</li>
+<li>Project work</li>
+</ul>
+<h3 id="lesson-outline">Lesson outline:</h3>
+<ul>
+<li>Version control using Git (35 min)
+<ul>
+<li>(Basic) introduction to Git</li>
+<li>Common commands for Git</li>
+</ul></li>
+<li>Quick introduction to using GitHub (10 min)</li>
+<li>Folders and files structure (15 min)
+<ul>
+<li>R projects in RStudio</li>
+<li>Using Git in RStudio</li>
+</ul></li>
+<li>Project work
+<ul>
+<li>Get started/work on assignment 7 (20 min)</li>
+</ul></li>
+</ul>
+</blockquote>
+<hr />
+</div>
+<div id="git" class="section level2">
+<h2>Git</h2>
+<div id="a-short-introduction" class="section level3">
+<h3>A short introduction</h3>
+<div class="figure">
+<img src="image/comic-filenaming.gif" alt="PhD Comics on filenaming" />
+<p class="caption"><a href="http://phdcomics.com/comics.php?f=1531">PhD Comics</a> on filenaming</p>
+</div>
+<p>The comic above is teasing about prematurely naming your thesis “FINAL”, but it also highlights a common method that many people use to keep track of different versions of their files. This method involves making a copy of a file, naming it differently from the original, and editing the contents of that new file, repeated as many times as to get the document finished. This is the basic concept of “version control”, though quite primitive. More formal and structured methods of version control keep track of what exactly changed, when, and by whom (like how Google Docs). Git is one such system of version control. Git is specially powerful when your project involves more than just a single file or has any type of code or data involved.</p>
+<p><a href="https://git-scm.com/book/en/v2">Git</a> is a software that keeps detailed tracking of your files and folders, keeping a history of exact characters that have been changed. It’s very powerful, open source, and is very popular among software developers, programmers, R coders, and scientists. This is one of the main reasons why we will be learning Git, because it has this massive online community, support, and documentation. Git is especially powerful with collaborating on more complex projects (such as a research project).</p>
+<p>Git works by using several commands to track files (‘add’), save (‘commit’) them to history, check the ‘status’ of your folders and files (in a project/parent folder, called a ‘repo’), and see the history (the ‘log’) of what was saved. You can do some much more advanced and powerful things in Git, but this lesson we’ll focus on the basics (which you many only ever use).</p>
+<div id="exercise" class="section level4">
+<h4>Exercise</h4>
+<p>Follow the getting setup steps from command line:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="fu">git</span> config --global user.name <span class="st">&quot;Your Name&quot;</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="fu">git</span> config --global user.email yourname@example.com</a></code></pre></div>
+<p>Replace “Your Name”, with, well, your first and last name. Replace the fake email address with the email address you normally use.</p>
+<p>Confirm it works by running:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="fu">git</span> config --list</a></code></pre></div>
+</div>
+</div>
+<div id="the-basic-commands-of-git" class="section level3">
+<h3>The basic commands of Git</h3>
+<p>There are a few commands that you will use regularly when you start using Git. In fact, you may never need to use more than this depending on what you do.</p>
+<ul>
+<li><code>git add</code></li>
+<li><code>git commit</code></li>
+<li><code>git log</code></li>
+<li><code>git status</code></li>
+</ul>
+<p>For your final assignment, you will be using a few more commands that we will cover a bit in this lesson and much more next week.</p>
+<ul>
+<li><code>git remote</code></li>
+<li><code>git push</code></li>
+<li><code>git pull</code></li>
+<li><code>git checkout</code></li>
+<li><code>git branch</code> (maybe)</li>
+</ul>
+<p>But first, let’s focus on the first four basic commands.</p>
+<ul>
+<li><code>git add</code> tells Git to start ‘tracking’ or watching the file(s) you point to and put them into the ‘staging area’ (see the image below).</li>
+<li><code>git commit</code> tells Git to take the changes made to the files you select and save them into the history, moving files from the ‘staging area’ into the history.</li>
+<li><code>git log</code> shows you the history of your git repository (all the changes made to the files; this is all contained in the <code>.git/</code> folder).</li>
+<li><code>git status</code> gives you a brief overview of what is going on in your git repository.</li>
+</ul>
+<div class="figure">
+<img src="https://git-scm.com/book/en/v2/images/areas.png" alt="Image of the Stages from the Git Basics Book" />
+<p class="caption">Image of the Stages from the <a href="https://git-scm.com/book/en/v2/">Git Basics Book</a></p>
+</div>
+<p>RStudio has an excellent Git interface, mainly for the basic things. However, for slightly more complicated things you will need to use the terminal. So we’ll start by learning how to use the terminal, then switch to using the RStudio interface.</p>
+<p>We’ll go through the process of creating a Git repository (repo) and using the basic four commands during class.</p>
+<div id="exercise-1" class="section level4">
+<h4>Exercise</h4>
+<p>Create a new Markdown file called <code>bio.md</code> in the Git repo we created in class. Add your name and one or two sentence blurb about yourself. <em>Using the command line</em>, add this new file and commit to the history. Check the status and log.</p>
+</div>
+</div>
+<div id="github-and-your-project" class="section level3">
+<h3>GitHub and your project</h3>
+<p>GitHub is a commercial, Git repository hosting service. For public repositories, GitHub is free. (yeay open source!) GitHub is an extremely popular site for R packages, with many of the most popular and powerful packages all on there (all of the <code>tidyverse</code> packages are there, like <code>dplyr</code> and <code>ggplot2</code>). Your final assignment is also on GitHub. When collaborating on GitHub, generally you’ll need to make a ‘fork’ of the original repository. In GitHub, a fork is a copy of the original repo. While you could make edits to the files in the GitHub repo using GitHub, its much faster to download (‘clone’) the repo onto your computer to edit there. The image below shows the different repos and their interactions. Because you are downloading (‘cloning’) your Forked GitHub repo, you need to tell your computer where to look for the fork and original GitHub repo. That’s what the ‘remote origin’ (your fork) and ‘remote upstream’ (the original) mean. Git stores these links to the GitHub repos in these ‘origin’ and ‘upstream’ pointers.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">DiagrammeR<span class="op">::</span><span class="kw">grViz</span>(<span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">digraph {</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">    node [shape = box, style = rounded]</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="st">    {</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="st">        rank = same;</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="st">        GitHubMain [label = &#39;Main GitHub</span><span class="ch">\n</span><span class="st">repo (UofTCoders)&#39;]</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="st">        GitHubFork [label = &#39;Forked GitHub</span><span class="ch">\n</span><span class="st">repo (yours)&#39;]</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="st">    }</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="st">    LocalRepo [label = &#39;Local repo&#39;]</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="st">    </span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="st">    GitHubFork -&gt; GitHubMain [label = &#39;Pull</span><span class="ch">\n</span><span class="st">Request&#39;]</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="st">    GitHubFork -&gt; LocalRepo [label = &#39;remote origin             &#39;]</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="st">    GitHubMain -&gt; LocalRepo [label = &#39;remote upstream&#39;]</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="st">}</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="st">&quot;</span>)</a></code></pre></div>
+<div id="htmlwidget-db8b06534d1db3e4fdf0" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-db8b06534d1db3e4fdf0">{"x":{"diagram":"\ndigraph {\n\n    node [shape = box, style = rounded]\n    {\n        rank = same;\n        GitHubMain [label = \"Main GitHub\nrepo (UofTCoders)\"]\n        GitHubFork [label = \"Forked GitHub\nrepo (yours)\"]\n    }\n\n    LocalRepo [label = \"Local repo\"]\n    \n    GitHubFork -> GitHubMain [label = \"Pull\nRequest\"]\n    GitHubFork -> LocalRepo [label = \"remote origin             \"]\n    GitHubMain -> LocalRepo [label = \"remote upstream\"]\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>We’ll all make a fork of the team final assignment. Then we’ll use <code>git clone</code> to download that repo onto your computer.</p>
+<div id="exercise-2" class="section level4">
+<h4>Exercise</h4>
+<p>Because we’ll be using GitHub and the final assignment team repositories, you’ll need to add something to your Git settings. Add this <code>remote</code> (link) to your Git repo of the final assignment:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># Change `teamname` to your team&#39;s name (JuniorCoders or Python)</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="fu">git</span> remote add upstream https://github.com/uoftcoders/eeb430.2017.teamname.git</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co"># you should see two lines of text, one for origin (your GitHub fork) and one</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co"># that you just added.</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="fu">git</span> remote -v</a></code></pre></div>
+</div>
+</div>
+</div>
+<div id="file-and-folder-structure" class="section level2">
+<h2>File and folder structure</h2>
+<p>You’ll notice in your final assignment folder that there are several files that already exist. Many of these files are standard files that are included when you make your own R package. The reason we are using it for this assignment is because it provides an infrastructure to be able to build and create simple to complex projects, in a way that is standardized and already well-documented. Here’s a description of each of the files/folders:</p>
+<ul>
+<li><code>R/</code> folder will contain custom functions and other bits of R code that you’ll use for your final report in the <code>doc/</code> folder. Sometimes your code gets too complex and you need to break it down into multiple (or one) functions. Those functions you will save in this folder.</li>
+<li><code>data/</code> folder will contain any <em>small</em> to <em>medium</em> sized datasets you may use or create. Most of the practice datasets are too massive to store on Git/GitHub, so what you’ll need to do is get everyone to have a copy of that dataset saved in the <code>data/</code> folder but <em>don’t</em> commit it to the Git history. This is also a great place to save results output, since you probably don’t want to run analyses on your massive datasets every time to create your results.</li>
+<li><code>doc/</code> contains all the R Markdown documents relevant to finishing your final report.</li>
+<li><code>.Rbuildignore</code> is a specific file for when you want to load all the R files in <code>R/</code>. We’ll talk about this more as you do your final report.</li>
+<li><code>.gitignore</code> is a special file used by Git to tell it to ignore certain files from tracking, such as files or figures that get generated from R code and data that you don’t need to save.</li>
+<li><code>DESCRIPTION</code> is a file that contains some metadata that is in the format used when making R packages. It contains information on who the authors are, details about the project, what R packages you need to install for the project, and more.</li>
+<li><code>README.md</code> is, as the name says, a file to read. GitHub by default will show this file as the first file to view in a repo. The README contains important and detailed information about the project.</li>
+<li><code>*.Rproj</code> tells RStudio that this folder is a project. You open this when you work on your project.</li>
+</ul>
+<div id="r-projects-and-git-in-rstudio" class="section level3">
+<h3>R projects and Git in RStudio</h3>
+<p>R projects are files that set a standard for how you and others use the files in your repo, when they use RStudio. Opening this file opens RStudio with the options and settings for your project.</p>
+<p>Let’s create a new R project called <code>testing</code>. We’ll also create a Git repo in this project. The nice thing about using this project style is that the Git interface is quite nice. Create a new file called <code>bio2.md</code> and switch to the Git interface (either the Git tab or Git button at the top). You’ll see that the common commands (status, add, commit, log) are all there. Let’s add and commit this new file.</p>
+<div id="exercise-3" class="section level4">
+<h4>Exercise</h4>
+<p>Add your name and a random string of text to the <code>bio2.md</code> file. View what was changed on the RStudio Git interface. Add and commit that file. Then look in History to see what you changed and what was changed in the file.</p>
+<p>Now, add more lines of text and also delete some of the original text from the file. Check out the Git interface and see what was changed. Add and commit. Check the history.</p>
+</div>
+</div>
+</div>
+<div id="project-work-exercises" class="section level2">
+<h2>Project work exercises</h2>
+<p>Open your final assignment <code>Rproj</code> files, so that RStudio opens in that folder. Try to work through some of Assignment 7 (on the website), using RStudio and the Git interface.</p>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<ul>
+<li>Excellent <a href="https://swcarpentry.github.io/git-novice/">tutorial</a> on using Git from <a href="https://software-carpentry.org/">Software Carpentry</a>. First five sections on the Software Carpentry website are relevant for this lesson.</li>
+</ul>
+</div>
+
+
+<hr>
+
+<p>This work is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. See the <a href="LICENSE.html">licensing</a> page for more details about copyright information.</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

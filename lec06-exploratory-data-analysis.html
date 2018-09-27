@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Lindsay Coome" />
+
+
+<title>Exploratory Data Analysis</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link rel="icon" type="image/png" href="image/favicon.png">
+<style type="text/css">
+
+table {
+    border-collapse: collapse;
+}
+
+thead {
+    border-top: solid #DCDCDC;
+    border-bottom: solid #DCDCDC;
+}
+
+tr.odd {
+    background-color: #F8F8F8;
+}
+
+tr:last-child {
+    border-bottom: solid #DCDCDC;
+}
+
+</style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 54px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h2 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h3 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h4 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h5 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h6 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">EEB313H1</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-map-o"></span>
+     
+    Syllabus
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lec01-introduction.html">Sept. 6: Intro to course, programming, RStudio, and R Markdown</a>
+    </li>
+    <li>
+      <a href="lec02-basic-r.html">Sept. 11: Assignment, vectors, functions</a>
+    </li>
+    <li>
+      <a href="lec03-basic-r.html">Sept. 13: Data frames, intro to dplyr</a>
+    </li>
+    <li>
+      <a href="lec04-dplyr.html">Sept. 18: Data wrangling in dplyr, ggplot, tidy data</a>
+    </li>
+    <li>
+      <a href="lec05-dplyr.html">Sept. 20: More dplyr and ggplot</a>
+    </li>
+    <li>
+      <a href="lec06-exploratory-data-analysis.html">Sept. 25: Exploratory data analysis</a>
+    </li>
+    <li>
+      <a href="lec07-linear-modelling.html">Sept. 27: Linear models and statistical modelling</a>
+    </li>
+    <li>
+      <a href="lec08-linear-mixed-effects-models.html">Oct. 02: Mixed effects models</a>
+    </li>
+    <li>
+      <a href="lec09-Randomization-tests.html">Oct. 04: Simulating data: Randomization tests</a>
+    </li>
+    <li class="dropdown-header">Oct. 09: Multivariate stats</li>
+    <li class="dropdown-header">Oct. 11: Model selection</li>
+    <li class="dropdown-header">Oct. 16: Numerically solving population models</li>
+    <li class="dropdown-header">Oct. 18: Time series analysis</li>
+    <li>
+      <a href="lec12-datasets.html">Oct. 23: Datasets, hypothesis, begin projects</a>
+    </li>
+    <li>
+      <a href="lec14-git.html">Oct. 25: Reproducible science</a>
+    </li>
+    <li>
+      <a href="lec17-rmarkdown.html">Oct. 30: Reproducible science</a>
+    </li>
+    <li class="dropdown-header">Nov. 01: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 13: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 15: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 20: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 22: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 27: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 29: Project work (no lesson)</li>
+    <li class="dropdown-header">Dec. 04: Project work (no lesson)</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Assignments
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="assignment-01.html">Assignment 1</a>
+    </li>
+    <li>
+      <a href="assignment-02.html">Assignment 2</a>
+    </li>
+    <li>
+      <a href="assignment-03.html">Assignment 3</a>
+    </li>
+    <li>
+      <a href="assignment-04.html">Assignment 4</a>
+    </li>
+    <li class="dropdown-header">Assignment 5</li>
+    <li class="dropdown-header">Assignment 6</li>
+    <li class="dropdown-header">Assignment 7</li>
+    <li class="dropdown-header">Assignment 8</li>
+    <li class="dropdown-header">Final assignment</li>
+  </ul>
+</li>
+<li>
+  <a href="resources.html">
+    <span class="fa fa-question"></span>
+     
+    Resources and FAQ
+  </a>
+</li>
+<li>
+  <a href="about.html">
+    <span class="fa fa-info"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-bars"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="mailto:ahmed.hasan@mail.utoronto.ca">
+        <span class="fa fa-envelope"></span>
+         
+        Contact
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/uoftcoders/rcourse">
+        <span class="fa fa-github"></span>
+         
+        GitHub
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Exploratory Data Analysis</h1>
+<h4 class="author"><em>Lindsay Coome</em></h4>
+
+</div>
+
+
+<div id="lesson-objectives" class="section level3">
+<h3>Lesson objectives:</h3>
+<ul>
+<li>Exploring and asking questions about our data with graphing/visualization</li>
+<li>Using insights from exploratory analysis to clean up data:
+<ul>
+<li>Dealing with unusual values/outliers</li>
+<li>Dealing with missing values (NAs)</li>
+</ul></li>
+</ul>
+</div>
+<div id="lesson-outline" class="section level3">
+<h3>Lesson outline:</h3>
+<p>Total lesson time: 2 hours</p>
+<ul>
+<li>Plotting and exploring data ({{20-30}} min)</li>
+<li>Dealing with unusual values ({{20-30}} min)</li>
+<li>Dealing with missing values and multiple imputation ({{40-50}} min)</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Exploratory data analysis is the process of visualizing and transforming your data in a systematic way. It’s goals are:</p>
+<ol style="list-style-type: decimal">
+<li><p>Generate questions about your data.</p></li>
+<li><p>Search for answers by visualising, transforming, and modelling your data.</p></li>
+<li><p>Use what you learn to refine your questions and/or generate new questions.</p></li>
+</ol>
+<p>Even in cases where data analysis may seem straightforward, exploratory data analysis is important as it allows you to investigate the quality of your data. Data that doesn’t meet expectations may need to be subjected to “data cleaning”, using all the tools of exploratory data analysis - visualisation, transformation, and modelling.</p>
+</div>
+<div id="setup" class="section level1">
+<h1>Setup</h1>
+<p>Today we’ll combine what you’ve learned about dplyr and ggplot2 to interactively ask questions and answer them with data.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co">#install.packages(&quot;mice&quot;)  #please install this package!</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(mice)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">download.file</span>(<span class="st">&quot;https://ndownloader.figshare.com/files/2292169&quot;</span>, <span class="st">&quot;survey.csv&quot;</span>) <span class="co">#if you need to re-download the survey</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">survey &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;survey.csv&quot;</span>)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   record_id = col_integer(),
+##   month = col_integer(),
+##   day = col_integer(),
+##   year = col_integer(),
+##   plot_id = col_integer(),
+##   species_id = col_character(),
+##   sex = col_character(),
+##   hindfoot_length = col_integer(),
+##   weight = col_integer(),
+##   genus = col_character(),
+##   species = col_character(),
+##   taxa = col_character(),
+##   plot_type = col_character()
+## )</code></pre>
+</div>
+<div id="questions" class="section level1">
+<h1>Questions</h1>
+<p>Your goal during exploratory data analysis is to develop an understanding of your data. The easiest way to do this is to use questions as tools to guide your investigation. A common questions might be:</p>
+<ol style="list-style-type: decimal">
+<li>What type of variation occurs within my variables?</li>
+</ol>
+<p>Variation is the tendency of the values of a variable to change from measurement to measurement. Every variable has its own pattern of variation, which can reveal interesting information. The best way to understand that pattern is to visualise the distribution of the variable’s values.</p>
+</div>
+<div id="visualizing-distributions" class="section level1">
+<h1>Visualizing Distributions</h1>
+<p>How you visualise the distribution of a variable will depend on whether the variable is categorical or continuous. A variable is categorical if it can only take one of a small set of values. In R, categorical variables are usually saved as factors or character vectors. To examine the distribution of a categorical variable, use a bar chart:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># Note: diamonds is a dataset that comes along with loading the ggplot2 and/or tidyverse packages</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="dt">data =</span> diamonds, <span class="kw">aes</span>(<span class="dt">x =</span> cut)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_bar</span>()</a></code></pre></div>
+<p><img src="lec06-exploratory-data-analysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /> The height of the bars displays how many observations occurred with each x value. You can compute these values manually with dplyr’s <code>count()</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">diamonds <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw">count</span>(cut) <span class="co">#same as tally() but has an option to add variables to group by</span></a></code></pre></div>
+<pre><code>## # A tibble: 5 x 2
+##   cut           n
+##   &lt;ord&gt;     &lt;int&gt;
+## 1 Fair       1610
+## 2 Good       4906
+## 3 Very Good 12082
+## 4 Premium   13791
+## 5 Ideal     21551</code></pre>
+<p>A variable is continuous if it can take any of an infinite set of ordered values. To examine the distribution of a continuous variable, use a histogram:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> diamonds, <span class="kw">aes</span>(<span class="dt">x =</span> carat)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.5</span>) <span class="co">#graphing the distribution of diamonds by carat</span></a></code></pre></div>
+<p><img src="lec06-exploratory-data-analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>You can compute this by hand by combining dplyr’s <code>count()</code> and ggplot2’s <code>cut_width()</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">diamonds <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span><span class="kw">count</span>(<span class="kw">cut_width</span>(carat, <span class="fl">0.5</span>)) <span class="co"># cut_width is a function that makes groups of a specified bin width</span></a></code></pre></div>
+<pre><code>## # A tibble: 11 x 2
+##    `cut_width(carat, 0.5)`     n
+##    &lt;fct&gt;                   &lt;int&gt;
+##  1 [-0.25,0.25]              785
+##  2 (0.25,0.75]             29498
+##  3 (0.75,1.25]             15977
+##  4 (1.25,1.75]              5313
+##  5 (1.75,2.25]              2002
+##  6 (2.25,2.75]               322
+##  7 (2.75,3.25]                32
+##  8 (3.25,3.75]                 5
+##  9 (3.75,4.25]                 4
+## 10 (4.25,4.75]                 1
+## 11 (4.75,5.25]                 1</code></pre>
+<p>A histogram divides the x-axis into equally spaced bins and then uses the height of a bar to display the number of observations that fall in each bin.</p>
+<p>You can set the width of the intervals in a histogram with the binwidth argument, which is measured in the units of the x variable. You should always explore a variety of binwidths when working with histograms, as different binwidths can reveal different patterns. For example, here is how the graph above looks when we zoom into just the diamonds with a size of less than three carats and choose a smaller binwidth.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">smaller &lt;-<span class="st"> </span>diamonds <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(carat <span class="op">&lt;</span><span class="st"> </span><span class="dv">3</span>) <span class="co"># Make a dataset with only diamonds smaller than 3 carats</span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">  </a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="kw">ggplot</span>(<span class="dt">data =</span> smaller, <span class="kw">aes</span>(<span class="dt">x =</span> carat)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.1</span>) <span class="co"># Zoomed in dataset with smaller bin widths</span></a></code></pre></div>
+<p><img src="lec06-exploratory-data-analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>If you wish to overlay multiple histograms in the same plot, I recommend using <code>geom_freqpoly()</code> instead of <code>geom_histogram()</code>. <code>geom_freqpoly()</code> performs the same calculation as <code>geom_histogram()</code>, but instead of displaying the counts with bars, it uses lines instead. It’s much easier to understand overlapping lines than bars.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> smaller, <span class="kw">aes</span>(<span class="dt">x =</span> carat, <span class="dt">colour =</span> cut)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_freqpoly</span>(<span class="dt">binwidth =</span> <span class="fl">0.1</span>)</a></code></pre></div>
+<p><img src="lec06-exploratory-data-analysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>Now that you can visualise variation, what should you look for in your plots? And what type of follow-up questions should you ask?</p>
+</div>
+<div id="typical-values" class="section level1">
+<h1>Typical Values</h1>
+<p>In both bar charts and histograms, tall bars show the common values of a variable, and shorter bars show less-common values. Places that do not have bars reveal values that were not seen in your data. To turn this information into useful questions, look for anything unexpected:</p>
+<ol style="list-style-type: decimal">
+<li><p>Which values are the most common? Why?</p></li>
+<li><p>Which values are rare? Why? Does that match your expectations?</p></li>
+<li><p>Can you see any unusual patterns? What might explain them?</p></li>
+</ol>
+<p>As an example, the histogram below suggests several interesting questions:</p>
+<p>As an example, the histogram below suggests an interesting question:</p>
+<ul>
+<li>Why are there more diamonds at whole carats and common fractions of carats?</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> smaller, <span class="kw">aes</span>(<span class="dt">x =</span> carat)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.01</span>) </a></code></pre></div>
+<p><img src="lec06-exploratory-data-analysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Clusters of similar values suggest that subgroups exist in your data. To understand the subgroups, ask:</p>
+<ol style="list-style-type: decimal">
+<li><p>How are the observations within each cluster similar to each other?</p></li>
+<li><p>How are the observations in separate clusters different from each other?</p></li>
+<li><p>How can you explain or describe the clusters?</p></li>
+<li><p>Why might the appearance of clusters be misleading?</p></li>
+</ol>
+<p>The histogram below shows the length (in minutes) of 272 eruptions of the Old Faithful Geyser in Yellowstone National Park. Eruption times appear to be clustered into two groups: there are short eruptions (of around 2 minutes) and long eruptions (4-5 minutes), but little in between.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> faithful, <span class="kw">aes</span>(<span class="dt">x =</span> eruptions)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.25</span>)</a></code></pre></div>
+<p><img src="lec06-exploratory-data-analysis_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+<div id="unusual-values" class="section level1">
+<h1>Unusual Values</h1>
+<p>Outliers are observations that are unusual; data points that don’t seem to fit the pattern. Sometimes outliers are data entry errors; other times outliers suggest important new science. When you have a lot of data, outliers are sometimes difficult to see in a histogram. For example, take the distribution of the y variable from the diamonds dataset. The only evidence of outliers is the unusually wide limits on the x-axis.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">ggplot</span>(diamonds, <span class="kw">aes</span>(<span class="dt">x =</span> y)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.5</span>)</a></code></pre></div>
+<p><img src="lec06-exploratory-data-analysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>There are so many observations in the common bins that the rare bins are so short that you can’t see them. To make it easy to see the unusual values, we need to zoom to small values of the y-axis with <code>coord_cartesian()</code>:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">ggplot</span>(diamonds, <span class="kw">aes</span>(<span class="dt">x =</span> y)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.5</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">50</span>)) <span class="co"># Zoom in so the y-axis goes from 0 to 50</span></a></code></pre></div>
+<p><img src="lec06-exploratory-data-analysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><code>coord_cartesian()</code> also has an <code>xlim()</code> argument for when you need to zoom into the x-axis. ggplot2 also has <code>xlim()</code> and <code>ylim()</code> functions that work slightly differently: they change the values displayed on your graph’s axes, throwing away the data outside the limits.</p>
+<p>This allows us to see that there are three unusual values: 0, ~30, and ~60. We pluck them out with dplyr:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">unusual &lt;-<span class="st"> </span>diamonds <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(y <span class="op">&lt;</span><span class="st"> </span><span class="dv">3</span> <span class="op">|</span><span class="st"> </span>y <span class="op">&gt;</span><span class="st"> </span><span class="dv">20</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># Select rows with the unusual values we&#39;ve found</span></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(price, x, y, z) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># Select relevant columns</span></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="st">  </span><span class="kw">arrange</span>(y) <span class="co"># Arrange in ascending order</span></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5">unusual</a></code></pre></div>
+<pre><code>## # A tibble: 9 x 4
+##   price     x     y     z
+##   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1  5139  0      0    0   
+## 2  6381  0      0    0   
+## 3 12800  0      0    0   
+## 4 15686  0      0    0   
+## 5 18034  0      0    0   
+## 6  2130  0      0    0   
+## 7  2130  0      0    0   
+## 8  2075  5.15  31.8  5.12
+## 9 12210  8.09  58.9  8.06</code></pre>
+<p>The y variable measures one of the three dimensions of these diamonds, in mm. We know that diamonds can’t have a width of 0mm, so these values must be incorrect. We might also suspect that measurements of 32mm and 59mm are implausible: those diamonds are over an inch long, but don’t cost hundreds of thousands of dollars!</p>
+<p>It’s good practice to repeat your analysis with and without the unusual values. If they have minimal effect on the results, and you can’t figure out why they’re there, it’s reasonable to replace them with missing values, and move on. However, if they have a substantial effect on your results, you shouldn’t drop them without justification. You’ll need to figure out what caused them (e.g. a data entry error) and disclose that you removed them in your write-up.</p>
+<div id="exercises" class="section level2">
+<h2>Exercises</h2>
+<ol style="list-style-type: decimal">
+<li>Explore the distribution of price. Do you discover anything unusual or surprising? (Hint: Carefully think about the binwidth and make sure you try a wide range of values.)</li>
+<li>Compare and contrast coord_cartesian() vs xlim() or ylim() when zooming in on a histogram. What happens if you leave binwidth unset? What happens if you try and zoom so only half a bar shows?</li>
+</ol>
+</div>
+</div>
+<div id="unusual-values-continued" class="section level1">
+<h1>Unusual Values Continued</h1>
+<p>If you’ve encountered unusual values in your dataset, and simply want to move on to the rest of your analysis, you have two options.</p>
+<p>Drop the entire row with the strange values:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">diamonds2 &lt;-<span class="st"> </span>diamonds <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(<span class="kw">between</span>(y, <span class="dv">3</span>, <span class="dv">20</span>)) <span class="co"># between() selects only values between 3 and 20</span></a></code></pre></div>
+<p>I don’t recommend this option because just because one measurement is invalid, doesn’t mean all the measurements are. Additionally, if you have low quality data, by time that you’ve applied this approach to every variable you might find that you don’t have any data left!</p>
+<p>Instead, I recommend replacing the unusual values with missing values. The easiest way to do this is to use mutate() to replace the variable with a modified copy. You can use the <code>ifelse()</code> function to replace unusual values with NA:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">diamonds2 &lt;-<span class="st"> </span>diamonds <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="kw">ifelse</span>(y <span class="op">&lt;</span><span class="st"> </span><span class="dv">3</span> <span class="op">|</span><span class="st"> </span>y <span class="op">&gt;</span><span class="st"> </span><span class="dv">20</span>, <span class="ot">NA</span>, y))</a></code></pre></div>
+<p><code>ifelse()</code> has three arguments. The first argument test should be a logical vector. The result will contain the value of the second argument, yes, when test is TRUE, and the value of the third argument, no, when it is false. Alternatively to ifelse, use dplyr’s <code>case_when()</code>. <code>case_when()</code> is particularly useful inside mutate when you want to create a new variable that relies on a complex combination of existing variables.</p>
+</div>
+<div id="outliers" class="section level1">
+<h1>Outliers</h1>
+<p>We just learned a bit about checking for unusual values in your dataset, but there are several ways of dealing with outliers beyond replacing them with missing values. What are our other options and under what circumstances should we use them?</p>
+<ol style="list-style-type: decimal">
+<li>Transform the data:</li>
+</ol>
+<ul>
+<li>Outliers tend to skew the distribution and this skew (and, therefore, the impact of the outliers) can sometimes be reduced by applying transformations to the data.</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>If transformation fails, then you can consider replacing the score:</li>
+</ol>
+<ul>
+<li>Convert back from a z-score. To look for outliers we could convert our variable to z-scores and then count how many fall within certain important limits. If we take the absolute value (i.e., we ignore whether the z-score is positive or negative) then in a normal distribution we’d expect about 5% to have absolute values greater than 1.96, and 1% to have absolute values greater than 2.58, and none to be greater than about 3.29. A z-score of 3.29 therefore constitutes an outlier. We can remove it or replace it with a value that correponds to a z-score of 3.29.</li>
+<li>The mean plus two standard deviations: A variation on the above method is to use the mean plus two times the standard deviation (rather than three times the standard deviation).</li>
+</ul>
+<p>Let’s try #2 (using removal) with the diamonds dataset:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">diamonds2 &lt;-<span class="st"> </span>diamonds</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">diamonds2<span class="op">$</span>xZscore &lt;-<span class="st"> </span><span class="kw">scale</span>(diamonds2<span class="op">$</span>x, <span class="dt">center=</span><span class="ot">TRUE</span>, <span class="dt">scale=</span><span class="ot">TRUE</span>) <span class="co"># Transform into z-scores</span></a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">diamonds2<span class="op">$</span>xZscore &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(diamonds2<span class="op">$</span>xZscore) </a>
+<a class="sourceLine" id="cb20-4" data-line-number="4">diamonds2 &lt;-<span class="st"> </span>diamonds2 <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb20-5" data-line-number="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">xZscore =</span> <span class="kw">ifelse</span>(xZscore <span class="op">&lt;</span><span class="st"> </span><span class="fl">-3.29</span> <span class="op">|</span><span class="st"> </span>xZscore <span class="op">&gt;</span><span class="st"> </span><span class="fl">3.29</span>, <span class="ot">NA</span>, xZscore)) <span class="co"># Create new dataset with only z-score values between -3.29 and 3.29</span></a>
+<a class="sourceLine" id="cb20-6" data-line-number="6"><span class="co">#diamonds2 %&gt;% </span></a>
+<a class="sourceLine" id="cb20-7" data-line-number="7"><span class="co">#  arrange(desc(xZscore)) %&gt;% </span></a>
+<a class="sourceLine" id="cb20-8" data-line-number="8"><span class="co">#  View()</span></a></code></pre></div>
+</div>
+<div id="missing-values" class="section level1">
+<h1>Missing Values</h1>
+<p>Although as researchers we strive to collect complete sets of data, it is often the case that we have missing data. Missing data can occur for a variety of reasons. However, just because we have missed out on some data for a participant doesn’t mean that we have to ignore the data we do have (although it sometimes creates statistical difficulties). Nevertheless, we do need to tell R that a value is missing for a particular case.</p>
+<p>Like R, ggplot2 subscribes to the philosophy that missing values should never silently go missing. It’s not obvious where you should plot missing values, so ggplot2 doesn’t include them in the plot, but it does warn that they’ve been removed:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> diamonds2, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="lec06-exploratory-data-analysis_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>To suppress that warning, set <code>na.rm = TRUE</code>:</p>
+<div id="exercises-1" class="section level2">
+<h2>Exercises</h2>
+<ol style="list-style-type: decimal">
+<li><p>What happens to missing values in a histogram? What happens to missing values in a bar chart? Why is there a difference?</p></li>
+<li><p>What does na.rm = TRUE do in mean() and sum()?</p></li>
+</ol>
+</div>
+<div id="methods-for-handling-missing-data" class="section level2">
+<h2>Methods for Handling Missing Data</h2>
+<div id="in-the-past" class="section level3">
+<h3>In the past:</h3>
+<ul>
+<li>Listwise deletion (usually the default)</li>
+<li>Mean imputaton</li>
+</ul>
+<p>The choice of method to impute missing values largely influences the model’s predictive ability. In most statistical analysis methods, listwise deletion is the default method used to deal with missing values. But, it not as good since it leads to information loss.</p>
+<p>While some quick fixes such as mean-substitution may be fine in some cases, such simple approaches usually introduce bias into the data, for instance, applying mean substitution leaves the mean unchanged (which is desirable) but decreases variance, which may be undesirable.</p>
+</div>
+<div id="two-cutting-edge-alternatives" class="section level3">
+<h3>Two cutting edge alternatives:</h3>
+<ul>
+<li>Maxiumum likelihood</li>
+<li>Multiple imputation</li>
+</ul>
+<p>Both of these techniques rely on the assumption that your data are missing at random (MAR). Multiple imputation is preferred because it has a wider range of applications.</p>
+<p>In essence, multiple imputation uses information from other variables in your data to come up with plausible values.</p>
+</div>
+</div>
+</div>
+<div id="multiple-imputation" class="section level1">
+<h1>Multiple Imputation</h1>
+<p>MICE (Multivariate Imputation via Chained Equations) is one of the most commonly used packages by R users. The MICE package in R helps you by imputing missing values with plausible data values. These plausible values are drawn from a distribution specifically designed for each missing datapoint.</p>
+<p>By default, linear regression is used to predict continuous missing values. Logistic regression is used for categorical missing values. Then, missing values will be replaced with predicted values.</p>
+<p>Let’s call the MICE package now. The code below is standard and you don’t need to change anything besides the dataset name. By default, MICE uses predictive mean matching as its imputation method. You may look at the MICE documentation if you want to explore using different imputation methods or change the default parameters.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">init &lt;-<span class="st"> </span><span class="kw">mice</span>(survey, <span class="dt">maxit=</span><span class="dv">0</span>)</a></code></pre></div>
+<pre><code>## Warning: Number of logged events: 6</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">meth &lt;-<span class="st"> </span>init<span class="op">$</span>method</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2">predM &lt;-<span class="st"> </span>init<span class="op">$</span>predictorMatrix</a></code></pre></div>
+<p>To impute the missing values, MICE package uses an algorithm in a such a way that information from all the other variables in the dataset is used to predict and impute the missing values. Therefore, you may not want to use a certain variable as a predictor. For example, the ID variable does not have any predictive value, so we want to remove it.</p>
+<p>The code below will remove a variable as a predictor in imputing missing values, but will not stop MICE from imputing values for that variable itself.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">predM[, <span class="kw">c</span>(<span class="st">&quot;record_id&quot;</span>)] &lt;-<span class="st"> </span><span class="dv">0</span></a></code></pre></div>
+<p>By default mice() includes all the variables in the data; it is suggested that we use as many variables as possible. Do not exclude a variable as predictor from the imputation model if that variable is going be included in your final analysis model.</p>
+<p>If you want to skip a variable from imputation itself use the code below. This variable will still be used for prediction. Let’s exclude all the variables where we aren’t missing data or where imputation isn’t of interest:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">meth[<span class="kw">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;day&quot;</span>, <span class="st">&quot;month&quot;</span>, <span class="st">&quot;plot_id&quot;</span>, <span class="st">&quot;species_id&quot;</span>, <span class="st">&quot;plot_type&quot;</span>, <span class="st">&quot;genus&quot;</span>, <span class="st">&quot;species&quot;</span>, <span class="st">&quot;taxa&quot;</span>)] &lt;-<span class="st"> &quot;&quot;</span></a></code></pre></div>
+<p>Now let specify the methods for imputing the missing values. There are specific methods for continuous, binary and ordinal variables. We will now set different methods for each variable. You can add more than one variable in each method. The default for continuous data is pmm. pmm stands for predictive mean matching, the default method of <code>mice()</code> for imputation of continous incomplete variables; for each missing value, pmm <em>finds a set of observed values with the closest predicted mean as the missing one and imputes the missing values by a random draw from that set</em>. Therefore, pmm is restricted to the observed values, and might do fine even for categorical data (though not recommended).</p>
+<p><code>mice()</code> automatically decides on the imputation model for each incomplete variable which method will be used for your data as default. The way to check how <code>mice()</code> actually decided to impute values is as follows:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">init<span class="op">$</span>meth</a></code></pre></div>
+<pre><code>##       record_id           month             day            year 
+##              &quot;&quot;              &quot;&quot;              &quot;&quot;              &quot;&quot; 
+##         plot_id      species_id             sex hindfoot_length 
+##              &quot;&quot;              &quot;&quot;              &quot;&quot;           &quot;pmm&quot; 
+##          weight           genus         species            taxa 
+##           &quot;pmm&quot;              &quot;&quot;              &quot;&quot;              &quot;&quot; 
+##       plot_type 
+##              &quot;&quot;</code></pre>
+<p>The variables <code>hindfoot_length</code> and <code>weight</code> are already set to pmm, so we will leave it like that. However, if we wanted to directly specify the method, we could use the following code:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">meth[<span class="kw">c</span>(<span class="st">&quot;hindfoot_length&quot;</span>)] &lt;-<span class="st"> &quot;pmm&quot;</span></a></code></pre></div>
+<p>Now it is time to run the multiple (m=5; this is generally standard) imputation.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">103</span>)</a>
+<a class="sourceLine" id="cb30-2" data-line-number="2">imputed &lt;-<span class="st"> </span><span class="kw">mice</span>(survey, <span class="dt">method=</span>meth, <span class="dt">predictorMatrix=</span>predM, <span class="dt">m=</span><span class="dv">5</span>)</a></code></pre></div>
+<pre><code>## 
+##  iter imp variable
+##   1   1  hindfoot_length  weight
+##   1   2  hindfoot_length  weight
+##   1   3  hindfoot_length  weight
+##   1   4  hindfoot_length  weight
+##   1   5  hindfoot_length  weight
+##   2   1  hindfoot_length  weight
+##   2   2  hindfoot_length  weight
+##   2   3  hindfoot_length  weight
+##   2   4  hindfoot_length  weight
+##   2   5  hindfoot_length  weight
+##   3   1  hindfoot_length  weight
+##   3   2  hindfoot_length  weight
+##   3   3  hindfoot_length  weight
+##   3   4  hindfoot_length  weight
+##   3   5  hindfoot_length  weight
+##   4   1  hindfoot_length  weight
+##   4   2  hindfoot_length  weight
+##   4   3  hindfoot_length  weight
+##   4   4  hindfoot_length  weight
+##   4   5  hindfoot_length  weight
+##   5   1  hindfoot_length  weight
+##   5   2  hindfoot_length  weight
+##   5   3  hindfoot_length  weight
+##   5   4  hindfoot_length  weight
+##   5   5  hindfoot_length  weight</code></pre>
+<p>Reminder: m – Refers to 5 imputed data sets maxit – Refers to no. of iterations taken to impute missing values method – Refers to method used in imputation. We used predictive mean matching.</p>
+<p>Then, using these 5 imputed datasets, mice creates a dataset after imputation with the following code:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">imputed &lt;-<span class="st"> </span><span class="kw">complete</span>(imputed)</a></code></pre></div>
+<p>Now let’s double check for missing values:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">imputed <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(hindfoot_length, weight) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb33-3" data-line-number="3"><span class="st">  </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">sum</span>(<span class="kw">is.na</span>(.))) <span class="co">#taken from tidyverse library purr; note requirement to include . in the function</span></a></code></pre></div>
+<pre><code>## $hindfoot_length
+## [1] 0
+## 
+## $weight
+## [1] 0</code></pre>
+<p>OK, we’ve successfully imputed values for <code>hindfoot_length</code> and <code>weight</code> using multiple imputation! How can we check the accuracy of our imputation? One way is to compare our imputed means to our actual means (i.e. with missing data included). If the variables are meaningfully correlated to one another, the averages of the imputed variables should be close to the averages of our original variables.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">actual &lt;-<span class="st"> </span>survey<span class="op">$</span>hindfoot_length</a>
+<a class="sourceLine" id="cb35-2" data-line-number="2">predicted &lt;-<span class="st"> </span>imputed<span class="op">$</span>hindfoot_length</a>
+<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="kw">mean</span>(actual, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<pre><code>## [1] 29.28793</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">mean</span>(predicted)</a></code></pre></div>
+<pre><code>## [1] 29.57819</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1">actual &lt;-<span class="st"> </span>survey<span class="op">$</span>weight</a>
+<a class="sourceLine" id="cb39-2" data-line-number="2">predicted &lt;-<span class="st"> </span>imputed<span class="op">$</span>weight</a>
+<a class="sourceLine" id="cb39-3" data-line-number="3"><span class="kw">mean</span>(actual, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<pre><code>## [1] 42.67243</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="kw">mean</span>(predicted)</a></code></pre></div>
+<pre><code>## [1] 43.04004</code></pre>
+<div id="challenge" class="section level2">
+<h2>Challenge</h2>
+<p>Let’s add some NA’s to the iris (native to R) dataset (copy the code below). Then use the MICE package to run multiple imputation on our new dataset.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1">iris2 &lt;-<span class="st"> </span>iris</a>
+<a class="sourceLine" id="cb43-2" data-line-number="2"><span class="kw">set.seed</span>(<span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb43-3" data-line-number="3">iris2[<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(iris2), <span class="dv">20</span>), <span class="st">&quot;Sepal.Length&quot;</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb43-4" data-line-number="4">iris2[<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(iris2), <span class="dv">20</span>), <span class="st">&quot;Petal.Length&quot;</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></a></code></pre></div>
+</div>
+</div>
+
+
+<hr>
+
+<p>This work is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. See the <a href="LICENSE.html">licensing</a> page for more details about copyright information.</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

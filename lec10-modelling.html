@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Madeleine Bonsma-Fisher" />
+
+
+<title>Fitting models to data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link rel="icon" type="image/png" href="image/favicon.png">
+<style type="text/css">
+
+table {
+    border-collapse: collapse;
+}
+
+thead {
+    border-top: solid #DCDCDC;
+    border-bottom: solid #DCDCDC;
+}
+
+tr.odd {
+    background-color: #F8F8F8;
+}
+
+tr:last-child {
+    border-bottom: solid #DCDCDC;
+}
+
+</style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 54px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h2 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h3 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h4 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h5 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h6 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">EEB313H1</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-map-o"></span>
+     
+    Syllabus
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lec01-introduction.html">Sept. 6: Intro to course, programming, RStudio, and R Markdown</a>
+    </li>
+    <li>
+      <a href="lec02-basic-r.html">Sept. 11: Assignment, vectors, functions</a>
+    </li>
+    <li>
+      <a href="lec03-basic-r.html">Sept. 13: Data frames, intro to dplyr</a>
+    </li>
+    <li>
+      <a href="lec04-dplyr.html">Sept. 18: Data wrangling in dplyr, ggplot, tidy data</a>
+    </li>
+    <li>
+      <a href="lec05-dplyr.html">Sept. 20: More dplyr and ggplot</a>
+    </li>
+    <li>
+      <a href="lec06-exploratory-data-analysis.html">Sept. 25: Exploratory data analysis</a>
+    </li>
+    <li>
+      <a href="lec07-linear-modelling.html">Sept. 27: Linear models and statistical modelling</a>
+    </li>
+    <li>
+      <a href="lec08-linear-mixed-effects-models.html">Oct. 02: Mixed effects models</a>
+    </li>
+    <li>
+      <a href="lec09-Randomization-tests.html">Oct. 04: Simulating data: Randomization tests</a>
+    </li>
+    <li class="dropdown-header">Oct. 09: Multivariate stats</li>
+    <li class="dropdown-header">Oct. 11: Model selection</li>
+    <li class="dropdown-header">Oct. 16: Numerically solving population models</li>
+    <li class="dropdown-header">Oct. 18: Time series analysis</li>
+    <li>
+      <a href="lec12-datasets.html">Oct. 23: Datasets, hypothesis, begin projects</a>
+    </li>
+    <li>
+      <a href="lec14-git.html">Oct. 25: Reproducible science</a>
+    </li>
+    <li>
+      <a href="lec17-rmarkdown.html">Oct. 30: Reproducible science</a>
+    </li>
+    <li class="dropdown-header">Nov. 01: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 13: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 15: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 20: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 22: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 27: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 29: Project work (no lesson)</li>
+    <li class="dropdown-header">Dec. 04: Project work (no lesson)</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Assignments
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="assignment-01.html">Assignment 1</a>
+    </li>
+    <li>
+      <a href="assignment-02.html">Assignment 2</a>
+    </li>
+    <li>
+      <a href="assignment-03.html">Assignment 3</a>
+    </li>
+    <li>
+      <a href="assignment-04.html">Assignment 4</a>
+    </li>
+    <li class="dropdown-header">Assignment 5</li>
+    <li class="dropdown-header">Assignment 6</li>
+    <li class="dropdown-header">Assignment 7</li>
+    <li class="dropdown-header">Assignment 8</li>
+    <li class="dropdown-header">Final assignment</li>
+  </ul>
+</li>
+<li>
+  <a href="resources.html">
+    <span class="fa fa-question"></span>
+     
+    Resources and FAQ
+  </a>
+</li>
+<li>
+  <a href="about.html">
+    <span class="fa fa-info"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-bars"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="mailto:ahmed.hasan@mail.utoronto.ca">
+        <span class="fa fa-envelope"></span>
+         
+        Contact
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/uoftcoders/rcourse">
+        <span class="fa fa-github"></span>
+         
+        GitHub
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Fitting models to data</h1>
+<h4 class="author"><em>Madeleine Bonsma-Fisher</em></h4>
+
+</div>
+
+
+<div id="lesson-preamble" class="section level2">
+<h2>Lesson preamble</h2>
+<blockquote>
+<h3 id="learning-objectives">Learning objectives</h3>
+<ul>
+<li>Appreciate bifurcations in models</li>
+<li>Use least squares to fit a model to data</li>
+</ul>
+<h3 id="lesson-outline">Lesson outline</h3>
+<p>Total lesson time: 2 hours</p>
+<ul>
+<li>Review eigenvalues and eigenvectors (10 minutes)</li>
+<li>Vectorizing linear systems of differential equations: another perspective on eigenvalues (20 minutes)</li>
+<li>Bifurcations (20 minutes)</li>
+<li>Fitting models to data
+<ul>
+<li>Fitting simulated data for a single parameters (20 minutes)</li>
+<li>Fitting real data for two parameters (40 minutes)</li>
+</ul></li>
+</ul>
+<h3 id="setup">Setup</h3>
+<ul>
+<li>Download <a href="https://uoftcoders.github.io/rcourse/data/plant-biomass-preprocess.csv">this plant biomass dataset</a> and put it in your working directory.</li>
+<li><code>install.packages('lattice')</code></li>
+<li><code>install.packages('phaseR')</code></li>
+<li><code>install.packages('deSolve')</code></li>
+<li><code>install.packages('ggplot2')</code> (or <code>tidyverse</code>)</li>
+<li><code>install.packages('dplyr')</code> (or <code>tidyverse</code>)</li>
+<li><code>install.packages('tidyr')</code> (or <code>tidyverse</code>)</li>
+</ul>
+</blockquote>
+</div>
+<div id="recap-quantitative-analysis-of-fixed-points-and-stability" class="section level2">
+<h2>Recap: quantitative analysis of fixed points and stability</h2>
+<p>Here are the steps to quantitatively analyze a model. These steps are written for a two-dimensional system, but they can be applied to a system of any number of dimensions.</p>
+<p>This is a generic two-dimensional system. There are two differential equations, and each is a function of both <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
+<p><span class="math display">\[ \frac{dx}{dt} = f(x, y) \\
+\frac{dy}{dt} = g(x,y)\]</span></p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Fixed points</strong>: Find all combinations of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> that satisfy <span class="math inline">\(f(x, y) = 0\)</span> and <span class="math inline">\(g(x, y) = 0\)</span>.</p></li>
+<li><p><strong>Stability</strong>: Calculate the Jacobian matrix and find its eigenvalues for each fixed point. This is the Jacobian matrix:</p></li>
+</ol>
+<p><span class="math display">\[J=\begin{bmatrix}
+    \frac{\partial f}{\partial x} &amp; \frac{\partial f}{\partial y} \\
+    \frac{\partial g}{\partial x} &amp; \frac{\partial g}{\partial y}
+\end{bmatrix}\]</span></p>
+<ul>
+<li>Find eigenvalues at each fixed point using the function <code>eigen</code> in R, or by solving the equation <span class="math inline">\(\text{Det}(A - \lambda \mathbb{1}) = 0\)</span>.</li>
+<li>For a set of eigenvalues (<span class="math inline">\(\lambda_1\)</span>, <span class="math inline">\(\lambda_2\)</span>):
+<ul>
+<li>If all eigenvalues have negative real parts, the fixed point is <strong>stable</strong>.</li>
+<li>If one or more eigenvalues has a positive real part, the fixed point is <strong>unstable</strong>.</li>
+<li>If the eigenvalues have an imaginary (<strong>complex</strong>) part, the fixed point is <strong>oscillatory</strong>.</li>
+</ul></li>
+</ul>
+</div>
+<div id="vectorizing-systems-of-differential-equations" class="section level2">
+<h2>Vectorizing systems of differential equations</h2>
+<p>To see why eigenvalues tell us about the stability of a fixed point, let’s look at a linear system of differential equations and its solution.</p>
+<p>Consider this system of differential equations:</p>
+<p><span class="math display">\[\frac{d x_1}{dt}=Ax_1+Bx_2 \\
+\frac{d x_2}{dt} = Cx_1+Dx_2\]</span></p>
+<p>This system is <strong>linear</strong>: each term only has either <span class="math inline">\(x_1\)</span> or <span class="math inline">\(x_2\)</span> in it, and there are no terms that have higher powers of <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> (such as <span class="math inline">\(x_1 x_2\)</span> or <span class="math inline">\(x_1^2\)</span>).</p>
+<p>Because it’s linear, this system can be written as a matrix equation:</p>
+<p><span class="math display">\[\frac{d \vec{x}}{dt} = E\vec{x}\]</span></p>
+<p>where <span class="math inline">\(\vec{x}\)</span> is two-element vector <span class="math inline">\((x_1,x_2)\)</span>, <span class="math inline">\(\frac{d \vec{x}}{dt}\)</span> is also a two-element vector <span class="math inline">\((\frac{d x_1}{dt}, \frac{d x_2}{dt})\)</span>, and</p>
+<p><span class="math display">\[E=\begin{bmatrix}
+    A &amp; B \\
+    C &amp; D 
+\end{bmatrix}\]</span></p>
+<p>To solve this, we assume that solutions exist of the form <span class="math inline">\(\vec{x} = \text{e}^{\lambda t} \vec{v}\)</span>, where <span class="math inline">\(\vec{v}\)</span> is an unknown fixed vector (basically a “direction”), and <span class="math inline">\(\lambda\)</span> is a growth rate, also unknown. If we can find solutions of this form, we know they correspond to exponential growth or decay in the direction described by <span class="math inline">\(\vec{v}\)</span>.</p>
+<p>Plugging <span class="math inline">\(\vec{x}\)</span> into the vector equation above:</p>
+<p><span class="math display">\[  \frac{d \vec{x}}{dt} = \frac{d}{dt} \text{e}^{\lambda t} \vec{v} = \lambda\text{e}^{\lambda t} \vec{v} \]</span></p>
+<p><span class="math display">\[\lambda\text{e}^{\lambda t} \vec{v} = E \text{e}^{\lambda t} \vec{v} \\
+E\vec{v} = \lambda \vec{v}\]</span></p>
+<p>This is an eigenvalue-eigenvector equation, which means that the directions we were after are the <strong>eigenvectors</strong> of <span class="math inline">\(E\)</span>, and the growth rates are the <strong>eigenvalues</strong>.</p>
+<div id="linear-system-example" class="section level3">
+<h3>Linear system example</h3>
+<p><span class="math display">\[\frac{dx}{dt} = y \\
+\frac{dy}{dt} = -2x - 3y\]</span></p>
+<p>The matrix form of this system is</p>
+<p><span class="math display">\[\frac{d \vec{x}}{dt} = E\vec{x}\]</span></p>
+<p>where the matrix <span class="math inline">\(E\)</span> is</p>
+<p><span class="math display">\[E =  \begin{bmatrix}
+    0 &amp; 1 \\
+    -2 &amp; -3
+\end{bmatrix}\]</span></p>
+<p>To solve this system, we look for eigenvalues and eigenvectors of <span class="math inline">\(E\)</span>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">E &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">              <span class="dv">-2</span>, <span class="dv">-3</span>),</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">            <span class="dt">ncol =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">            <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">eigenvalues &lt;-<span class="st"> </span><span class="kw">eigen</span>(E)<span class="op">$</span>values</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">eigenvectors &lt;-<span class="st"> </span><span class="kw">eigen</span>(E)<span class="op">$</span>vectors</a></code></pre></div>
+<p>Let’s look at the eigenvectors on a phase portrait.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(phaseR)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">linear_system &lt;-<span class="st"> </span><span class="cf">function</span>(t, y, parameters) {</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">    X &lt;-<span class="st"> </span>y[<span class="dv">1</span>] <span class="co"># prey</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">    Y &lt;-<span class="st"> </span>y[<span class="dv">2</span>] <span class="co"># predators</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">  </a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">    <span class="co"># calculate rate of change</span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">    dx &lt;-<span class="st"> </span>Y</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">    dy &lt;-<span class="st"> </span><span class="dv">-2</span> <span class="op">*</span><span class="st"> </span>X <span class="op">-</span><span class="st"> </span><span class="dv">3</span> <span class="op">*</span><span class="st"> </span>Y</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">  </a>
+<a class="sourceLine" id="cb2-12" data-line-number="12">  <span class="co"># return rate of change</span></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">  <span class="kw">return</span>(<span class="kw">list</span>(<span class="kw">c</span>(dx, dy)))</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14">}</a>
+<a class="sourceLine" id="cb2-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co"># plot vector field: on a grid of points, plot an arrow in the direction of dx/dt and dy/dt</span></a>
+<a class="sourceLine" id="cb2-17" data-line-number="17">pp_flowField &lt;-<span class="st"> </span><span class="kw">flowField</span>(linear_system, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>),</a>
+<a class="sourceLine" id="cb2-18" data-line-number="18">                          <span class="dt">points =</span> <span class="dv">15</span>, <span class="co"># this is the density of grid points on which to plot arrows</span></a>
+<a class="sourceLine" id="cb2-19" data-line-number="19">                          <span class="dt">system =</span> <span class="st">&#39;two.dim&#39;</span>, <span class="co"># &#39;two.dim&#39; is default</span></a>
+<a class="sourceLine" id="cb2-20" data-line-number="20">                          <span class="dt">add =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb2-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb2-22" data-line-number="22"><span class="co"># add trajectories</span></a>
+<a class="sourceLine" id="cb2-23" data-line-number="23">pp_trajectory &lt;-<span class="st"> </span><span class="kw">trajectory</span>(linear_system, </a>
+<a class="sourceLine" id="cb2-24" data-line-number="24">                            <span class="co"># y0 is a matrix where each row is pairs of (X, Y) </span></a>
+<a class="sourceLine" id="cb2-25" data-line-number="25">                            <span class="dt">y0 =</span> <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">-4</span>,</a>
+<a class="sourceLine" id="cb2-26" data-line-number="26">                                          <span class="dv">-4</span>, <span class="dv">-4</span>,</a>
+<a class="sourceLine" id="cb2-27" data-line-number="27">                                          <span class="dv">-3</span>, <span class="dv">3</span>,</a>
+<a class="sourceLine" id="cb2-28" data-line-number="28">                                          <span class="dv">3</span>, <span class="dv">5</span>),</a>
+<a class="sourceLine" id="cb2-29" data-line-number="29">                                        <span class="dt">ncol =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb2-30" data-line-number="30">                                        <span class="dt">byrow =</span> <span class="ot">TRUE</span>), </a>
+<a class="sourceLine" id="cb2-31" data-line-number="31">                            <span class="dt">tlim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">30</span>), <span class="co"># how far in time to calculate the trajectories</span></a>
+<a class="sourceLine" id="cb2-32" data-line-number="32">                            <span class="dt">system =</span> <span class="st">&quot;two.dim&quot;</span>)</a></code></pre></div>
+<pre><code>## Note: col has been reset as required</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># eigenvector for eigenvalue lambda = -2</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">lines</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="op">*</span>eigenvectors[<span class="dv">1</span>]), <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="op">*</span>eigenvectors[<span class="dv">2</span>]), <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&#39;green&#39;</span>)</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co"># eigenvector for eigenvalue lambda = -1</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw">lines</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="op">*</span>eigenvectors[<span class="dv">3</span>]), <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="op">*</span>eigenvectors[<span class="dv">4</span>]), <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&#39;purple&#39;</span>)</a></code></pre></div>
+<p><img src="lec10-modelling_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>The two eigenvector directions <span class="math inline">\(\vec{v_1}\)</span> and <span class="math inline">\(\vec{v_2}\)</span> (green and purple dashed lines) represent the directions in which the flow follows <span class="math inline">\(\text{e}^{\lambda_1 t} \vec{v_1}\)</span> or <span class="math inline">\(\text{e}^{\lambda_2 t} \vec{v_2}\)</span>. Other trajectories can be linear combinations of these two solutions:</p>
+<p><span class="math display">\[\vec{x}(t) =c_l \text{e}^{\lambda_1 t} \vec{v_1} + c_2 \text{e}^{\lambda_2 t} \vec{v_2}\]</span></p>
+<p>Now we can see why the eigenvalues determine stability: in a linear (or linearized) system, the eigenvalues determine whether the system shows exponential growth, decay, or oscillations, because the model solution is a combination of exponential functions whose parameters are the eigenvalues.</p>
+<p>By calculating the Jacobian for any system we encounter, we are converting the system into a linear system like the one above, and all the same logic applies.</p>
+</div>
+</div>
+<div id="bifurcations" class="section level2">
+<h2>Bifurcations</h2>
+<p>A <strong>bifurcation</strong> is a change in the <em>number</em> or <em>stability</em> of fixed points in a system as a function of one of the system parameters. This is a pretty abstract definition, so let’s look at an example right away.</p>
+<div id="a-model-of-fishing" class="section level3">
+<h3>A model of fishing</h3>
+<p>Here is a model that describes the population size of a species of fish as they are being hunted.</p>
+<p><span class="math display">\[\frac{dN}{dt} = rN\left(1-\frac{N}{K}\right) - HN\]</span></p>
+<p>In the absence of fishing, the population is assumed to grow logistically — this is the first term in the equation. The effects of fishing are modeled by the term <span class="math inline">\(- HN\)</span>, which says that fish are caught or “harvested” at a rate that depends on <span class="math inline">\(N\)</span>. This is plausible — when fewer fish are available, it is harder to find them and so the daily catch drops.</p>
+<div id="challenge" class="section level4">
+<h4>Challenge</h4>
+<p>Find the fixed points analytically for this system.</p>
+<hr />
+<p>Right away, we can see something interesting about one of the fixed points. If <span class="math inline">\(H &gt; r\)</span>, then the second fixed point becomes negative. In a real population, there would now be only a single fixed point at <span class="math inline">\(N=0\)</span> since <span class="math inline">\(N\)</span> can’t be negative.</p>
+<p>Next, let’s look at the stability analytically. We calculate <span class="math inline">\(\frac{\partial f(N)}{\partial N}\)</span> and evaluate it at each fixed point, where <span class="math inline">\(f(N) = rN(1-\frac{N}{K}) - HN\)</span>.</p>
+<p><span class="math display">\[\frac{\partial f(N)}{\partial N} = \frac{\partial}{\partial N} \left(rN(1-\frac{N}{K}) - HN \right) \\
+=r - \frac{2rN}{K} - H\]</span></p>
+<p>For the fixed point <span class="math inline">\(N=0\)</span>:</p>
+<p><span class="math display">\[\frac{\partial f(N)}{\partial N} = r-H\]</span></p>
+<p>This is positive if <span class="math inline">\(r &gt; H\)</span> and negative if <span class="math inline">\(r &lt; H\)</span>. This means <span class="math inline">\(H = r\)</span> is a <strong>bifurcation point</strong>: at this value of <span class="math inline">\(H\)</span> (assuming <span class="math inline">\(r\)</span> is fixed), this fixed point changes stability.</p>
+<p>For the fixed point <span class="math inline">\(N = K\left(1-\frac{H}{r}\right)\)</span>:</p>
+<p><span class="math display">\[\frac{\partial f(N)}{\partial N} = -r+H\]</span></p>
+<p>This is positive if <span class="math inline">\(r &lt; H\)</span> and negative if <span class="math inline">\(r &gt; H\)</span>. This fixed point also changes stability at the bifurcation point <span class="math inline">\(H = r\)</span>.</p>
+<p>Finally, let’s plot <span class="math inline">\(dN/dt\)</span> vs <span class="math inline">\(N\)</span> and confirm our result.</p>
+<p>First, define a function for the model.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">fishing_model &lt;-<span class="st"> </span><span class="cf">function</span>(t, y, parameters) {</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">  </a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">  N &lt;-<span class="st"> </span>y</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">  </a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">  r &lt;-<span class="st"> </span>parameters[<span class="st">&#39;r&#39;</span>]</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">  K &lt;-<span class="st"> </span>parameters[<span class="st">&#39;K&#39;</span>]</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">  H &lt;-<span class="st"> </span>parameters[<span class="st">&#39;H&#39;</span>]</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">  </a>
+<a class="sourceLine" id="cb5-9" data-line-number="9">  dN &lt;-<span class="st"> </span>r <span class="op">*</span><span class="st"> </span>N <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>N <span class="op">/</span><span class="st"> </span>K) <span class="op">-</span><span class="st"> </span>H <span class="op">*</span><span class="st"> </span>N </a>
+<a class="sourceLine" id="cb5-10" data-line-number="10">  </a>
+<a class="sourceLine" id="cb5-11" data-line-number="11">  <span class="kw">return</span>(<span class="kw">list</span>(<span class="kw">c</span>(dN)))</a>
+<a class="sourceLine" id="cb5-12" data-line-number="12">}</a></code></pre></div>
+<p>Next, we choose parameters and create a sequence to plot.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">params &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">r =</span> <span class="dv">1</span>, <span class="dt">K =</span> <span class="dv">150</span>, <span class="dt">H =</span> <span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">N_seq &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">dN_seq &lt;-<span class="st"> </span><span class="kw">fishing_model</span>(t, <span class="dt">y =</span> N_seq, <span class="dt">parameters =</span> params)</a></code></pre></div>
+<p>And finally we plot in the usual way.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">dN_seq &lt;-<span class="st"> </span><span class="kw">unlist</span>(dN_seq) <span class="co"># because our function returns a list, we need to convert it to numbers.</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(N_seq, dN_seq)</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="kw">ggplot</span>(data) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> N_seq, <span class="dt">y =</span> dN_seq)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>)</a></code></pre></div>
+<p><img src="lec10-modelling_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="fitting-models-to-data" class="section level2">
+<h2>Fitting models to data</h2>
+<p>Finding data is a massive field, and there are many different strategies for choosing parameters for a model depending on the assumptions you make about your data and model. Today we will talk about arguably the most common way to fit data — <strong>least squares</strong> fitting. (Linear regression, which will be covered next class, is a special case of least squares fitting.) I will show you a method for doing ‘brute force’ least squares fitting so that you can fit any model you like using the same procedure, but there are special cases you might encounter in which there are faster and/or better ways to implement least squares fitting.</p>
+<div id="fitting-simulated-data-with-a-single-parameter" class="section level3">
+<h3>Fitting simulated data with a single parameter</h3>
+<p>Suppose we sample repeatedly from a bacterial population over time, and suppose we want to fit our sampled data to an exponential growth model.</p>
+<p>Let’s simulate some data from an exponential function to work with.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">10</span>, <span class="dt">by =</span> <span class="fl">0.2</span>) <span class="co"># sample times</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">r &lt;-<span class="st"> </span><span class="fl">0.2</span> <span class="co"># growth rate</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">N0 &lt;-<span class="st"> </span><span class="dv">10</span> <span class="co"># initial population</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co"># use the function &#39;rnorm&#39; to add noise to the data</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">Ndata &lt;-<span class="st"> </span>N0<span class="op">*</span><span class="kw">exp</span>(r<span class="op">*</span>times) <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="kw">length</span>(times), <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="fl">0.75</span>) </a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="kw">qplot</span>(times,Ndata) <span class="co"># check with a plot</span></a></code></pre></div>
+<p><img src="lec10-modelling_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Now let’s assume we don’t know the growth rate <span class="math inline">\(r\)</span> and we want to extract it from the data — we want to fit the data to an exponential growth model and find the value of <span class="math inline">\(r\)</span> that gives the best fit.</p>
+<p>To do this, we need a way to tell if a fit is good or bad. What criteria should we use to determine if a fit is good? One option is to just try several parameter values and try to manually adjust the parameter until the fit looks good. This is imprecise and not reproducible, but it’s often a good place to start to get an idea of what parameter range to check.</p>
+<p>The idea behind least squares fitting is that we want to minimize the difference between our model’s prediction and the actual data, and we do that by minimizing the sum of the <strong>squares</strong> of the <strong>residuals</strong>. Residuals (or <strong>errors</strong>) are the difference between the model and the data for each data point. The purpose of taking the square of each residual is to take out the influence of the sign of the residual.</p>
+<p>The sum of the squares of the residuals is just a number, and now we have a criteria we can use to determine which of two fits is better: whichever fit minimizes that number is the better fit.</p>
+<p>In practice, there are many ways to find the particular parameter that gives the best fit. One way is to start at some parameter value, then start adjusting it by small amounts and checking if the fit gets better or worse. If it gets worse, go in a different direction. If it gets better, keep going in that direction until it either starts getting worse again or the amount by which it gets better is very small. This type of algorithm is called <strong>gradient descent</strong>.</p>
+<p>Another option is to try a range of parameter values and choose the one that gives the best fit out of that list. This is simpler to implement than the previous algorithm, but it’s also computationally more costly — it can take a long time.</p>
+<p>We will do some examples of the second method today, what we’ll call ‘brute-force least squares’.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># Make a range of r parameter values to try</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">r_vals &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.01</span>, <span class="fl">0.3</span>, <span class="dt">by =</span> <span class="fl">0.01</span>)</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co"># use the function &#39;sapply&#39; to loop over r_vals list</span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">resids_sq &lt;-<span class="st"> </span><span class="kw">sapply</span>(r_vals, <span class="cf">function</span>(r) {</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">    prediction &lt;-<span class="st"> </span>Ndata[<span class="dv">1</span>] <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>(r <span class="op">*</span><span class="st"> </span>times)</a>
+<a class="sourceLine" id="cb9-7" data-line-number="7">    residuals &lt;-<span class="st"> </span>prediction <span class="op">-</span><span class="st"> </span>Ndata</a>
+<a class="sourceLine" id="cb9-8" data-line-number="8">    <span class="kw">sum</span>(residuals<span class="op">^</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">})</a></code></pre></div>
+<p>Let’s plot the sum of residuals squared vs. <span class="math inline">\(r\)</span> to find which value of <span class="math inline">\(r\)</span> fits best:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">qplot</span>(r_vals, resids_sq)</a></code></pre></div>
+<p><img src="lec10-modelling_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>We can see visually that the minimum is around <span class="math inline">\(r = 0.2\)</span>, but to extract that number from the list we can use the function <code>which</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">best_fit &lt;-<span class="st"> </span><span class="kw">which</span>(resids_sq <span class="op">==</span><span class="st"> </span><span class="kw">min</span>(resids_sq))</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">r_fit &lt;-<span class="st"> </span>r_vals[best_fit] </a></code></pre></div>
+<p>We got the ‘correct’ value of <span class="math inline">\(r\)</span>, the one that we originally used to simulate the data.</p>
+<p>Finally, let’s plot the fit against the original data:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">qplot</span>(times,Ndata) <span class="op">+</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> times, <span class="dt">y =</span> Ndata[<span class="dv">1</span>] <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>(r_fit <span class="op">*</span><span class="st"> </span>times)))</a></code></pre></div>
+<p><img src="lec10-modelling_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>You can play around with this simulated data and see what happens to the fit if you change the amount of noise that gets added to the data.</p>
+</div>
+<div id="fitting-models-with-two-or-more-parameters" class="section level3">
+<h3>Fitting models with two or more parameters</h3>
+<p>Now let’s fit a model with more parameters, and let’s use some real data.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># The dataset downloaded at the beginning</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co"># https://uoftcoders.github.io/rcourse/data/plant-biomass-preprocess.csv</span></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">plant_data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;plant-biomass-preprocess.csv&quot;</span>)</a></code></pre></div>
+<p>We can use our usual tricks to see what’s in our dataset:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">summary</span>(plant_data) <span class="co"># create a summary of the dataset</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw">head</span>(plant_data) <span class="co"># display the first few rows of the data</span></a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="kw">colnames</span>(plant_data) <span class="co"># show the column names</span></a></code></pre></div>
+<p>Let’s plot just one of the habitats, sites, and treatments vs. time and colour by species.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb19-3" data-line-number="3">plant_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(habitat <span class="op">==</span><span class="st"> &quot;Tundra&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb19-5" data-line-number="5"><span class="st">  </span><span class="kw">filter</span>(site <span class="op">==</span><span class="st"> </span><span class="dv">3</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-6" data-line-number="6"><span class="st">  </span><span class="kw">filter</span>(treatment <span class="op">==</span><span class="st"> &quot;rodentexclosure&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-7" data-line-number="7"><span class="st">  </span><span class="kw">gather</span>(Species, Value, <span class="op">-</span>year, <span class="op">-</span>treatment, <span class="op">-</span>habitat, <span class="op">-</span>site) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-8" data-line-number="8"><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-9" data-line-number="9"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> Value, <span class="dt">color =</span> Species))</a></code></pre></div>
+<p><img src="lec10-modelling_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p><em>Empetrum nigrum</em> looks like it could be following logistic growth, so let’s try to fit the data to that model. First, let’s make a new variable with just the data we want to fit.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">e_nigrum &lt;-<span class="st"> </span>plant_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(site <span class="op">==</span><span class="st"> </span><span class="dv">3</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb20-3" data-line-number="3"><span class="st">  </span><span class="kw">filter</span>(habitat <span class="op">==</span><span class="st"> &quot;Tundra&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb20-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(treatment <span class="op">==</span><span class="st"> &quot;rodentexclosure&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb20-5" data-line-number="5"><span class="st">  </span><span class="kw">select</span>(year, empetrum_nigrum) </a></code></pre></div>
+<p>Now we define a logistic model function so that we can numerically generate the model’s solution and compare it to the data.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">logistic_fn &lt;-<span class="st"> </span><span class="cf">function</span>(t, state, parameters) {</a>
+<a class="sourceLine" id="cb21-2" data-line-number="2">  <span class="co"># Calculates dN/dt for the logistic equation</span></a>
+<a class="sourceLine" id="cb21-3" data-line-number="3">  </a>
+<a class="sourceLine" id="cb21-4" data-line-number="4">  <span class="co"># t: time point at which to evaluate derivative (doesn&#39;t actually change anything in this example)</span></a>
+<a class="sourceLine" id="cb21-5" data-line-number="5">  <span class="co"># state: vector of variables (here it&#39;s just N)</span></a>
+<a class="sourceLine" id="cb21-6" data-line-number="6">  <span class="co"># parameters: vector of model parameters c(r, K)</span></a>
+<a class="sourceLine" id="cb21-7" data-line-number="7">  </a>
+<a class="sourceLine" id="cb21-8" data-line-number="8">  N &lt;-<span class="st"> </span>state </a>
+<a class="sourceLine" id="cb21-9" data-line-number="9">  </a>
+<a class="sourceLine" id="cb21-10" data-line-number="10">  r &lt;-<span class="st"> </span>parameters[<span class="dv">1</span>] <span class="co"># the first element of the parameters vector is r</span></a>
+<a class="sourceLine" id="cb21-11" data-line-number="11">  K &lt;-<span class="st"> </span>parameters[<span class="dv">2</span>] <span class="co"># the second element of the parameters vector is K</span></a>
+<a class="sourceLine" id="cb21-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb21-13" data-line-number="13">  <span class="co">#rate of change</span></a>
+<a class="sourceLine" id="cb21-14" data-line-number="14">  dN &lt;-<span class="st"> </span>r <span class="op">*</span><span class="st"> </span>N <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>N <span class="op">/</span><span class="st"> </span>K)</a>
+<a class="sourceLine" id="cb21-15" data-line-number="15">    </a>
+<a class="sourceLine" id="cb21-16" data-line-number="16">  <span class="co">#return rate of change</span></a>
+<a class="sourceLine" id="cb21-17" data-line-number="17">  <span class="kw">return</span>(<span class="kw">list</span>(<span class="kw">c</span>(dN)))</a>
+<a class="sourceLine" id="cb21-18" data-line-number="18">}</a></code></pre></div>
+<p>Let’s try running a single numerical solution and plotting it alongside the data.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">library</span>(deSolve)</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">parameters &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">r =</span> <span class="fl">0.5</span>, <span class="dt">K =</span> <span class="dv">150</span>)</a>
+<a class="sourceLine" id="cb22-4" data-line-number="4">state &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">N =</span> e_nigrum[<span class="dv">1</span>,<span class="dv">2</span>]) <span class="co"># the first row and second column is the initial population size</span></a>
+<a class="sourceLine" id="cb22-5" data-line-number="5">times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">14</span>, <span class="dt">by =</span> <span class="dv">1</span>) <span class="co"># make the same time vector as the data</span></a>
+<a class="sourceLine" id="cb22-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb22-7" data-line-number="7">result &lt;-</a>
+<a class="sourceLine" id="cb22-8" data-line-number="8"><span class="st">  </span><span class="kw">ode</span>(</a>
+<a class="sourceLine" id="cb22-9" data-line-number="9">  <span class="dt">y =</span> state,</a>
+<a class="sourceLine" id="cb22-10" data-line-number="10">  <span class="dt">times =</span> times,</a>
+<a class="sourceLine" id="cb22-11" data-line-number="11">  <span class="dt">func =</span> logistic_fn,</a>
+<a class="sourceLine" id="cb22-12" data-line-number="12">  <span class="dt">parms =</span> parameters</a>
+<a class="sourceLine" id="cb22-13" data-line-number="13">  )</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co"># Plot</span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">result &lt;-<span class="st"> </span><span class="kw">data.frame</span>(result)</a>
+<a class="sourceLine" id="cb23-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb23-4" data-line-number="4">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(e_nigrum) <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> empetrum_nigrum))</a>
+<a class="sourceLine" id="cb23-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb23-7" data-line-number="7">p1 <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-8" data-line-number="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time <span class="op">+</span><span class="st"> </span><span class="dv">1998</span>, <span class="dt">y =</span> N), result, <span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-9" data-line-number="9"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time <span class="op">+</span><span class="st"> </span><span class="dv">1998</span>, <span class="dt">y =</span> N), result, <span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>)</a></code></pre></div>
+<p><img src="lec10-modelling_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p>Now we’ll define a grid of <span class="math inline">\(r\)</span> and <span class="math inline">\(K\)</span> values to try, then calculate a numerical solution for each combination of parameters.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">rvals &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.05</span>, <span class="fl">1.0</span>, <span class="dt">by =</span> <span class="fl">0.05</span>)</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2">Kvals &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">120</span>, <span class="dv">180</span>, <span class="dt">by =</span> <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="co"># initialize empty matrix for likelihood calculation</span></a>
+<a class="sourceLine" id="cb24-5" data-line-number="5">residuals_surface =<span class="st"> </span><span class="kw">matrix</span>(, <span class="dt">nrow =</span> <span class="kw">length</span>(rvals), <span class="dt">ncol =</span> <span class="kw">length</span>(Kvals)) </a>
+<a class="sourceLine" id="cb24-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb24-7" data-line-number="7"><span class="co"># loop over values of r and k, calculate log likelihood</span></a>
+<a class="sourceLine" id="cb24-8" data-line-number="8"><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq</span>(<span class="kw">length</span>(rvals))){</a>
+<a class="sourceLine" id="cb24-9" data-line-number="9">  <span class="cf">for</span> (j <span class="cf">in</span> <span class="kw">seq</span>(<span class="kw">length</span>(Kvals))){</a>
+<a class="sourceLine" id="cb24-10" data-line-number="10">    result &lt;-<span class="st"> </span><span class="kw">ode</span>(<span class="dt">y =</span> state, </a>
+<a class="sourceLine" id="cb24-11" data-line-number="11">                  <span class="dt">times =</span> times, </a>
+<a class="sourceLine" id="cb24-12" data-line-number="12">                  <span class="dt">func =</span> logistic_fn,</a>
+<a class="sourceLine" id="cb24-13" data-line-number="13">                  <span class="dt">parms =</span> <span class="kw">c</span>(<span class="dt">r =</span> rvals[i], <span class="dt">K =</span> Kvals[j]))</a>
+<a class="sourceLine" id="cb24-14" data-line-number="14">    result &lt;-<span class="st"> </span><span class="kw">data.frame</span>(result)</a>
+<a class="sourceLine" id="cb24-15" data-line-number="15">    residuals &lt;-<span class="st"> </span>result<span class="op">$</span>N <span class="op">-</span><span class="st"> </span>e_nigrum<span class="op">$</span>empetrum_nigrum</a>
+<a class="sourceLine" id="cb24-16" data-line-number="16">    residuals_surface[i,j] &lt;-<span class="st"> </span><span class="kw">sum</span>(residuals<span class="op">^</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb24-17" data-line-number="17">  }</a>
+<a class="sourceLine" id="cb24-18" data-line-number="18">}</a></code></pre></div>
+<p><strong>Added:</strong> The more R way of doing the above code is:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">logistic_pred_fn &lt;-<span class="st"> </span><span class="cf">function</span>(r, K) {</a>
+<a class="sourceLine" id="cb25-2" data-line-number="2">    result &lt;-<span class="st"> </span><span class="kw">ode</span>(<span class="dt">y =</span> state, </a>
+<a class="sourceLine" id="cb25-3" data-line-number="3">                  <span class="dt">times =</span> times, </a>
+<a class="sourceLine" id="cb25-4" data-line-number="4">                  <span class="dt">func =</span> logistic_fn,</a>
+<a class="sourceLine" id="cb25-5" data-line-number="5">                  <span class="dt">parms =</span> <span class="kw">c</span>(<span class="dt">r =</span> r, <span class="dt">K =</span> K))</a>
+<a class="sourceLine" id="cb25-6" data-line-number="6">    result &lt;-<span class="st"> </span><span class="kw">data.frame</span>(result)</a>
+<a class="sourceLine" id="cb25-7" data-line-number="7">    residuals &lt;-<span class="st"> </span>result<span class="op">$</span>N <span class="op">-</span><span class="st"> </span>e_nigrum<span class="op">$</span>empetrum_nigrum</a>
+<a class="sourceLine" id="cb25-8" data-line-number="8">    <span class="kw">sum</span>(residuals<span class="op">^</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb25-9" data-line-number="9">}</a>
+<a class="sourceLine" id="cb25-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb25-11" data-line-number="11">rvals &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.05</span>, <span class="fl">1.0</span>, <span class="dt">by =</span> <span class="fl">0.05</span>)</a>
+<a class="sourceLine" id="cb25-12" data-line-number="12">Kvals &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">120</span>, <span class="dv">180</span>, <span class="dt">by =</span> <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb25-13" data-line-number="13"><span class="co"># Create a two column data frame with every combination of rvals and Kvals</span></a>
+<a class="sourceLine" id="cb25-14" data-line-number="14">params &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">r =</span> rvals, <span class="dt">K =</span> Kvals)</a>
+<a class="sourceLine" id="cb25-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb25-16" data-line-number="16"><span class="co"># Apply the logistic_pred_fn to each combination of rvals and Kvals.</span></a>
+<a class="sourceLine" id="cb25-17" data-line-number="17"><span class="co"># This is known as vectorization, which is R&#39;s strength.</span></a>
+<a class="sourceLine" id="cb25-18" data-line-number="18">resids &lt;-<span class="st"> </span><span class="kw">mapply</span>(logistic_pred_fn,</a>
+<a class="sourceLine" id="cb25-19" data-line-number="19">                 params<span class="op">$</span>r, <span class="co"># First arg in logistic_pred_fn</span></a>
+<a class="sourceLine" id="cb25-20" data-line-number="20">                 params<span class="op">$</span>K) <span class="co"># Second arg in logistic_pred_fn</span></a>
+<a class="sourceLine" id="cb25-21" data-line-number="21">resids &lt;-<span class="st"> </span><span class="kw">matrix</span>(resids, <span class="dt">nrow =</span> <span class="kw">length</span>(rvals), <span class="dt">ncol =</span> <span class="kw">length</span>(Kvals))</a>
+<a class="sourceLine" id="cb25-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb25-23" data-line-number="23"><span class="co"># Check if they are the same</span></a>
+<a class="sourceLine" id="cb25-24" data-line-number="24"><span class="kw">identical</span>(resids, residuals_surface)</a></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>We can use the library <code>lattice</code> to plot the surface:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">library</span>(lattice)</a>
+<a class="sourceLine" id="cb27-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb27-3" data-line-number="3"><span class="kw">wireframe</span>(</a>
+<a class="sourceLine" id="cb27-4" data-line-number="4">  residuals_surface,</a>
+<a class="sourceLine" id="cb27-5" data-line-number="5">  <span class="dt">shade =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb27-6" data-line-number="6">  <span class="dt">xlab =</span> <span class="st">&quot;R&quot;</span>,</a>
+<a class="sourceLine" id="cb27-7" data-line-number="7">  <span class="dt">ylab =</span> <span class="st">&quot;K&quot;</span>,</a>
+<a class="sourceLine" id="cb27-8" data-line-number="8">  <span class="dt">scales =</span> <span class="kw">list</span>(<span class="dt">arrows =</span> <span class="ot">FALSE</span>) <span class="co"># fix so that axes are correct numbers</span></a>
+<a class="sourceLine" id="cb27-9" data-line-number="9">  ) </a></code></pre></div>
+<p><img src="lec10-modelling_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>Now we extract the values of <span class="math inline">\(r\)</span> and <span class="math inline">\(K\)</span> that minimize the sum of residuals:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">best_fit &lt;-<span class="st"> </span><span class="kw">which</span>(residuals_surface <span class="op">==</span><span class="st"> </span><span class="kw">min</span>(residuals_surface), <span class="dt">arr.ind =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb28-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb28-3" data-line-number="3">r_fit &lt;-<span class="st"> </span>rvals[best_fit[<span class="dv">1</span>]] <span class="co"># r is varied across the rows of the surface</span></a>
+<a class="sourceLine" id="cb28-4" data-line-number="4">K_fit &lt;-<span class="st"> </span>Kvals[best_fit[<span class="dv">2</span>]] <span class="co"># K is varied across the columns of the surface</span></a></code></pre></div>
+<p>And now we can plot the best fit curve with the data:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">result &lt;-</a>
+<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="st">  </span><span class="kw">ode</span>(</a>
+<a class="sourceLine" id="cb29-3" data-line-number="3">  <span class="dt">y =</span> state,</a>
+<a class="sourceLine" id="cb29-4" data-line-number="4">  <span class="dt">times =</span> times,</a>
+<a class="sourceLine" id="cb29-5" data-line-number="5">  <span class="dt">func =</span> logistic_fn,</a>
+<a class="sourceLine" id="cb29-6" data-line-number="6">  <span class="dt">parms =</span> <span class="kw">c</span>(<span class="dt">r =</span> r_fit, <span class="dt">K =</span> K_fit)</a>
+<a class="sourceLine" id="cb29-7" data-line-number="7">  )</a>
+<a class="sourceLine" id="cb29-8" data-line-number="8">  </a>
+<a class="sourceLine" id="cb29-9" data-line-number="9">result &lt;-<span class="st"> </span><span class="kw">data.frame</span>(result)</a>
+<a class="sourceLine" id="cb29-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb29-11" data-line-number="11">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(e_nigrum) <span class="op">+</span></a>
+<a class="sourceLine" id="cb29-12" data-line-number="12"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> empetrum_nigrum))</a>
+<a class="sourceLine" id="cb29-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb29-14" data-line-number="14">p2 <span class="op">+</span></a>
+<a class="sourceLine" id="cb29-15" data-line-number="15"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time <span class="op">+</span><span class="st"> </span><span class="dv">1998</span>, <span class="dt">y =</span> N), result, <span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb29-16" data-line-number="16"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time <span class="op">+</span><span class="st"> </span><span class="dv">1998</span>, <span class="dt">y =</span> N), result, <span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>)</a></code></pre></div>
+<p><img src="lec10-modelling_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p>You can do this process with more than two parameters as well, but the search space will be larger and the simulations necessary will take longer.</p>
+</div>
+<div id="assumptions-of-least-squares" class="section level3">
+<h3>Assumptions of least squares</h3>
+<p>When is it appropriate to use least squares to fit your data?</p>
+<p>Assumptions of least squares:</p>
+<ul>
+<li>The noise or error is <strong>Gaussian-distributed</strong>: the most likely value for a data point is the predicted value, but there is a Gaussian distribution with some width that determines how likely it is that the data will have a different value.</li>
+<li>All data points have the same variance in their error: the width of the Gaussian distribution governing the error is the same for each data point. This can be modified though if it’s not a good assumption.</li>
+<li>The noise or error is only in the dependent variable(s), not in the independent variable(s).</li>
+<li>Each data point is independent of the other data points.</li>
+</ul>
+<p><em>Note</em>: in all this talk of fitting, what we’re doing doesn’t tell us <em>which</em> model fits our data best, only what parameters for a particular model fit best. The choice of model is up to us. There are ways to distinguish between fits for different models which will be discussed next class.</p>
+</div>
+</div>
+<div id="extras-maximum-likelihood" class="section level2">
+<h2>Extras: Maximum Likelihood</h2>
+<p>Maximum likelihood is a way of finding parameters of a given probability distribution that best match data. It answers the question: which paremeter(s) make the data most likely to have occured?</p>
+<p>Likelihood is defined as <span class="math inline">\(P(\text{data} | \text{model})\)</span>, which you can read as <em>the probability of the data given the model</em>. This is subtly different from <span class="math inline">\(P(\text{model} | \text{data})\)</span>, the probability of the model given the data, which is what you’re really after. But according to Bayes’ theorem, these two quantities are proportional, and so in practice, maximizing the likelihood is equivalent to maximizing the probability of a particular model given your data.</p>
+<p>Bayes’ theorem, for the curious:</p>
+<p><span class="math display">\[ P(A | B) = \frac{P(B | A)P(A)}{P(B)}\]</span></p>
+<div id="least-squares-from-maximum-likelihood" class="section level3">
+<h3>Least squares from maximum likelihood</h3>
+<p>Least squares is the maximum likelihood solution for the assumption that errors are Gaussian distributed. This assumption can be formulated like this: for a set of data <span class="math inline">\(y\)</span> as a function of <span class="math inline">\(x\)</span>, let <span class="math inline">\(e_i\)</span> be the difference between the predicted and measured value of <span class="math inline">\(y\)</span> at point <span class="math inline">\(x_i\)</span>. We assume <span class="math inline">\(e_i\)</span> follows a <strong>Gaussian</strong> or <strong>normal</strong> distribution with mean <span class="math inline">\(0\)</span> and variance <span class="math inline">\(\sigma\)</span>:</p>
+<p><span class="math display">\[P(e_i) = \frac{1}{\sqrt{2 \pi \sigma^2}} \text{e}^{-\frac{e_i^2}{2\sigma^2}}\]</span></p>
+<p>We also assume that each data point <span class="math inline">\(y_i\)</span> is independent, so the probability for the entire dataset is a product of all the probabilities for each data point:</p>
+<p><span class="math display">\[P(\vec{e}) = P(e_1)P(e_2) ... P(e_N) = \prod_{i=1}^N P(e_i) \]</span></p>
+<p>This is the <strong>likelihood</strong>, this is the quantity we want to maximize. To make our lives easier, we can also maximize the logarithm of the likelihood instead, since the logarithm is an increasing function and its maximum will still be in the same spot.</p>
+<p>The log-likelihood is</p>
+<p><span class="math display">\[\sum_{i=1}^N \text{log}P(e_i) = \sum_{i=1}^N \left( \text{log} \frac{1}{\sqrt{2 \pi \sigma^2}} - \frac{e_i^2}{2\sigma^2} \right)\]</span></p>
+<p><span class="math display">\[ = N \text{log} \frac{1}{\sqrt{2 \pi \sigma^2}} - \frac{1}{2\sigma^2}\sum_{i=1}^N e_i^2\]</span></p>
+<p>The first term is a constant, and so we can forget about it when looking for the maximum. What we’re left with is wanting to maximize</p>
+<p><span class="math display">\[- \frac{1}{2\sigma^2}\sum_{i=1}^N e_i^2\]</span></p>
+<p>Since <span class="math inline">\(\sigma\)</span> is a constant, we can drop the prefactor as well. Finally, we can change the sign and <em>minimize</em> what’s left:</p>
+<p><span class="math display">\[\sum_{i=1}^N e_i^2\]</span></p>
+<p>But remember that <span class="math inline">\(e_i\)</span> is just the difference between the predicted <span class="math inline">\(y_i\)</span> and the actual data point <span class="math inline">\(y_i\)</span>, so the quantity above is just the sum of the squares of the residuals, exactly what we want to minimize in least squares.</p>
+</div>
+</div>
+<div id="extras-using-the-analytic-solution-for-a-model-to-fit-data" class="section level2">
+<h2>Extras: using the analytic solution for a model to fit data</h2>
+<p>Instead of simulating the model, if you know the analytic solution you can use it directly like we did with the exponential model.</p>
+<p>This is the analytic solution for the logistic model:</p>
+<p><span class="math display">\[N(t) = \frac{N_0 K\text{e}^{rt}}{N_0(\text{e}^{rt}-1)+K}\]</span></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">logistic_solution &lt;-<span class="st"> </span><span class="cf">function</span>(N0, t, r, K) {</a>
+<a class="sourceLine" id="cb30-2" data-line-number="2">  <span class="co"># Calculates N at time t using the analytic solution for the logistic equation</span></a>
+<a class="sourceLine" id="cb30-3" data-line-number="3">  </a>
+<a class="sourceLine" id="cb30-4" data-line-number="4">  <span class="co"># N0: initial population size</span></a>
+<a class="sourceLine" id="cb30-5" data-line-number="5">  <span class="co"># t: time at which to calculate N</span></a>
+<a class="sourceLine" id="cb30-6" data-line-number="6">  <span class="co"># r: growth rate</span></a>
+<a class="sourceLine" id="cb30-7" data-line-number="7">  <span class="co"># K: carrying capacity</span></a>
+<a class="sourceLine" id="cb30-8" data-line-number="8">  </a>
+<a class="sourceLine" id="cb30-9" data-line-number="9">  C &lt;-<span class="st"> </span>(K<span class="op">-</span>N0)<span class="op">/</span>N0 <span class="co"># constant of integration</span></a>
+<a class="sourceLine" id="cb30-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb30-11" data-line-number="11">  N &lt;-<span class="st"> </span>K<span class="op">*</span><span class="kw">exp</span>(r<span class="op">*</span>t)<span class="op">/</span>(<span class="kw">exp</span>(r<span class="op">*</span>t)<span class="op">+</span>C)</a>
+<a class="sourceLine" id="cb30-12" data-line-number="12">  </a>
+<a class="sourceLine" id="cb30-13" data-line-number="13">  <span class="kw">return</span>(N)</a>
+<a class="sourceLine" id="cb30-14" data-line-number="14">}</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">rvals =<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.05</span>, <span class="fl">1.0</span>, <span class="dt">by =</span> <span class="fl">0.05</span>)</a>
+<a class="sourceLine" id="cb31-2" data-line-number="2">Kvals =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">120</span>, <span class="dv">180</span>, <span class="dt">by =</span> <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb31-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb31-4" data-line-number="4">residuals_surface =<span class="st"> </span><span class="kw">matrix</span>( , <span class="dt">nrow =</span> <span class="kw">length</span>(rvals), <span class="dt">ncol =</span> <span class="kw">length</span>(Kvals)) <span class="co"># initialize matrix for likelihood calculation</span></a>
+<a class="sourceLine" id="cb31-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb31-6" data-line-number="6">initial_condition &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">N =</span> e_nigrum[<span class="dv">1</span>,<span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb31-7" data-line-number="7">times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">14</span>, <span class="dt">by =</span> <span class="dv">1</span>) <span class="co"># make the same time vector as the data</span></a>
+<a class="sourceLine" id="cb31-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb31-9" data-line-number="9"><span class="co"># loop over values of r and k, calculate log likelihood</span></a>
+<a class="sourceLine" id="cb31-10" data-line-number="10"><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq</span>(<span class="kw">length</span>(rvals))){</a>
+<a class="sourceLine" id="cb31-11" data-line-number="11">  <span class="cf">for</span> (j <span class="cf">in</span> <span class="kw">seq</span>(<span class="kw">length</span>(Kvals))){</a>
+<a class="sourceLine" id="cb31-12" data-line-number="12">    Ndata &lt;-<span class="st"> </span><span class="kw">logistic_solution</span>(initial_condition, times, rvals[i], Kvals[j])</a>
+<a class="sourceLine" id="cb31-13" data-line-number="13">    result &lt;-<span class="st"> </span><span class="kw">data.frame</span>(times, Ndata)</a>
+<a class="sourceLine" id="cb31-14" data-line-number="14">    residuals &lt;-<span class="st"> </span>result<span class="op">$</span>N <span class="op">-</span><span class="st"> </span>e_nigrum<span class="op">$</span>empetrum_nigrum</a>
+<a class="sourceLine" id="cb31-15" data-line-number="15">    residuals_surface[i,j] &lt;-<span class="st"> </span><span class="kw">sum</span>(residuals<span class="op">^</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb31-16" data-line-number="16">  }</a>
+<a class="sourceLine" id="cb31-17" data-line-number="17">}</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">wireframe</span>(residuals_surface,</a>
+<a class="sourceLine" id="cb32-2" data-line-number="2">          <span class="dt">shade=</span><span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb32-3" data-line-number="3">          <span class="dt">xlab =</span> <span class="st">&quot;R&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;K&quot;</span>,</a>
+<a class="sourceLine" id="cb32-4" data-line-number="4">          <span class="dt">scales=</span><span class="kw">list</span>(<span class="dt">arrows=</span><span class="ot">FALSE</span>)) </a></code></pre></div>
+<p><img src="lec10-modelling_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p>Now to extract the values of <span class="math inline">\(r\)</span> and <span class="math inline">\(K\)</span> that minimize the sum of residuals:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">best_fit &lt;-<span class="st"> </span><span class="kw">which</span>(residuals_surface <span class="op">==</span><span class="st"> </span><span class="kw">min</span>(residuals_surface), <span class="dt">arr.ind =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb33-3" data-line-number="3">r_fit &lt;-<span class="st"> </span>rvals[best_fit[<span class="dv">1</span>]] <span class="co"># r is varied across the rows of the surface</span></a>
+<a class="sourceLine" id="cb33-4" data-line-number="4">K_fit &lt;-<span class="st"> </span>Kvals[best_fit[<span class="dv">2</span>]] <span class="co"># K is varied across the columns of the surface</span></a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">result &lt;-<span class="st"> </span><span class="kw">ode</span>(<span class="dt">y =</span> state, <span class="dt">times =</span> times, <span class="dt">func =</span> logistic_fn, <span class="dt">parms =</span> <span class="kw">c</span>(<span class="dt">r =</span> r_fit, <span class="dt">K =</span> K_fit))</a>
+<a class="sourceLine" id="cb34-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb34-3" data-line-number="3">result &lt;-<span class="st"> </span><span class="kw">data.frame</span>(result)</a>
+<a class="sourceLine" id="cb34-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb34-5" data-line-number="5">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(e_nigrum) <span class="op">+</span></a>
+<a class="sourceLine" id="cb34-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> empetrum_nigrum))</a>
+<a class="sourceLine" id="cb34-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb34-8" data-line-number="8">p2 <span class="op">+</span></a>
+<a class="sourceLine" id="cb34-9" data-line-number="9"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time <span class="op">+</span><span class="st"> </span><span class="dv">1998</span>, <span class="dt">y =</span> N), result, <span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb34-10" data-line-number="10"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time <span class="op">+</span><span class="st"> </span><span class="dv">1998</span>, <span class="dt">y =</span> N), result, <span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>)</a></code></pre></div>
+<p><img src="lec10-modelling_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+</div>
+
+
+<hr>
+
+<p>This work is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. See the <a href="LICENSE.html">licensing</a> page for more details about copyright information.</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Madeleine Bonsma-Fisher" />
+
+
+<title>Qualitative review of population models</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link rel="icon" type="image/png" href="image/favicon.png">
+<style type="text/css">
+
+table {
+    border-collapse: collapse;
+}
+
+thead {
+    border-top: solid #DCDCDC;
+    border-bottom: solid #DCDCDC;
+}
+
+tr.odd {
+    background-color: #F8F8F8;
+}
+
+tr:last-child {
+    border-bottom: solid #DCDCDC;
+}
+
+</style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 54px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h2 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h3 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h4 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h5 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h6 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">EEB313H1</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-map-o"></span>
+     
+    Syllabus
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lec01-introduction.html">Sept. 6: Intro to course, programming, RStudio, and R Markdown</a>
+    </li>
+    <li>
+      <a href="lec02-basic-r.html">Sept. 11: Assignment, vectors, functions</a>
+    </li>
+    <li>
+      <a href="lec03-basic-r.html">Sept. 13: Data frames, intro to dplyr</a>
+    </li>
+    <li>
+      <a href="lec04-dplyr.html">Sept. 18: Data wrangling in dplyr, ggplot, tidy data</a>
+    </li>
+    <li>
+      <a href="lec05-dplyr.html">Sept. 20: More dplyr and ggplot</a>
+    </li>
+    <li>
+      <a href="lec06-exploratory-data-analysis.html">Sept. 25: Exploratory data analysis</a>
+    </li>
+    <li>
+      <a href="lec07-linear-modelling.html">Sept. 27: Linear models and statistical modelling</a>
+    </li>
+    <li>
+      <a href="lec08-linear-mixed-effects-models.html">Oct. 02: Mixed effects models</a>
+    </li>
+    <li>
+      <a href="lec09-Randomization-tests.html">Oct. 04: Simulating data: Randomization tests</a>
+    </li>
+    <li class="dropdown-header">Oct. 09: Multivariate stats</li>
+    <li class="dropdown-header">Oct. 11: Model selection</li>
+    <li class="dropdown-header">Oct. 16: Numerically solving population models</li>
+    <li class="dropdown-header">Oct. 18: Time series analysis</li>
+    <li>
+      <a href="lec12-datasets.html">Oct. 23: Datasets, hypothesis, begin projects</a>
+    </li>
+    <li>
+      <a href="lec14-git.html">Oct. 25: Reproducible science</a>
+    </li>
+    <li>
+      <a href="lec17-rmarkdown.html">Oct. 30: Reproducible science</a>
+    </li>
+    <li class="dropdown-header">Nov. 01: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 13: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 15: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 20: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 22: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 27: Project work (no lesson)</li>
+    <li class="dropdown-header">Nov. 29: Project work (no lesson)</li>
+    <li class="dropdown-header">Dec. 04: Project work (no lesson)</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Assignments
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="assignment-01.html">Assignment 1</a>
+    </li>
+    <li>
+      <a href="assignment-02.html">Assignment 2</a>
+    </li>
+    <li>
+      <a href="assignment-03.html">Assignment 3</a>
+    </li>
+    <li>
+      <a href="assignment-04.html">Assignment 4</a>
+    </li>
+    <li class="dropdown-header">Assignment 5</li>
+    <li class="dropdown-header">Assignment 6</li>
+    <li class="dropdown-header">Assignment 7</li>
+    <li class="dropdown-header">Assignment 8</li>
+    <li class="dropdown-header">Final assignment</li>
+  </ul>
+</li>
+<li>
+  <a href="resources.html">
+    <span class="fa fa-question"></span>
+     
+    Resources and FAQ
+  </a>
+</li>
+<li>
+  <a href="about.html">
+    <span class="fa fa-info"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-bars"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="mailto:ahmed.hasan@mail.utoronto.ca">
+        <span class="fa fa-envelope"></span>
+         
+        Contact
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/uoftcoders/rcourse">
+        <span class="fa fa-github"></span>
+         
+        GitHub
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Qualitative review of population models</h1>
+<h4 class="author"><em>Madeleine Bonsma-Fisher</em></h4>
+
+</div>
+
+
+<div id="lesson-preamble" class="section level2">
+<h2>Lesson preamble</h2>
+<p>In developing this series of lectures I have referred heavily to the notes from Nonlinear Physics, <a href="https://www.physics.utoronto.ca/students/graduate-courses/current/phy1460s">PHY1460</a>, which I would encourage anyone who is interested in getting more in depth on the quantitative analysis of dynamical systems to take or audit. I also refer to “Nonlinear Dynamics and Chaos” by Steven Strogatz, a very good textbook which you might find helpful. You can find the PDF online, it’s available as an e-book from the UofT library, and it’s available in the Physics library as a hard copy course reserve.</p>
+<blockquote>
+<h3 id="learning-objectives">Learning objectives</h3>
+<ul>
+<li>Appreciate the purpose and usefulness of modelling real-world systems</li>
+<li>Understand the use of differential equations to model populations</li>
+<li>Qualitatively analyze one-dimensional population models by hand and in R
+<ul>
+<li>Find fixed points graphically in R</li>
+<li>Analyze stability graphically in R</li>
+<li>Draw one-dimensional phase portraits by hand</li>
+</ul></li>
+</ul>
+<h3 id="lesson-outline">Lesson outline</h3>
+<p>Total lesson time: 2 hours</p>
+<ul>
+<li>Introduction to modelling (20 min)</li>
+<li>Setting up a model (40 min)</li>
+<li>Qualitative analysis of one-dimensional models (60 min)</li>
+</ul>
+<h3 id="setup">Setup</h3>
+<ul>
+<li>Install <code>ggplot2</code>: run <code>install.packages('ggplot2')</code> in the R console.</li>
+</ul>
+</blockquote>
+<!-- - Optional: install `animation`: run `install.packages('animation'). This is only if you want to play around with the simulations at the bottom later. -->
+<hr />
+</div>
+<div id="introduction---why-model" class="section level2">
+<h2>Introduction - why model?</h2>
+<!--*How many have taken some theoretical ecology before?*-->
+<ol style="list-style-type: decimal">
+<li>Models can simplify a complex system and help us identify what’s important.
+<ul>
+<li>Biology, as we all know, is extremely complicated.</li>
+<li><p>Models summarize what we think we know about a system, force us to identify the important parameters, and encourage us to distill them down to a manageable number of parameters.</p>
+<em>Note</em>: that’s not always how modelling is done. Sometimes you just add everything you can think of to your very complicated model, and you hope by doing that, your model will be more accurate and make better predictions. But your model will likely be too complicated to solve analytically. (Analytical = a version you can leave with variables instead of putting numbers in. In R we will mostly be simulating.) An example of a discipline where the models tend to be complicated is systems biology - models of celluar pathways often try to include as many components as are known, i.e. taking all the components from the following picture and creating a corresponding model:<br />
+<img src="image/signal-transduction-pathway.png" alt="Signal transduction pathway. Image source: https://en.wikipedia.org/wiki/Modelling_biological_systems#/media/File:Signal_transduction_pathways.svg)" /></li>
+<li><p>Data don’t always fit theoretical models, but it is helpful to interpret data with a larger theoretical framework in mind.</p></li>
+</ul></li>
+<li>Models can show us something we didn’t expect, that we couldn’t intuit from just thinking about the problem.
+<ul>
+<li>if your model is simple enough, it can be predictive in a broadly applicable way. We’ll talk about some famous ecological models, and the assignments will include more examples. I will also include some famous examples from physics, where this field is known as <strong>nonlinear dynamics</strong>. Many of these classic models are classic because their results weren’t obvious before the model was created.
+<ul>
+<li>example: Lorenz model of the atmosphere which exhibits <strong>chaos</strong> (<a href="https://www.youtube.com/watch?v=FYE4JKAXSfY">video</a>). The equations for this system are simple, but Lorenz was surprised to find that the behaviour of the system could be very different for starting conditions that were very similar. I wrote a quick simulation in R which you can play around with, it’s at the bottom of these notes.</li>
+<li>example: Lotka-volterra predator-prey model. This model predicts never-ending oscillations in the populations of predator and prey species. A simulation for this is also at the bottom of these notes.
+<ul>
+<li>What else is a reasonable thing that could happen to a population of predator and prey?</li>
+</ul>
+<!--Possible answers: 
+- predators eat all the prey and the prey dies, then the predator dies. 
+- predators and prey reach an unchanging steady-state --></li>
+</ul>
+<em>Aside</em>: I do theoretical biophysics, which is quite similar to theoretical ecology in my case, so all of what I’ll be telling you about is techniques and concepts that I have found useful or use very frequently and that I think are an important part of the theorist / data scientist toolkit.</li>
+</ul></li>
+<li>In the next few lectures we will talk about models and about using R to analyze models. We will first do this qualitatively (no math), then quantitatively. We will talk about fitting models to data, and by the end I hope that you will be able to incorporate modelling into your project, whether a model you design yourself or an existing ecological model.</li>
+</ol>
+</div>
+<div id="setting-up-a-model" class="section level2">
+<h2>Setting up a model</h2>
+<p>Let’s look at some examples of one-dimensional models and talk about what we can learn from these models qualitatively, without doing any calculations.</p>
+<p><strong>Dimension</strong>: the number of variables in your model. (Not the number of parameters.<br />
+Variables are what track the species you’re interested in, and parameters are numbers that specify the details of the model.)</p>
+<p>Let’s write down a model for the growth of a species. We want to predict how many organisms are present in the population at time <span class="math inline">\(t\)</span>, and to do that we need to write down an equation that describes how the population changes with time. We will start by writing a <em>recursion relation</em>, which tells us how to update the population size at time <span class="math inline">\(t+ \Delta t\)</span> from the population size at time <span class="math inline">\(t\)</span>:</p>
+<p><span class="math display">\[N_{t+\Delta t} = N_t + \Delta N\]</span></p>
+<p><span class="math inline">\(\Delta N\)</span>, the change in the population size, will depend on the specifics of our model. Let’s rearrange this expression into the definition of a derivative by moving <span class="math inline">\(\Delta N\)</span> over and dividing both sides by <span class="math inline">\(\Delta t\)</span>, then taking the limit of <span class="math inline">\(\Delta t\)</span> going to <span class="math inline">\(0\)</span>:</p>
+<p><span class="math display">\[\frac{N_{t+\Delta t} - N_t}{\Delta t} = \frac{\Delta N}{\Delta t}\]</span> <span class="math display">\[lim_{\Delta t \to 0}\frac{N_{t+\Delta t} - N_t}{\Delta t} = \frac{dN}{dt}\]</span></p>
+<p>If you’ve taken calculus, you will recognize this as the first derivative of <span class="math inline">\(N\)</span> with respect to <span class="math inline">\(t\)</span>. If your calculus is foggy in your memory, when you see this notation think “change in <span class="math inline">\(N\)</span> per change in <span class="math inline">\(t\)</span>. <span class="math inline">\(dN\)</span> is the notation commonly used to mean”a small amount of <span class="math inline">\(N\)</span>,&quot; so this expression mathematically describes by what small amount <span class="math inline">\(N\)</span> will change in a small amount of time <span class="math inline">\(dt\)</span>. This is also sometimes written as <span class="math inline">\(\dot{N}\)</span>. I will usually use <span class="math inline">\(dN/dt\)</span> but you may see the dot notation in the literature. A single dot is shorthand for “first derivative”.</p>
+<p>Biologically, <span class="math inline">\(dN/dt\)</span> is the <strong>growth rate</strong> or <strong>rate of change</strong> of a population with <span class="math inline">\(N\)</span> organisms at time <span class="math inline">\(t\)</span>.</p>
+<p>What should the growth rate of our population depend on? Let’s brainstorm some things. There are no wrong answers here: anything you can think of that makes biological sense is a reasonable thing to include in a model, although after brainstorming we will write something very simple as an example.</p>
+<!-- Possible answers: 
+- birth rate $r$
+- death rate $\delta$
+- number of organisms $N$
+- carrying capacity $K$
+- rate of predation
+- migration rate
+- abundance of food -->
+<p>Let’s make some sample data to help us come up with a simple model.</p>
+<p>For bacteria growing in a flask with plenty of food, we know that they divide in two periodically. If we take one unit of time to be the time between divisions, we can assume that the population approximately doubles at each time point.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(ggplot2) <span class="co"># ggplot2 includes the qplot function</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co"># qplot produces plots that are similar to ggplot, but you don&#39;t need a dataframe to use it.</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co"># We could use ggplot instead by first making a dataframe out of our data:</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># data &lt;- data.frame(times, population_size)</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dt">by =</span> <span class="fl">0.2</span>)</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">population_size &lt;-<span class="st"> </span><span class="dv">2</span> <span class="op">^</span><span class="st"> </span>times</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw">qplot</span>(times, population_size) <span class="op">+</span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> times, <span class="dt">y =</span> population_size))</a></code></pre></div>
+<p><img src="lec06-pop-models_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>How do we write this assumption as a general model? Let’s calculate the difference in <span class="math inline">\(N\)</span> at each time point and plot this vs. <span class="math inline">\(N\)</span> at the previous time point.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># last N-1 points minus first N-1 points</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">N_diff &lt;-<span class="st"> </span><span class="kw">tail</span>(population_size, <span class="dv">-1</span>) <span class="op">-</span><span class="st"> </span><span class="kw">head</span>(population_size, <span class="dv">-1</span>) </a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">qplot</span>(<span class="kw">head</span>(population_size, <span class="dv">-1</span>), N_diff) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">head</span>(population_size, <span class="dv">-1</span>), <span class="dt">y =</span> N_diff))</a></code></pre></div>
+<p><img src="lec06-pop-models_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>This is a straight line, which tells us that the change in <span class="math inline">\(N\)</span> is proportional to <span class="math inline">\(N\)</span>, and in fact because of the way we defined time, the change in <span class="math inline">\(N\)</span> is exactly <span class="math inline">\(N\)</span>.</p>
+<p>Now we have our model: this model describes <strong>exponential</strong> growth of a population and is commonly used for microbes growing with plenty of food.</p>
+<p><span class="math display">\[\frac{dN}{dt}=N\]</span></p>
+<p>This is a <strong>differential equation</strong>: an equation that describes how some function of <span class="math inline">\(N\)</span> is related to derivatives of <span class="math inline">\(N\)</span>. (In this case, and probably in this entire course, we’ll just be using the first derivative.)</p>
+<p>If we wanted time to be something else, like minutes instead of generations, we could add a constant of proportionality that captures how often our bacteria divide:</p>
+<p><span class="math display">\[\frac{dN}{dt} = rN\]</span></p>
+<p>This says that the population will increase by <span class="math inline">\(r N dt\)</span> in the small time <span class="math inline">\(dt\)</span>, or the population increases by <span class="math inline">\(N dt\)</span> in time <span class="math inline">\(dt/r\)</span>.</p>
+<p>The process we just used to get this model is probably not what you’d do in practice - I just wanted to illustrate the connection between exponential growth and this differential equation.</p>
+<p>If <span class="math inline">\(r\)</span> is made larger, does the population grow faster or slower?</p>
+</div>
+<div id="analyzing-models-qualitatively-at-first" class="section level2">
+<h2>Analyzing models (qualitatively at first)</h2>
+<p>When you analyze a model, the exact questions you answer will depend on the model. But in general, the following questions are ones you will try to answer for any model.</p>
+<ol style="list-style-type: decimal">
+<li>What are the <strong>fixed points</strong> of the model? (For which sizes of the population(s) does the population size remain constant in time?)</li>
+<li>Which of the fixed points are <strong>stable</strong>? (If the population is slightly different from the fixed point, will it go towards it or away from it?)</li>
+<li>How do the above depend on parameters of the model?</li>
+</ol>
+<p>We will see how to answer these questions quantitatively soon. But let’s start by looking at them qualitatively. We will draw a <strong>phase portrait</strong> of this system, and the techniques we use will be applicable to almost any model you might come across.</p>
+<div id="the-exponential-growth-model" class="section level3">
+<h3>The exponential growth model</h3>
+<p>Let’s start answering these questions qualitatively for the exponential growth model. There’s a lot of information in the differential equation we can qualitatively read off. If we plot <span class="math inline">\(dN/dt\)</span> vs <span class="math inline">\(N\)</span>, the places where <span class="math inline">\(dN/dt = 0\)</span> are the fixed points of our system. Let’s do this for the exponential growth model.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">N_seq &lt;-</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">seq</span>(<span class="op">-</span><span class="dv">20</span>, <span class="dv">20</span>) <span class="co"># make a sequence of N values to plot dN/dt against</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">dN_dt &lt;-<span class="st"> </span>N_seq  <span class="co"># assume r = 1</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="kw">qplot</span>(N_seq, dN_dt) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> N_seq, <span class="dt">y =</span> <span class="dv">0</span>)) <span class="co"># a line at zero for visual aid</span></a></code></pre></div>
+<p><img src="lec06-pop-models_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>We can also tell whether the fixed points are stable or unstable by looking at the sign of <span class="math inline">\(dN/dt\)</span> on either side of the fixed point. For a one-dimensional system, our phase portrait is a line of <span class="math inline">\(N\)</span>. We mark the fixed point(s) with circles, and we draw an arrow to the left wherever <span class="math inline">\(dN/dt\)</span> is negative, and an arrow to the right wherever <span class="math inline">\(dN/dt\)</span> is positive in the regions between fixed points.</p>
+<!-- diagram of phase portrait -->
+<p>This model is a bit boring - there’s only one fixed point, and it’s unstable. This makes sense - we are talking about exponential growth, after all. There’s no upper limit.</p>
+<div id="challenge" class="section level4">
+<h4>Challenge</h4>
+<p>Find the fixed point(s) of the following differential equation.</p>
+<p><span class="math display">\[\frac{dN}{dt} = N - a\]</span></p>
+<ul>
+<li>Choose a value for the parameter <span class="math inline">\(a\)</span>. Can you think of anything that <span class="math inline">\(a\)</span> might represent in a real population? Are there any values of <span class="math inline">\(a\)</span> that don’t make biological sense?</li>
+<li>Plot <span class="math inline">\(\frac{dN}{dt}\)</span> vs. <span class="math inline">\(N\)</span>, like we did earlier.</li>
+<li>Sketch a phase portrait. Are the fixed point(s) stable or unstable?</li>
+</ul>
+<!--
+The fixed point is shifted by $a$. This isn't really a good model, but if $a > 0$ the population will decrease 
+if $N < a$ and will increase if $N > a$ - maybe this could reflect a minimum population needed to reproduce,
+like, say, 2. If $a < 0$, $N = 0$ is still not a fixed point, but since $N$ can't really decrease below 0, 
+this doesn't really make sense. If $a = 0$, we recover the previous exponential model. 
+
+
+```r
+a <- 3 # choose some value for a
+
+N_seq <- seq(-20, 20, by = 0.2)
+dN_dt <- N_seq - a
+
+qplot(N_seq, dN_dt) +
+  geom_line(aes(x = N_seq, y = 0)) # a line at zero for visual aid
+```
+
+<img src="lec06-pop-models_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+-->
+</div>
+</div>
+<div id="the-logistic-model" class="section level3">
+<h3>The logistic model</h3>
+<p>Of course in real life there must be an upper limit to growth, otherwise the surface of the earth would be covered in bacteria several feet thick in a matter of hours. Let’s do a quick calculation for fun - how long would it take for a single bacterial cell undergoing exponential growth to take over the world?</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">cell_volume &lt;-<span class="st"> </span><span class="fl">0.6</span> <span class="co">#micrometres cubed - E. coli cell volume is ~0.6 to 0.7 micrometres^3</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">growth_rate &lt;-<span class="st"> </span><span class="dv">3</span> <span class="co"># let&#39;s say cells divide three times per hour - every 20 minutes (max growth rate of E. coli in good food conditions)</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">N_t &lt;-</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">  </span><span class="cf">function</span>(N0, r, t) {</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">    <span class="co"># Calculate change in population size with time    </span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">    <span class="co"># r: is growth rate (divisions per hour) </span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">    <span class="co"># t: time in hours</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10">    <span class="co"># N0: starting population size</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11">    <span class="kw">return</span>(N0 <span class="op">*</span><span class="st"> </span><span class="dv">2</span> <span class="op">^</span><span class="st"> </span>(r <span class="op">*</span><span class="st"> </span>t <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)) <span class="co"># the -1 is because the first doubling is included with the factor of 2</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12">  }</a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14">radius_earth &lt;-<span class="st"> </span><span class="dv">6000</span> <span class="co"># approximately 6000 km</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15">SA_earth &lt;-<span class="st"> </span><span class="dv">4</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>radius_earth <span class="op">^</span><span class="st"> </span><span class="dv">2</span> <span class="co"># surface area of earth in km^2. pi is a predefined variable in R.</span></a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb4-17" data-line-number="17">surface_covered &lt;-</a>
+<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="st">  </span><span class="cf">function</span>(N0, r, t) {</a>
+<a class="sourceLine" id="cb4-19" data-line-number="19">    <span class="co"># Calculate the height of the layer of evenly spread out bacteria on the earth&#39;s surface</span></a>
+<a class="sourceLine" id="cb4-20" data-line-number="20">    <span class="co">#</span></a>
+<a class="sourceLine" id="cb4-21" data-line-number="21">    <span class="co"># r : growth rate as divisions per hour</span></a>
+<a class="sourceLine" id="cb4-22" data-line-number="22">    <span class="co"># t : time in hours</span></a>
+<a class="sourceLine" id="cb4-23" data-line-number="23">    <span class="co"># N0 : starting population size</span></a>
+<a class="sourceLine" id="cb4-24" data-line-number="24">    </a>
+<a class="sourceLine" id="cb4-25" data-line-number="25">    bac_volume &lt;-</a>
+<a class="sourceLine" id="cb4-26" data-line-number="26"><span class="st">      </span><span class="kw">N_t</span>(N0, growth_rate, t) <span class="op">*</span><span class="st"> </span>cell_volume <span class="co"># in micrometres cubed</span></a>
+<a class="sourceLine" id="cb4-27" data-line-number="27">    height_km =<span class="st"> </span>bac_volume <span class="op">*</span><span class="st"> </span>(<span class="fl">1e-27</span>) <span class="op">/</span><span class="st"> </span>SA_earth <span class="co"># assume the earth is flat compared to the height of our surface - volume is surface area x height of surface above earth. This is height in km.</span></a>
+<a class="sourceLine" id="cb4-28" data-line-number="28">    <span class="co"># surface_volume = height*SA_earth</span></a>
+<a class="sourceLine" id="cb4-29" data-line-number="29">    <span class="co"># convert bacteria volume to km cubed by dividing by 10^-27 (I googled this conversion).</span></a>
+<a class="sourceLine" id="cb4-30" data-line-number="30">    </a>
+<a class="sourceLine" id="cb4-31" data-line-number="31">    height_m &lt;-<span class="st"> </span>height_km <span class="op">*</span><span class="st"> </span><span class="dv">1000</span> <span class="co"># 1000 m in km</span></a>
+<a class="sourceLine" id="cb4-32" data-line-number="32">    </a>
+<a class="sourceLine" id="cb4-33" data-line-number="33">    <span class="kw">return</span>(height_m)</a>
+<a class="sourceLine" id="cb4-34" data-line-number="34">  }</a>
+<a class="sourceLine" id="cb4-35" data-line-number="35"></a>
+<a class="sourceLine" id="cb4-36" data-line-number="36"><span class="co"># plot</span></a>
+<a class="sourceLine" id="cb4-37" data-line-number="37">t &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">38</span>, <span class="fl">0.3</span>)</a>
+<a class="sourceLine" id="cb4-38" data-line-number="38"><span class="kw">qplot</span>(t, <span class="kw">surface_covered</span>(<span class="dv">2</span>, growth_rate, t), <span class="dt">log =</span> <span class="st">&#39;y&#39;</span>, <span class="dt">ylab =</span> <span class="st">&#39;Height above surface (m)&#39;</span>) </a></code></pre></div>
+<p><img src="lec06-pop-models_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co">#yikes. In less than two days, we would be submerged in bacteria.</span></a></code></pre></div>
+<p>Let’s look at another model, the <em>logistic growth model</em>, which most of you will have seen before:</p>
+<p><span class="math display">\[\frac{dN}{dt} = rN\left(1-\frac{N}{K}\right)\]</span></p>
+<p><span class="math inline">\(N\)</span> is the number of organisms, <span class="math inline">\(r\)</span> is the growth rate, and <span class="math inline">\(K\)</span> is the carrying capacity of the system.</p>
+<p>Notice that when <span class="math inline">\(N\)</span> is much smaller than <span class="math inline">\(K\)</span>, this reduces to the exponential growth model we just looked at since <span class="math inline">\(N/K \approx 0\)</span>.</p>
+<p>Let’s again plot <span class="math inline">\(dN/dt\)</span> vs. <span class="math inline">\(N\)</span> to find the fixed points:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">N_seq &lt;-</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">20</span>, <span class="dv">100</span>) <span class="co"># make a sequence of N values to plot dN/dt against</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">  </a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">logistic_eqn &lt;-<span class="st">  </span><span class="cf">function</span>(N, r, K) {</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">  <span class="co"># calculate dN/dt for the logistic equation</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">  <span class="kw">return</span>(r <span class="op">*</span><span class="st"> </span>N <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>N <span class="op">/</span><span class="st"> </span>K))</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">  }</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">  </a>
+<a class="sourceLine" id="cb6-9" data-line-number="9">dN_dt &lt;-<span class="st"> </span><span class="kw">logistic_eqn</span>(N_seq, <span class="dt">r =</span> <span class="fl">0.5</span>, <span class="dt">K =</span> <span class="dv">80</span>)  <span class="co"># notice the vectorized implementation</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">  </a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="kw">qplot</span>(N_seq, dN_dt) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> N_seq, <span class="dt">y =</span> <span class="dv">0</span>)) <span class="co"># a line at zero for visual aid</span></a></code></pre></div>
+<p><img src="lec06-pop-models_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>The fixed points are at <span class="math inline">\(N=0\)</span> and <span class="math inline">\(N=80\)</span>. If we change <span class="math inline">\(K\)</span>, we can figure out that the second fixed point is actually just <span class="math inline">\(N=K\)</span>.</p>
+<p>Now we draw the phase portrait (on blackboard):</p>
+<!-- Phase portrait for logistic eqn -->
+<p>As with the exponential growth model, the fixed point at <span class="math inline">\(0\)</span> is unstable, but now there is also a fixed point at <span class="math inline">\(K\)</span> which is stable. This means that at longer times, the system will go towards <span class="math inline">\(N=K\)</span>.</p>
+</div>
+<div id="note-the-importance-of-stability" class="section level3">
+<h3>Note: the importance of stability</h3>
+<p>Why is stability important? The real world is noisy, and while mathematically an unstable fixed point is still a fixed point (if you were exactly there you would stay there forever), in reality there will always be small perturbations (perhaps a member of the population dies or migrates in) that will move you away from the fixed point. The important thing to know, then, is whether the population will remain close to that fixed point or move away to a different point.</p>
+<p>Think of a ball balanced perfectly on top of a hill, or think of balancing a pen on your finger, or think of balancing a chair on the back two legs. It can stay there as long as there are no disturbances, but the tiniest breath of wind or tremble in your balance will knock it over and it will go towards its other fixed point - the ground.</p>
+</div>
+<div id="note-discrete-vs.continuous" class="section level3">
+<h3>Note: discrete vs. continuous</h3>
+<div id="challenge-1" class="section level4">
+<h4>Challenge</h4>
+<p>There is a subtlety to these differential equation descriptions of models. To see this, calculate <span class="math inline">\(\frac{dN}{dt}\)</span> for <span class="math inline">\(r=1\)</span> and <span class="math inline">\(N=0.1\)</span>. Is this value positive, negative, or zero? Think about what <span class="math inline">\(N=0.1\)</span> means biologically. Does it make sense that the population should increase if <span class="math inline">\(N=0.1\)</span>?</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">r &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">N &lt;-<span class="st"> </span><span class="fl">0.1</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="kw">print</span>(r<span class="op">*</span>N)</a></code></pre></div>
+<pre><code>## [1] 0.1</code></pre>
+<p>Clearly, if <span class="math inline">\(N\)</span> represents a real population, it can only ever take integer values (it must be <em>discrete</em>), and it can never be negative. But there’s nothing in the model by itself, <span class="math inline">\(\frac{dN}{dt} = rN\)</span>, that requires any of those things. Models like this are <em>continuous</em> - the variable <span class="math inline">\(N\)</span> can be any real number and isn’t restricted to integers.</p>
+<p>How do we reconcile this with the real world? For “large” population sizes, the continuous description is fairly accurate, since if <span class="math inline">\(N\)</span> is, say, 400, then a change of <span class="math inline">\(\pm 1\)</span> is a relatively small change, and we can think of <span class="math inline">\(N\)</span> as varying continuously. But for small populations, the continuous description breaks down. If <span class="math inline">\(N\)</span> falls below <span class="math inline">\(1\)</span>, the continuous description might tell you that it can bounce back, but in reality <span class="math inline">\(N&lt;1\)</span> means the population is extinct. Even though <span class="math inline">\(N=0\)</span> was an unstable fixed point for the systems we looked at so far, it’s what is called an <strong>absorbing</strong> state: once you enter it, you can never leave (unless we add something back in, of course).</p>
+<p>There is a way to model the discreteness of a population so that small population sizes are treated realistically, and time permitting I will talk about it a bit - it’s called “stochastic simulation” and the most common method is to use the Gillespie algorithm.</p>
+</div>
+</div>
+<div id="extras-lorenz-simulation-in-r" class="section level3">
+<h3>Extras: Lorenz simulation in R</h3>
+<p>The following code will create a GIF of the x-y phase plane for the Lorenz system.</p>
+<div class="figure">
+<img src="image/lorenz.gif" alt="Lorenz system simulation" />
+<p class="caption">Lorenz system simulation</p>
+</div>
+<pre><code># Simulation of the Lorenz system, a chaotic model (plotted in 2D)
+
+library(animation)
+
+ani.options(interval=.001)
+
+# dynamical equations for the lorenz system
+dotx &lt;- function(x,y,sigma){
+    return(sigma*(y-x))
+}
+
+doty &lt;- function(x,y,z,rho){
+    return(x*(rho-z) - y)
+}
+    
+dotz &lt;- function(x,y,z,beta){
+    return(x*y - beta*z)
+}
+
+# parameters
+sigma &lt;- 10
+beta &lt;- 8/3
+rho &lt;- 28
+
+dt &lt;- 0.02 #timestep
+tmax &lt;- 8
+points &lt;- tmax/dt
+
+t_vector = seq(0, tmax, by = dt)
+
+xinit &lt;- 0.5
+yinit &lt;- 0.6
+zinit &lt;- 0.7
+
+# vectors to store simulation
+x_vector&lt;-numeric(points); y_vector&lt;-numeric(points); z_vector&lt;-numeric(points)
+
+# initialize variables
+x &lt;- xinit
+y &lt;- yinit
+z &lt;- zinit
+
+saveGIF({
+    count &lt;- 1
+    for (t in t_vector){ 
+      count &lt;- count + 1
+      dx &lt;- dotx(x,y,sigma)*dt
+      dy &lt;- doty(x,y,z,rho)*dt
+      dz &lt;- dotz(x,y,z,beta)*dt
+      
+      x &lt;- x + dx
+      y &lt;- y + dy 
+      z &lt;- z +  dz
+    
+      x_vector[count] &lt;- x
+      y_vector[count] &lt;- y
+      z_vector[count] &lt;- z
+      plot(x_vector,y_vector, ylim = c(-30,30), xlim = c(-30,30))
+    }
+})</code></pre>
+</div>
+<div id="extras-lotka-volterra-predator-prey-model" class="section level3">
+<h3>Extras: Lotka-Volterra Predator-Prey model</h3>
+<div class="figure">
+<img src="image/lotka-volterra.gif" alt="Lotka-Volterra system simulation" />
+<p class="caption">Lotka-Volterra system simulation</p>
+</div>
+<pre><code># caution: this is slow
+
+library(animation)
+library(ggplot2)
+
+ani.options(interval=.00001)
+
+# dynamical equations for the lotka-volterra predator-prey model
+dotx &lt;- function(x,y,alpha,beta){
+    return(alpha*x - beta*x*y)
+}
+
+doty &lt;- function(x,y,gamma,delta){
+    return(delta*x*y - gamma*y)
+}
+
+# parameters
+alpha &lt;- 0.5
+beta &lt;- 0.6
+gamma &lt;- 0.5
+delta &lt;- 0.5
+
+dt &lt;- 0.1 #timestep - should really be smaller for accuracy
+tmax &lt;- 30
+points &lt;- tmax/dt
+
+t_vector &lt;- seq(dt, tmax, by = dt)
+
+xinit &lt;- 0.5
+yinit &lt;- 0.5
+
+# vectors to store simulation
+x_vector &lt;- numeric(points); y_vector&lt;-numeric(points)
+
+# initialize variables
+x &lt;- xinit
+y &lt;- yinit
+
+x_vector[1] &lt;- x
+y_vector[1] &lt;- y
+
+
+saveGIF({
+    par(mfrow=c(1,2))
+    count &lt;- 1
+    for (t in t_vector){ 
+      dx &lt;- dotx(x,y,alpha,beta)*dt
+      dy &lt;- doty(x,y,gamma,delta)*dt
+      
+      x &lt;- x + dx
+      y &lt;- y + dy 
+    
+      x_vector[count] &lt;- x
+      y_vector[count] &lt;- y
+      
+      data = data.frame(t_vector, x_vector, y_vector)
+      plot(x_vector, y_vector, ylim = c(0,2.1), xlim = c(0,2.1)) 
+      plot(t_vector[1:count],x_vector[1:count],  ylim = c(0,2.1), xlim = c(0,tmax)) 
+      lines(t_vector[1:count],y_vector[1:count])
+      count &lt;- count + 1
+    }
+})
+
+</code></pre>
+</div>
+</div>
+
+
+<hr>
+
+<p>This work is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. See the <a href="LICENSE.html">licensing</a> page for more details about copyright information.</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
